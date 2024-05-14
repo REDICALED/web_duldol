@@ -1,0 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Nanum+Gothic&display=swap');
+
+body {
+    font-family: "Nanum Gothic", sans-serif;
+  }
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
