@@ -10,7 +10,7 @@ const Editor = () => {
                 <div className="container pt-[30vh]">
             <MDEditor
                 value={value}
-                onChange={(value = '', event) => setValue(value)}
+                onChange={(value = '', _event) => setValue(value)}
             />
             <MDEditor.Markdown source={value} style={{ whiteSpace: 'pre-wrap' }} />
         </div>
