@@ -4,7 +4,7 @@ const CvPage = () => {
         <div >
         
 
-        <div className=" text-dul-gray ml-[20vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-xl">
+        <div className=" leading-8 text-dul-gray ml-[20vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-sm md:text-xl">
             <div>
             정들돌
             <br />

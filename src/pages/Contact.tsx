@@ -5,11 +5,11 @@ const ContactPage = () => {
         
 
         <div className=" text-dul-gray font-semibold ml-[20vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-xl">
-            <a  className=" underline" target='_blank' href="mailto:steasolduldo@gmail.com">steasolduldo@gmail.com</a>
+            <a  className="md:text-xl text-sm" target='_blank' href="mailto:steasolduldo@gmail.com">steasolduldo@gmail.com</a>
             <br />
             <br />
 
-            <a className=" underline" target='_blank' href="https://www.instagram.com/steasolduldo">ig: @steasolduldo </a>
+            <a className="md:text-xl text-sm" target='_blank' href="https://www.instagram.com/steasolduldo">ig: @steasolduldo </a>
         </div>
         
         </div>
