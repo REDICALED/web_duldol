@@ -1,7 +1,7 @@
 
 const HomePage = () => {
     return (
-        <div className=" text-dul-gray mx-[5vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-xl">
+        <div className=" text-dul-gray ml-[25vw] mr-[5vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-xs md:text-base ">
 
         <img className={ "w-[100vw] md:h-[50vh] object-cover"} src="/images/Home/Home1.jpg" alt='asd'></img>
         <br />

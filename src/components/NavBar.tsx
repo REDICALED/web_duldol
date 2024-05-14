@@ -14,9 +14,9 @@ const NavBar = () => {
     return (
         <>
         
-        <div className=" hidden md:block font-semibold ml-[2vw] fixed mt-[10vh]  md:text-xl">
+        <div className=" ml-[2vw] fixed mt-[2vh] text-xs md:text-xl z-50">
             DULDOL JUNG
-            <div className=" font-medium text-base ">
+            <div className=" font-medium text-xxs md:text-base ">
                 <div className="mt-[3vh] ">
                     <Link to="/" className={ currentPath==="/" ? " text-dul-white " : " text-dul-gray" }>Home</Link>
                 </div>
@@ -41,8 +41,8 @@ const NavBar = () => {
             </div>
         </div>
 
-        <div className=" md:hidden block fixed right-0 end z-50 ">
-            <div className=" pt-[1vh] text-base font-medium 2sm:flex 2sm:justify-end text-right w-full ">
+        {/* <div className=" md:hidden block fixed right-0 end z-50 ">
+            <div className=" pt-[1vh] text-xs font-medium 2sm:flex 2sm:justify-end text-right w-full ">
                 <div className=" mx-1">
                     DULDOL JUNG
                 </div>
@@ -58,7 +58,7 @@ const NavBar = () => {
                 </div>
             </div>
             
-        </div>
+        </div> */}
         </>
     );
 }
