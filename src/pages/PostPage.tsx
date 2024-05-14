@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom";
 
 const PostPage = () => {
-    let tags = useParams();
-    console.log(tags);
+    const tags = useParams();
+    console.log(tags.id);
     return (
         <div className=" text-dul-gray mx-[5vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-xl">
 

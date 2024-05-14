@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const WorksPage = () => {
 
@@ -66,8 +67,9 @@ const renderImages = () => {
                     <div className="flex ">
                         { groupedByYear[parseInt(year)].map((item: { title: string, year: number, series: string }, index: number) => ( item.series === "" &&
                             <div key={`${year}-${index}`} className="">
+                            <Link key={index} to={'/Works/' + item.title} className=''>
                             <img
-
+                                loading='lazy'
                                 src={`/images/Works/${item.title}/title.jpg`}
                                 alt={`Work Image ${item.title}`}
                                 className="peer px-[0.1vw] md:w-[150px] w-[100px] transition-all duration-500 hover:scale-105 "
@@ -75,6 +77,7 @@ const renderImages = () => {
                             <div className=" fixed peer-hover:relative peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
                                 <div>{item.title}</div>
                             </div>
+                            </Link>
                         </div>
                         ))}
                     </div>
@@ -88,16 +91,18 @@ const renderImages = () => {
                     <div className="flex">
                     {groupedBySeries[series].reverse().map((item: { title: string, year: number }, index: number) => (
                         <div key={`${series}-${index}`}>
+                            <Link key={index} to={'/Works/' + item.title} className=''>
                             <img
-                                height={100}
-                                width={100}
+                                loading='lazy'
                                 src={`/images/Works/${item.title}/title.jpg`}
                                 alt={`Work Image ${item.title}`}
                                 className="peer hover:scale-105 transition-all duration-500 px-[0.1vw]  md:w-[150px] w-[100px]"
                             />
+
                             <div className=" fixed peer-hover:relative peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
                                 <div>{item.title}</div>
                             </div>
+                            </Link>
                         </div>
                     ))}
                     </div>
