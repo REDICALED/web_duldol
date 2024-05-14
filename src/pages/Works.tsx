@@ -72,11 +72,12 @@ const renderImages = () => {
                                 loading='lazy'
                                 src={`/images/Works/${item.title}/title.jpg`}
                                 alt={`Work Image ${item.title}`}
-                                className="peer px-[0.1vw] transition-all duration-500 hover:scale-105 object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px] "
+                                className=" peer px-[0.1vw] transition-all duration-500 hover:scale-105 object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px] "
                             />
-                            <div className=" fixed peer-hover:relative peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
+                            <div className=" fixed peer-hover:fixed peer-hover:w-fit h-0 peer-hover:h-fit peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
                                 <div>{item.title}</div>
                             </div>
+                            <div className="peer-hover:mb-10"></div>
                             </Link>
                         </div>
                         ))}
@@ -96,10 +97,9 @@ const renderImages = () => {
                                 loading='lazy'
                                 src={`/images/Works/${item.title}/title.jpg`}
                                 alt={`Work Image ${item.title}`}
-                                className="peer hover:scale-105 transition-all duration-500 px-[0.1vw] object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px]"
+                                className=" peer px-[0.1vw] transition-all duration-500 hover:scale-105 object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px] "
                             />
-
-                            <div className=" fixed peer-hover:relative peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
+                            <div className=" fixed peer-hover:fixed peer-hover:w-fit h-0 peer-hover:h-fit peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
                                 <div>{item.title}</div>
                             </div>
                             </Link>
