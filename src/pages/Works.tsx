@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const WorksPage = () => {
 
-    const [realarray, setRealArray] = useState<{ [year: number]: { title: string, year: number, series: string }[] }>({});
+    const [realarray, setRealArray] = useState<{ [year: number]: { title: string, year: number }[] }>({});
     
     const GetImages = async () => {
         await fetch('/Posts.json')
@@ -33,26 +33,13 @@ const WorksPage = () => {
     // renderImages 함수 수정
 const renderImages = () => {
     // 연도별로 이미지 그룹화
-    const groupedByYear: { [year: number]: { title: string, year: number,  series: string }[] } = {};
+    const groupedByYear: { [year: number]: { title: string, year: number }[] } = {};
     Object.values(realarray).forEach((yearArray) => {
         yearArray.forEach((item) => {
             if (!groupedByYear[item.year]) {
                 groupedByYear[item.year] = [];
             }
             groupedByYear[item.year].push(item);
-        });
-    });
-
-    // 시리즈가 있는 경우 시리즈별로 이미지 그룹화
-    const groupedBySeries: { [series: string]: { title: string, year: number,  series: string }[] } = {};
-    Object.values(realarray).forEach((yearArray) => {
-        yearArray.forEach((item) => {
-            if (item.series) {
-                if (!groupedBySeries[item.series]) {
-                    groupedBySeries[item.series] = [];
-                }
-                groupedBySeries[item.series].push(item);
-            }
         });
     });
 
@@ -65,7 +52,7 @@ const renderImages = () => {
                 <div key={year} className="">
                     <div className="mt-[0.5vh]">{year}</div>
                     <div className="flex ">
-                        { groupedByYear[parseInt(year)].map((item: { title: string, year: number, series: string }, index: number) => ( item.series === "" &&
+                        { groupedByYear[parseInt(year)].map((item: { title: string, year: number }, index: number) => (
                             <div key={`${year}-${index}`} className="">
                             <Link key={index} to={'/Works/' + item.title} className=''>
                             <img
@@ -85,29 +72,7 @@ const renderImages = () => {
                 </div>
             ))}
         </div>
-            {/* 시리즈별 이미지 출력 */}
-            {Object.keys(groupedBySeries).map((series) => (
-                <div key={series} style={{ marginBottom: '20px' }}>
-                    <div className="mt-[0.5vh]" >{series}</div>
-                    <div className="flex">
-                    {groupedBySeries[series].reverse().map((item: { title: string, year: number }, index: number) => (
-                        <div key={`${series}-${index}`}>
-                            <Link key={index} to={'/Works/' + item.title} className=''>
-                            <img
-                                loading='lazy'
-                                src={`/images/Works/${item.title}/title.jpg`}
-                                alt={`Work Image ${item.title}`}
-                                className=" peer px-[0.1vw] transition-all duration-500 hover:scale-105 object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px] "
-                            />
-                            <div className=" fixed peer-hover:fixed peer-hover:w-fit h-0 peer-hover:h-fit peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
-                                <div>{item.title}</div>
-                            </div>
-                            </Link>
-                        </div>
-                    ))}
-                    </div>
-                </div>
-            ))}
+            
         </>
     );
 };

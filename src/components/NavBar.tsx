@@ -1,5 +1,21 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+
+import name from "@/assets/name.png";
+import menu1contact from "@/assets/menu1-contact.png";
+import menu1cv from "@/assets/menu1-cv.png";
+import menu1home from "@/assets/menu1-home.png";
+import menu1note from "@/assets/menu1-note.png";
+import menu1works from "@/assets/menu1-works.png";
+import menu2cv from "@/assets/menu2-cv.png";
+import menu2home from "@/assets/menu2-home.png";
+import menu2note from "@/assets/menu2-note.png";
+import menu2works from "@/assets/menu2-works.png";
+import menu2contact from "@/assets/menu2-contact.png";
+
+
+
+
 // import Dropdown from "./Dropdown";
 
 const NavBar = () => {
@@ -14,29 +30,47 @@ const NavBar = () => {
     return (
         <>
         
-        <div className=" ml-[2vw] fixed mt-[2vh] text-xs md:text-xl z-50">
-            DULDOL JUNG
-            <div className=" font-medium text-xxs md:text-base ">
-                <div className="mt-[3vh] ">
-                    <Link to="/" className={ currentPath==="/" ? " text-dul-white " : " text-dul-gray" }>Home</Link>
+        <div className=" w-[80px] md:w-[130px] ml-[3vw] fixed mt-[2vh] text-xs md:text-xl z-50">
+            <img src={name} className="my-10 "/>
+            <div className=" font-medium text-xxs md:text-base">
+                <div className="mt-[2vh] w-[35px] md:w-[50px]">
+                    <Link to="/" >
+                    {
+                        currentPath==="/" ? <img src={menu1home}/> : <img src={menu2home}/>
+                    }
+                    </Link>
                 </div>
 
-                <div className="mt-[1vh]">
-                    <Link to="/Works" className={ currentPath.includes("Works") ? " text-dul-white " : " text-dul-gray" }>Works</Link>
+                <div className="mt-[2vh] w-[35px] md:w-[55px]">
+                <Link to="/Works" >
+                    {
+                        currentPath.includes("Works") ? <img src={menu1works}/> : <img src={menu2works}/>
+                    }
+                </Link>
                 </div>
 
-                <div className="mt-[1vh]">
-
-                    <Link to="/Note" className={ currentPath==="/Note" ? " text-dul-white " : " text-dul-gray" }>Note</Link>
+                <div className="mt-[2vh] w-[30px] md:w-[45px]">
+                <Link to="/Note" >
+                    {
+                        currentPath==="/Note" ? <img src={menu1note}/> : <img src={menu2note}/>
+                    }
+                </Link>                
                 </div>
 
-                <div className="mt-[1vh]">
-                    <Link to="/cv" className={ currentPath==="/cv" ? " text-dul-white " : " text-dul-gray" }>cv</Link>
+                <div className="mt-[2vh] w-[15px] md:w-[20px]">
+                <Link to="/cv" >
+                    {
+                        currentPath==="/cv" ? <img src={menu1cv}/> : <img src={menu2cv}/>
+                    }
+                </Link>                
                 </div>
 
-                <div className=" mt-[1vh]">
-
-                    <Link to="/Contact" className={ currentPath==="/Contact" ? " text-dul-white " : " text-dul-gray" }>Contact</Link>
+                <div className="mt-[2vh] w-[45px] md:w-[70px]">
+                <Link to="/Contact" >
+                    {
+                        currentPath==="/Contact" ? <img src={menu1contact}/> : <img src={menu2contact}/>
+                    }
+                </Link>                
                 </div>
             </div>
         </div>

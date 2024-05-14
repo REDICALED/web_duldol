@@ -5,6 +5,7 @@ import CvPage from './pages/CvPage'
 import ContactPage from './pages/Contact'
 import PostPage from './pages/PostPage'
 import ErrPage from './pages/ErrPage'
+import Editor from './pages/Editor'
 
 import {
   createBrowserRouter,
@@ -53,6 +54,10 @@ const router = createBrowserRouter([
       {
         path: '/Works/:id',
         element: <PostPage />,
+      },
+      {
+        path: '/Editor',
+        element: <Editor />,
       },
     ],
   },
