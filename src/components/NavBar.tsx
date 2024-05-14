@@ -14,9 +14,9 @@ const NavBar = () => {
     return (
         <>
         
-        <div className=" hidden md:block font-semibold ml-[2vw] fixed mt-[10vh]  md:text-2xl">
+        <div className=" hidden md:block font-semibold ml-[2vw] fixed mt-[10vh]  md:text-xl">
             DULDOL JUNG
-            <div className=" font-medium text-xl ">
+            <div className=" font-medium text-base ">
                 <div className="mt-[3vh] ">
                     <Link to="/" className={ currentPath==="/" ? " text-dul-white " : " text-dul-gray" }>Home</Link>
                 </div>

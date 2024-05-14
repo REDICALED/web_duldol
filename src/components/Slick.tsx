@@ -8,7 +8,7 @@ export const Slick = (props: { images: string[] }) => {
   console.log(images);
       
       return (
-        <div className="  ">
+        <div className=" px-[3vw] md:pr-[0]  ">
           {images.map((imgurl, index) => (
               <div>
                 <Zoom>
@@ -21,13 +21,13 @@ export const Slick = (props: { images: string[] }) => {
 
       </div>
         <div className=" font-semibold pr-[1vw] w-full text-right justify-end md:space-x-10 space-x-5 flex text-dul-gray ">
-          <div className=" right-0 text-sm md:text-3xl">
+          <div className=" right-0 text-sm md:text-base">
             <button className={ currentImage > 0 ? "opacity-100 " : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage-1)}>&lt;</button>
           </div>
-          <div className=" md:pt-1 right-0 text-sm md:text-2xl">
+          <div className="  right-0 text-sm md:text-base">
             {currentImage + 1}
           </div>
-          <div className=" right-0 text-sm md:text-3xl">
+          <div className=" right-0 text-sm md:text-base">
             <button className={ currentImage < images.length - 1 ? "opacity-100 " : "opacity-0 pointer-events-none  "} onClick={()=>setCurrentImage(currentImage+1)}>&gt;</button>
           </div>
         </div>

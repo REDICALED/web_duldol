@@ -5,7 +5,7 @@ const NotePage = () => {
         <div >
         
 
-        <div className=" text-dul-gray pt-[5vh] md:ml-[30vw]">
+        <div className=" text-dul-gray pt-[5vh] md:mx-[30vw]">
         <div className="  ml-[3vw] text-center">
             <Slick images={["/images/Note/Note1.jpg","/images/Note/Note2.jpg", "/images/Note/Note3.jpg"]}/>
 
@@ -13,13 +13,13 @@ const NotePage = () => {
 
 
         <div className=" px-[2vw] ">
-        <p className=" leading-8 mx-[2vw] md:text-base text-xs">
+        <p className=" leading-6 md:leading-8  lea mx-[2vw] md:text-sm text-xs">
         작게 친 도형 위나 아래가 뚫려있는 도형 어딘가가 뚫려 있어 그래, 모서리, 획 점 이 이루는 이 틀은 오픈형인걸 폐쇄형 이 아닌걸. 담백하고 싶어 뜯는 손 벗겨내보려는 가려움, 주변이 아닌 중심으로 불러보려는 손톱. 주변으로 미호명 하는 일은 쉬운 것 같아, 뜯는 손으로 미명을 부르고 싶어 
         </p>
         <br/>
         <br/>
 
-        <p className=" leading-8 mx-[5vw] md:text-base text-xs  ">
+        <p className=" leading-6 md:leading-8 mx-[5vw] md:text-sm text-xs  ">
         ’새장의 문을 닫고 새의 날갯짓을 생각했다. - 내가 들어갈 괄호의 맵시를 생각했다. - 괄호 안은 어두웠다. 그 언저리만     
         훤하고 조금은 따뜻했다. 서기 1945년 5월, 나에게도 뿔이 있어 세워 보고 또 세워 보고 했지만 부러지지 않았다. 
         내 뿔에는 뼈가 없었다. 괄호 안에서 나서 괄호 안에서 자랐기 때문일까 달팽이처럼,‘ 
@@ -27,14 +27,14 @@ const NotePage = () => {
         <br/>
         <br/>
 
-        <p className=" leading-8 mx-[2vw] md:text-base text-xs ">
+        <p className=" leading-6 md:leading-8 mx-[2vw] md:text-sm text-xs ">
         처용단장 3부에 있는 김춘수의 시이다. 그의 뼈 없는뿔처럼 달아나는 미명이라고 생각했다. 부풀어오르는 것 같은 내 양볼처럼 자꾸 새어나가고 하는 자꾸 더러워지는 편안함처럼 알 수가 없다. 알 수가 없는 것. 
         부드러운 달팽이 몸과 함께 자라는 단단한 껍데기는 칼륨 카르보나이트 - 석회질 - 점액질로 만들어지며, /그래 갈아타는 등딱지가 아니래 / 축적되어 추가되어 커다라진단다… 저는,… 아… 그래, 그러자…
         </p>
 
         <br/>
         <br/>
-        <p className=" leading-8 mx-[2vw] md:text-base text-xs text-right">
+        <p className=" leading-6 md:leading-8 mx-[2vw] md:text-sm text-xs text-right">
         <p>        영원히 불완전한 삶에, 그 위에 계속해서 삶을 서로 번역하며 전개하며 대화하며 창조한다. 그 대화가 계속 전개된다.</p>
         ‘불완전하게 그리고 다르게’
         <br/>
