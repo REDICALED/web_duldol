@@ -3,8 +3,7 @@ const CvPage = () => {
     return (
         <div >
         
-
-        <div className=" leading-6 text-dul-gray mx-[20vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-xs md:text-sm">
+        <div className=" leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xs md:text-sm">
             <div>
             정들돌
             <br />
