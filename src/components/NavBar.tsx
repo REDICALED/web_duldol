@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import Dropdown from "./Dropdown";
+// import Dropdown from "./Dropdown";
 
 const NavBar = () => {
     const location = useLocation();
-    const [dropdownstate, ToggleDropdown] = useState(false);
+    // const [dropdownstate, ToggleDropdown] = useState(false);
 
     const [currentPath, setCurrentPath] = useState(location.pathname);
 
