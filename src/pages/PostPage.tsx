@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useParams } from "react-router-dom";
 import PostComponent1 from "@/components/initpages/PostComponent1";
 import PostComponent2 from "@/components/initpages/PostComponent2";
