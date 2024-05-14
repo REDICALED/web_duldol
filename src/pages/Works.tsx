@@ -1,14 +1,127 @@
+import { useEffect, useState } from "react";
 
 const WorksPage = () => {
-    return (
-        <div >
-        
 
-        <div className="  text-white bg-red-200 ">
-            is works
+    const [realarray, setRealArray] = useState<{ [year: number]: { title: string, year: number, series: string }[] }>({});
+    
+    const GetImages = async () => {
+        await fetch('/Posts.json')
+        .then(response => response.json()) 
+        .then(data => {
+          // posts 배열 추출
+          const posts = data.posts;
+      
+          // 년도별로 그룹화하는 객체 생성
+          const postsByYear = posts.reduce((acc: { [x: number]: any[]; }, post: { year: number; }) => {
+            if (!acc[post.year]) {
+              acc[post.year] = [];
+            }
+            acc[post.year].push(post);
+            return acc; 
+          }, {});
+      
+          // 그룹화된 데이터 확인
+          console.log(postsByYear);
+          setRealArray(postsByYear);
+        })
+        .catch(error => console.error('Error fetching JSON:', error));
+        return ;       
+    }
+
+
+    // renderImages 함수 수정
+const renderImages = () => {
+    // 연도별로 이미지 그룹화
+    const groupedByYear: { [year: number]: { title: string, year: number,  series: string }[] } = {};
+    Object.values(realarray).forEach((yearArray) => {
+        yearArray.forEach((item) => {
+            if (!groupedByYear[item.year]) {
+                groupedByYear[item.year] = [];
+            }
+            groupedByYear[item.year].push(item);
+        });
+    });
+
+    // 시리즈가 있는 경우 시리즈별로 이미지 그룹화
+    const groupedBySeries: { [series: string]: { title: string, year: number,  series: string }[] } = {};
+    Object.values(realarray).forEach((yearArray) => {
+        yearArray.forEach((item) => {
+            if (item.series) {
+                if (!groupedBySeries[item.series]) {
+                    groupedBySeries[item.series] = [];
+                }
+                groupedBySeries[item.series].push(item);
+            }
+        });
+    });
+
+    // 이미지 출력
+    return (
+        <>
+            {/* 연도별 이미지 출력 */}
+        <div className=" text-dul-gray md:text-sm">
+            {Object.keys(groupedByYear).reverse().map((year) => (
+                <div key={year} className="">
+                    <div className="mt-[0.5vh]">{year}</div>
+                    <div className="flex ">
+                        { groupedByYear[parseInt(year)].map((item: { title: string, year: number, series: string }, index: number) => ( item.series === "" &&
+                            <div key={`${year}-${index}`} className="">
+                            <img
+
+                                src={`/images/Works/${item.title}/title.jpg`}
+                                alt={`Work Image ${item.title}`}
+                                className="peer px-[0.1vw] md:w-[150px] w-[100px] transition-all duration-500 hover:scale-105 "
+                            />
+                            <div className=" fixed peer-hover:relative peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
+                                <div>{item.title}</div>
+                            </div>
+                        </div>
+                        ))}
+                    </div>
+                </div>
+            ))}
         </div>
-        
-        </div>
+            {/* 시리즈별 이미지 출력 */}
+            {Object.keys(groupedBySeries).map((series) => (
+                <div key={series} style={{ marginBottom: '20px' }}>
+                    <div className="mt-[0.5vh]" >{series}</div>
+                    <div className="flex">
+                    {groupedBySeries[series].reverse().map((item: { title: string, year: number }, index: number) => (
+                        <div key={`${series}-${index}`}>
+                            <img
+                                height={100}
+                                width={100}
+                                src={`/images/Works/${item.title}/title.jpg`}
+                                alt={`Work Image ${item.title}`}
+                                className="peer hover:scale-105 transition-all duration-500 px-[0.1vw]  md:w-[150px] w-[100px]"
+                            />
+                            <div className=" fixed peer-hover:relative peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
+                                <div>{item.title}</div>
+                            </div>
+                        </div>
+                    ))}
+                    </div>
+                </div>
+            ))}
+        </>
+    );
+};
+
+
+    useEffect(() => {
+        GetImages();
+        if (realarray[2024] && realarray[2024][0]) {
+            console.log(realarray[2024][0].title); 
+        }
+    }
+    ,[]);
+    return (
+        <>
+            <div className="leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
+            {renderImages()}
+
+            </div>
+        </>
     );
 }
 

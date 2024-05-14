@@ -7,7 +7,7 @@ const NotePage = () => {
 
         <div className=" text-dul-gray pt-[5vh] ml-[30vw] md:mx-[30vw] mr-[5vw]">
         <div className="">
-            <Slick images={["/images/Note/Note1.jpg","/images/Note/Note2.jpg", "/images/Note/Note3.jpg"]} images_cap={["단단한 여자애의 소망","단단한 여자애의 소망","단단한 여자애의 소망"]}/>
+            <Slick images={["/images/Note/Note1.jpg","/images/Note/Note2.jpg", "/images/Note/Note3.jpg"]} images_cap={["단단한 여자애의 소망_text file_a4_2022","단단한 여자애의 소망_text file_a4_2022","단단한 여자애의 소망_text file_a4_2022"]}/>
 
         </div>
 
