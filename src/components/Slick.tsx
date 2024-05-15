@@ -19,15 +19,19 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
                 </div>}
             </div>
       ))}
-        <div className=" pr-[1vw] w-full text-right justify-end md:space-x-10 space-x-5 flex text-dul-gray ">
-          <div className=" right-0 text-xs md:text-sm">
-            <button className={ currentImage > 0 ? "opacity-100 " : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage-1)}>&lt;</button>
-          </div>
-          <div className="  right-0 text-xs md:text-sm">
-            {currentImage + 1}
-          </div>
-          <div className=" right-0 text-xs md:text-sm">
-            <button className={ currentImage < images.length - 1 ? "opacity-100 " : "opacity-0 pointer-events-none  "} onClick={()=>setCurrentImage(currentImage+1)}>&gt;</button>
+        <div className="w-full text-center justify-end flex text-dul-gray ">
+          <span></span>
+          <span className=" mx-4 right-0 text-xs md:text-sm font-semibold">{currentImage + 1}</span>
+          <div className="flex">
+            <div className=" mx-2  right-0 text-xs md:text-sm">
+              <button className={ currentImage > 0 ? "opacity-100 " : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage-1)}>&lt;</button>
+            </div>
+            <div className=" mx-2  right-0 text-xs md:text-sm">
+              1 - {images.length}
+            </div>
+            <div className=" mx-2  right-0 text-xs md:text-sm">
+              <button className={ currentImage < images.length - 1 ? "opacity-100 " : "opacity-0 pointer-events-none  "} onClick={()=>setCurrentImage(currentImage+1)}>&gt;</button>
+            </div>
           </div>
         </div>
         <br/>

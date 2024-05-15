@@ -3,17 +3,19 @@ import pic2 from "/images/Works/I_m thinking about pebble/2.jpg";
 import pic3 from "/images/Works/I_m thinking about pebble/3.jpg";
 import gif1 from "/images/Works/I_m thinking about pebble/1.gif";
 import gif2 from "/images/Works/I_m thinking about pebble/2.gif";
-
+import Zoom from "react-medium-image-zoom";
 import Slick from '@/components/Slick';
 
 const PostComponent10 = () => {
 
 
     return (
-        <div className=" leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
+        <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
         
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
+            <Zoom>
                 <img src={pic2} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
+            </Zoom>
                 <span className='w-full text-xxs md:text-xs'>thinking about pebble / 돌맹이 3부작 - 1</span>
             </div>
             <Slick images={[pic1, pic2, pic3]} images_cap={["돌멩이에 대해 생각해 thinking about pebble 1_digital print_2022","돌멩이에 대해 생각해 thinking about pebble 2_digital print_2022","돌멩이에 대해 생각해 thinking about pebble 3_digital print_2022"]}/>
@@ -30,9 +32,13 @@ const PostComponent10 = () => {
                 <br />사람들이, 세상이, 서로에게, 돌멩이처럼 씩씩하고 다정하면 좋겠다고 생각했다. 
             </span>
             <br />
+            <Zoom>
             <img src={gif1} className="w-[100vw]" ></img>
+            </Zoom>
             <span>돌멩이에 대해 생각해 thinking about pebble 4_digital gif_2022</span>
+            <Zoom>
             <img src={gif2} className="w-[100vw]" ></img>
+            </Zoom>
             <span>돌멩이에 대해 생각해 thinking about pebble 5_digital gif_2022</span>
             <br />
             <br />

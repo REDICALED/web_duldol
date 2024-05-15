@@ -1,7 +1,30 @@
+import pic1 from "/images/Works/감정의 정반합/1.jpg";
+import pic2 from "/images/Works/감정의 정반합/2.jpg";
+
+
+
+import Zoom from "react-medium-image-zoom";
+
+
+
+import Slick from '@/components/Slick';
 const PostComponent1 = () => {
+
+
     return (
-        <div className=" leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
-        postpage
+        <div className=" leading-5 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
+            <div className='flex mb-[1vh] md:mb-[0.5vh]'>
+                <Zoom>
+                <img src={pic1} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
+                </Zoom>
+                <span className='w-full text-xxs md:text-xs'>감정의 정반합</span>
+            </div>
+
+            
+            
+            <Slick images={[pic1, pic2]} images_cap={["감정의 정반합-회색 인간_뜯은 골판지 상자 한 쪽 면에 연필_54*78(cm)_2022", "감정의 정반합-회색 인간_부분도"]}/>
+            <br />
+
         </div>
     );
 }
