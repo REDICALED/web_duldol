@@ -1,13 +1,7 @@
 import pic1 from "/images/Works/여린 것들의 슬픔/1.jpg";
 
-
-
-
 import Zoom from "react-medium-image-zoom";
 
-
-
-import Slick from '@/components/Slick';
 const PostComponent7 = () => {
 
 
