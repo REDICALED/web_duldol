@@ -11,6 +11,7 @@ import PostComponent9 from "@/components/initpages/PostComponent9";
 import PostComponent10 from "@/components/initpages/PostComponent10";
 import PostComponent11 from "@/components/initpages/PostComponent11";
 import PostComponent12 from "@/components/initpages/PostComponent12";
+import ErrPage from "@/pages/ErrPage";
 
 
 
@@ -41,6 +42,8 @@ const PostPage = () => {
         return <PostComponent11 />;
     else if (tags.id === "murmur-mural ensemble(웅얼웅얼-벽화 합창)") 
         return <PostComponent12 />;
+    else
+        return <ErrPage/>
 };
 
 
