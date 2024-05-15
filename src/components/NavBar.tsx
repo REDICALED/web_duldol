@@ -33,7 +33,7 @@ const NavBar = () => {
         <div className=" w-[80px] md:w-[130px] ml-[3vw] fixed mt-[2vh] text-xs md:text-xl z-50">
             <img src={name} className="my-10 "/>
             <div className=" font-medium text-xxs md:text-base">
-                <div className="mt-[2vh] w-[35px] md:w-[50px]">
+                <div className="mt-[2vh] w-[40px] md:w-[50px]">
                     <Link to="/" >
                     {
                         currentPath==="/" ? <img src={menu1home}/> : <img src={menu2home}/>
@@ -41,7 +41,7 @@ const NavBar = () => {
                     </Link>
                 </div>
 
-                <div className="mt-[2vh] w-[35px] md:w-[55px]">
+                <div className="mt-[2vh] w-[40px] md:w-[50px]">
                 <Link to="/Works" >
                     {
                         currentPath.includes("Works") ? <img src={menu1works}/> : <img src={menu2works}/>
@@ -49,7 +49,7 @@ const NavBar = () => {
                 </Link>
                 </div>
 
-                <div className="mt-[2vh] w-[30px] md:w-[45px]">
+                <div className="mt-[2vh] w-[30px] md:w-[40px]">
                 <Link to="/Note" >
                     {
                         currentPath==="/Note" ? <img src={menu1note}/> : <img src={menu2note}/>
@@ -65,7 +65,7 @@ const NavBar = () => {
                 </Link>                
                 </div>
 
-                <div className="mt-[2vh] w-[45px] md:w-[70px]">
+                <div className="mt-[2vh] w-[55px] md:w-[75px]">
                 <Link to="/Contact" >
                     {
                         currentPath==="/Contact" ? <img src={menu1contact}/> : <img src={menu2contact}/>
