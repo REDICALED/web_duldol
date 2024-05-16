@@ -31,7 +31,7 @@ const PostComponent5 = () => {
             </div>
 
             <div className=" justify-start flex text-left w-full ">
-                <iframe src="https://player.vimeo.com/video/827133486?autoplay=1&loop=1&title=0" className="w-full md:h-[600px]" ></iframe>
+                <iframe src="https://player.vimeo.com/video/827133486?autoplay=0&loop=1&title=0" className="w-full md:h-[600px]" ></iframe>
             </div>
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
                 <span className='w-full text-xxs md:text-xs'>미뢔 Mirwae_1 channel 2D·3D animation_00:02:26_2023

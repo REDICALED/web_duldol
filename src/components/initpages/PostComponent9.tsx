@@ -29,7 +29,7 @@ const PostComponent9 = () => {
             </div>
 
             <div className=" justify-start flex text-left w-full ">
-                <iframe src="https://player.vimeo.com/video/782211457?autoplay=1&loop=1&title=0" className="w-full md:h-[550px]" ></iframe>
+                <iframe src="https://player.vimeo.com/video/782211457?autoplay=0&loop=1&title=0" className="w-full md:h-[550px]" ></iframe>
             </div>
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
                 <span className='w-full text-xxs md:text-xs'>중성인간 Neutral person_1 channel 2D animation_00:01:36_ 2022

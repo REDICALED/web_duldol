@@ -79,7 +79,7 @@ const PostComponent11 = () => {
             <br />
             </span>
             <div className=" justify-start flex text-left w-full ">
-                <iframe src="https://player.vimeo.com/video/898474520?autoplay=1&loop=1&title=0" className="w-full md:h-[550px]" ></iframe>
+                <iframe src="https://player.vimeo.com/video/898474520?autoplay=0&loop=1&title=0" className="w-full md:h-[550px]" ></iframe>
             </div>
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
                 <span className='w-full text-xxs md:text-xs'>Metamorphosis 4_1 channel, 4 moving images_00:00:29_2023</span>
