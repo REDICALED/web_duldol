@@ -26,12 +26,27 @@ const PostComponent12 = () => {
 
             <div className="flex items-center justify-between">
                 <Zoom>
+                <img src={picfull1} className="md:h-[50vh] ml-auto " ></img>
+                </Zoom>
+            </div>
+            <span className="text-right justify-end flex">murmur-mural ensemble(웅얼웅얼-벽화 합창) 1~3_installation view</span>
+            
+            <br />
+            <br />
+
+            <div className="flex items-center justify-between">
+                <Zoom>
                 <img src={pic1} className="md:h-[50vh] ml-auto " ></img>
                 </Zoom>
             </div>
             <span className="text-right justify-end flex">murmur-mural ensemble(웅얼웅얼-벽화 합창) 1_210*197(cm)_혼합 종이(닥종이, 한지, 마분지 등), 흑연, 화이트젯소, 겔, 페이스트_2024</span>
 
+            <br />
+            <br />
+
             <Slick images={[pics1, pics2, pics3]} images_cap={["murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도","murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도","murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도"]}/>
+
+            <Slick images={[pics21, pics22, pics23]} images_cap={["murmur-mural ensemble_2_onthefloor","murmur-mural ensemble_3_detail","murmur-mural ensemble_3_onthefloor"]}/>
 
 
             <span className=" justify-start flex text-left w-full ">
@@ -191,15 +206,7 @@ const PostComponent12 = () => {
             난 그냥 다 지겨워
             <br />
             <br />
-            </span>
-
-            <Slick images={[pics21, pics22, pics23]} images_cap={["murmur-mural ensemble_2_onthefloor","murmur-mural ensemble_3_detail","murmur-mural ensemble_3_onthefloor"]}/>
-            <div className="flex items-center justify-between">
-                <Zoom>
-                <img src={picfull1} className="md:h-[50vh] ml-auto " ></img>
-                </Zoom>
-            </div>
-            <span className="text-right justify-end flex">murmur-mural ensemble_full_2405</span>
+            </span>            
             <br />
             <br />
 

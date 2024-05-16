@@ -31,7 +31,7 @@ const PostComponent11 = () => {
                 </Zoom>
                 <span className='w-full text-xxs md:text-xs'>Metamorphosis</span>
             </div>
-            <Slick images={[pic1_1, pic1_2, pic1_3, pic1_4]} images_cap={["Metamorphosis_installation view","Metamorphosis 1_148*108(cm)_장지에 연필과 아크릴_2023","Metamorphosis 2_150*113(cm)_종이에 연필과 아크릴_ 2023", "Metamorphosis 3_150*140(cm)_종이에 연필, 아크릴 물감, 흑연, 제스모나이트,석고, 종이죽_2023"]}/>
+            <Slick images={[pic1_1, pic1_2, pic1_3, pic1_4]} images_cap={["Metamorphosis_installation view","Metamorphosis_installation view","Metamorphosis_installation view","Metamorphosis_installation view"]}/>
 
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
                 <span className='w-full text-xxs md:text-xs'>Metamorphosis</span>

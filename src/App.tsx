@@ -13,6 +13,7 @@ import {
   Outlet
 } from 'react-router-dom';
 import NavBar from './components/NavBar'
+import ScrollToTop from './components/ScrolToTop'
 
 const HeaderLayout = () => (
   <>
@@ -20,6 +21,8 @@ const HeaderLayout = () => (
       <NavBar />
     </header>
     <Outlet />
+    <ScrollToTop />
+
   </>
 );
 

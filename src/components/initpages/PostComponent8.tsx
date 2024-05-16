@@ -24,7 +24,7 @@ const PostComponent8 = () => {
     
             <Slick images={[pic1, pic2,pic3]} images_cap={["유(柔)하다 1_아크릴, 파스텔_60.6*90.9(cm)_2021","유(柔)하다 2_아크릴물감, 파스텔_97*130.3(cm)_2021","유(柔)하다 4_아크릴물감, 파스텔_97*130.3(cm)_2021"]}/>
             <Zoom>
-            <img src={pic4} className="w-[100vw] md:h-[50vh] object-cover " ></img>
+            <img src={pic4} className="w-[100vw] object-cover " ></img>
             </Zoom>
             <span>유(有)하다_종이에 연필_47*64(cm)_2021</span>
             <br />

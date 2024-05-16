@@ -12,7 +12,15 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
           {images.map((imgurl, index) => (
               <div>
                 <Zoom>
-                  {<img loading="lazy" className={ currentImage === index ? "opacity-100 block transition-all duration-300 w-[100vw] md:w-[60vw] h-[15vh] md:h-[40vh] object-contain " : " object-contain opacity-0 hidden pointer-events-none transition-all duration-300 w-[100vw] md:w-[60vw]"} src={imgurl} alt='asd'></img>}
+{<img 
+  loading="lazy" 
+  className={currentImage === index ? 
+    "opacity-100 block transition-opacity duration-500 w-[100vw] md:w-[60vw] h-[15vh] md:h-[40vh] object-contain" 
+    : "opacity-0 absolute w-[100vw] md:w-[60vw] h-0 object-contain pointer-events-none"
+  } 
+  src={imgurl} 
+  alt='asd'
+/>}
                 </Zoom>
                 { currentImage === index && <div className=" text-xxs md:text-xs font-sans flex justify-between " >
                   <p>{props.images_cap[index]}</p>

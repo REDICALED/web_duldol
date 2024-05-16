@@ -14,7 +14,7 @@ const PostComponent7 = () => {
                 <span className='w-full text-xxs md:text-xs'>여린 것들의 슬픔</span>
             </div>
             <Zoom>
-            <img src={pic1} className="w-[100vw] md:h-[50vh] object-cover " ></img>
+            <img src={pic1} className="w-[100vw] object-cover " ></img>
             </Zoom>
             <span>여린 것들의 슬픔_아크릴, 모래, 파스텔_97*130(cm)_2021</span>
 

@@ -36,7 +36,7 @@ const PostPage = () => {
         return <PostComponent8 />;
     else if (tags.id === "중성인간(neutral person)") 
         return <PostComponent9 />;
-    else if (tags.id === "I_m thinking about pebble") 
+    else if (tags.id === "thinking about pebble") 
         return <PostComponent10 />;
     else if (tags.id === "metamorphosis") 
         return <PostComponent11 />;

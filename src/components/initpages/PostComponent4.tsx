@@ -25,7 +25,7 @@ const PostComponent4 = () => {
             
             
             <Slick images={[pic1, pic2,pic3,pic4]} images_cap={["모양들 1_드라이 포인트_25*35(cm)_2021","모양들 2_스크린판화_45*62(cm)_2021","모양들 3_스크린판화_45*62(cm)_2021","모양들 4_스크린판화_45*62(cm)_2021"]}/>
-            <br />
+            <span className='w-full justify-center flex text-center text-xxs md:text-xs'>모양들, 내 속을 떠다니는 모양들.</span>
 
         </div>
     );

@@ -1,8 +1,8 @@
-import pic1 from "/images/Works/I_m thinking about pebble/1.jpg";
-import pic2 from "/images/Works/I_m thinking about pebble/2.jpg";
-import pic3 from "/images/Works/I_m thinking about pebble/3.jpg";
-import gif1 from "/images/Works/I_m thinking about pebble/1.gif";
-import gif2 from "/images/Works/I_m thinking about pebble/2.gif";
+import pic1 from "/images/Works/thinking about pebble/1.jpg";
+import pic2 from "/images/Works/thinking about pebble/2.jpg";
+import pic3 from "/images/Works/thinking about pebble/3.jpg";
+import gif1 from "/images/Works/thinking about pebble/1.gif";
+import gif2 from "/images/Works/thinking about pebble/2.gif";
 import Zoom from "react-medium-image-zoom";
 import Slick from '@/components/Slick';
 
