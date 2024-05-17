@@ -16,7 +16,7 @@ const PostComponent10 = () => {
             <Zoom>
                 <img src={pic2} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
             </Zoom>
-                <span className='w-full text-xxs md:text-xs'>thinking about pebble / 돌맹이 3부작 - 1</span>
+                <span className='w-full text-xxs md:text-xs'>thinking about pebble</span>
             </div>
             <Slick images={[pic1, pic2, pic3]} images_cap={["돌멩이에 대해 생각해 thinking about pebble 1_digital print_2022","돌멩이에 대해 생각해 thinking about pebble 2_digital print_2022","돌멩이에 대해 생각해 thinking about pebble 3_digital print_2022"]}/>
             

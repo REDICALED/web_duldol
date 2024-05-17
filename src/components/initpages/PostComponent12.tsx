@@ -34,19 +34,14 @@ const PostComponent12 = () => {
             <br />
             <br />
 
-            <div className="flex items-center justify-between">
-                <Zoom>
-                <img src={pic1} className="md:h-[50vh] ml-auto " ></img>
-                </Zoom>
-            </div>
             <span className="text-right justify-end flex">murmur-mural ensemble(웅얼웅얼-벽화 합창) 1_210*197(cm)_혼합 종이(닥종이, 한지, 마분지 등), 흑연, 화이트젯소, 겔, 페이스트_2024</span>
 
             <br />
             <br />
 
-            <Slick images={[pics1, pics2, pics3]} images_cap={["murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도","murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도","murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도"]}/>
+            <Slick images={[pic1, pics1, pics2, pics3]} images_cap={["murmur-mural ensemble(웅얼웅얼-벽화 합창) 1_210*197(cm)_혼합 종이(닥종이, 한지, 마분지 등), 흑연, 화이트젯소, 겔, 페이스트_2024","murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도","murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도","murmur-mural ensemble (웅얼웅얼-벽화 합창) 1_부분도"]}/>
 
-            <Slick images={[pics21, pics22, pics23]} images_cap={["murmur-mural ensemble_2_onthefloor","murmur-mural ensemble_3_detail","murmur-mural ensemble_3_onthefloor"]}/>
+            <Slick images={[pics21, pics23, pics22]} images_cap={["murmur-mural ensemble 2_128*149(cm)_장지, 캔트지, 색지, 연질 에폭시, 화이트 젯소, 흑연_2024","murmur-mural ensemble 3_103*118(cm)_혼합종이, 흑연, 유화, 먹물, 색연필_2023, 2024", "murmur-mural ensemble 3_부분도"]}/>
 
 
             <span className=" justify-start flex text-left w-full ">
@@ -69,7 +64,7 @@ const PostComponent12 = () => {
             <br />
             불완전한 존재들이 상호간 연결되어, 그 웅얼대는 웅성됨이 공명하고 간섭하는 하나의 지대. 
             <br />
-            그러한 혼합된 장을 담은 웅얼-합창이 담긴 벽화를 통해 불완전하게 피어나는 ‘사람’을 조명하는 그림을 그리고 싶었다.
+            그러한 혼합된 장을 담은 웅얼-합창이 담긴 벽화를 통해 불완전하게 피어나는 사람을 조명하는 그림을 그리고 싶었다.
             <br />
             <br />
 
