@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useState } from "react";
+// import { useState } from "react";
 import { Editor } from '@tinymce/tinymce-react';
 
 const EditorPage = () => {
-        const [value, setValue] = useState("**Hello world!!!**");
+        // const [value, setValue] = useState("**Hello world!!!**");
         const tags = useParams();
         console.log(tags.id);
         return (
@@ -19,7 +19,7 @@ const EditorPage = () => {
                 { value: 'First.Name', title: 'First Name' },
                 { value: 'Email', title: 'Email' },
               ],
-              ai_request: (request: any, respondWith: { string: (arg0: () => Promise<never>) => any; }) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+            //   ai_request: (request: any, respondWith: { string: (arg0: () => Promise<never>) => any; }) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
             }}
             initialValue="Welcome to TinyMCE!"
           />
