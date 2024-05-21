@@ -18,7 +18,7 @@ const PostComponent3 = () => {
                 <span className='w-full text-xxs md:text-xs'>돌계란 stonegg</span>
             </div>
             <Zoom>
-            <img src={pic2} className="w-[100vw] md:h-[50vh] object-cover " ></img>
+            <img src={pic2} className="w-[100vw] object-cover " ></img>
             </Zoom>
             <span>돌계란 2_21*28(cm)_혼합재료_2022</span>
             <br />

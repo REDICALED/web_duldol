@@ -26,7 +26,7 @@ const PostComponent12 = () => {
 
             <div className="flex items-center justify-between">
                 <Zoom>
-                <img src={picfull1} className="md:h-[50vh] ml-auto " ></img>
+                <img src={picfull1} className=" w-[100vw] ml-auto " ></img>
                 </Zoom>
             </div>
             <span className="text-right justify-end flex">murmur-mural ensemble(웅얼웅얼-벽화 합창) 1~3_installation view</span>
