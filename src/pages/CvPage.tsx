@@ -25,12 +25,6 @@ const CvPage = () => {
             <br />
             : Queerdiosyncrasies vol. 2, whammyanalogmedia, 로스앤젤레스, 미국
             <br />
-            2022 "Signal of the Moment BEEP", RNL 갤러리, 중구, 서울, 한국
-            <br />
-            2022 "P between A", 갤러리 Raon, 종로, 서울, 한국
-            <br />
-            2021 "저장하시겠습니까?", onme.studio, 온라인
-            <br />
             <br />
 
             기타
@@ -38,8 +32,6 @@ const CvPage = () => {
             2023 [2023 성남시 예비예술가 육성사업]: Dear.X
             <br />
             2023 하자센터 아트플랫폼 공유작업실 OOEO 1기, 2기 입주멤버
-            <br />
-            2022 Darkroom: 대학생 작가를 만나다, 첫발행호 인터뷰이
             <br />
             <br />
 
@@ -63,12 +55,6 @@ const CvPage = () => {
             <br />
             2023 Film &lt;Neutral person-root girl&gt; Screening: Queerdios Syncrasies vol. 2, whammyanalogmedia, Los Angeles, United States
             <br />
-            2022 "Signal of the Moment BEEP", RNL Gallery, Jung-gu, Seoul, Korea
-            <br />
-            2022 "Petween A", Gallery Raon, Jongno, Seoul, Korea
-            <br />
-            2021 "Do you want to save it?" onme.studio, online
-            <br />
             <br />
 
             etc
@@ -76,8 +62,6 @@ const CvPage = () => {
             2023 [2023 Seongnam City Prospective Artist Promotion Project]: Dear.X
             <br />
             2023 Haja Center Art Platform Sharing Studio OOEO 1st and 2nd Resident Members
-            <br />
-            2022 Darkroom: Meet a Student artist, First Published Issue Interviewee
             <br />
                 <br />
                 <br />
