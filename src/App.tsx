@@ -14,6 +14,8 @@ import {
 } from 'react-router-dom';
 import NavBar from './components/NavBar'
 import ScrollToTop from './components/ScrolToTop'
+import ModalProvider from './providers/ModalProvider'
+import { RecoilRoot } from 'recoil'
 
 const HeaderLayout = () => (
   <>
@@ -70,8 +72,12 @@ function App() {
 
   return (
     <>
-      <RouterProvider router={router} />
-    </>
+      <RecoilRoot>
+        <ModalProvider>
+          <RouterProvider router={router}/>
+        </ModalProvider>    
+      </RecoilRoot>
+        </>
   )
 }
 
