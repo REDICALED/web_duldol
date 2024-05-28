@@ -1,0 +1,124 @@
+/* Basic editor styles */
+.tiptap {
+    > * + * {
+      margin-top: 0.75em;
+    }
+  
+    ul,
+    ol {
+      padding: 0 1rem;
+    }
+  
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      line-height: 1.1;
+    }
+
+    img {
+      height: 50vh;
+      width: 50vw;
+    }
+  
+    pre {
+      background: #0D0D0D;
+      color: #FFF;
+      font-family: 'JetBrainsMono', monospace;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+  
+      code {
+        color: inherit;
+        padding: 0;
+        background: none;
+        font-size: 0.8rem;
+      }
+    }
+  
+    blockquote {
+      padding-left: 1rem;
+      border-left: 2px solid rgba(13, 13, 13, 0.1);
+    }
+  
+    hr {
+      border: none;
+      border-top: 2px solid rgba(13, 13, 13, 0.1); /* Corrected RGBA format */
+      margin: 2rem 0;
+    }
+
+    border: 2px solid black; /* 검정 테두리 */
+    padding: 10px; /* 패딩 설정 */
+    background-color: white; /* 배경색 */
+    
+  }
+
+  .is-active {
+    border: 1px solid black; /* 검정 테두리 */
+    padding: 10px; /* 패딩 설정 */
+    background-color: #e5e7eb; /* 배경색 */  }
+
+  .is-none {
+    border: 1px solid black; /* 검정 테두리 */
+    padding: 10px; /* 패딩 설정 */
+    background-color: white; /* 배경색 */  }
+
+    p:empty::before {
+      content: "\00a0"; /* non-breaking space */
+      display: block;
+    }
+
+    .ProseMirror {        
+      min-height: 50vh;
+      max-height: 50vh;
+      min-width: 40vw;
+      max-width: 40vw;
+      overflow-y: scroll;
+    }
+
+
+    ul,
+    ol {
+      padding: 0 1rem;
+    }
+  
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      line-height: 1.1;
+    }
+
+    img {
+      height: 50vh;
+    }
+  
+    pre {
+      background: #0D0D0D;
+      color: #FFF;
+      font-family: 'JetBrainsMono', monospace;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+  
+      code {
+        color: inherit;
+        padding: 0;
+        background: none;
+        font-size: 0.8rem;
+      }
+    }
+  
+    blockquote {
+      padding-left: 1rem;
+      border-left: 2px solid rgba(13, 13, 13, 0.1);
+    }
+  
+    hr {
+      border: none;
+      border-top: 2px solid rgba(13, 13, 13, 0.1); /* Corrected RGBA format */
+      margin: 2rem 0;
+    }
