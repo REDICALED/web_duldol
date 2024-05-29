@@ -330,8 +330,8 @@ const Editor = () => {
 
       </div>
  
-      <div className=" ml-[1vw] preview w-[40vw] border-2 border-dul-gray">
-          <div className=" leading-5 md:leading-6 w-[20vw] ml-[10vw] text-dul-gray pt-[5vh] text-xxs md:text-xs"
+      <div className=" ml-[1vw] preview w-[40vw] border-2 border-dul-gray h-[80vh] overflow-y-scroll">
+          <div className=" leading-5 md:leading-6 w-[20vw] ml-[10vw]  text-dul-gray pt-[5vh] text-xxs md:text-xs"
           >
             <Preview/>
           </div>
