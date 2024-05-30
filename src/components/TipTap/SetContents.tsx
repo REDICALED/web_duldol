@@ -7,6 +7,7 @@ import { getFunc } from '@/components/Git/GitFunc';
 
  const SetContents = (props:any) => {
     const [ GenreType , ] = useRecoilState(PostGenreType);
+    
 
     const GetContents = async () => {
         const octokit = new Octokit({
@@ -16,14 +17,11 @@ import { getFunc } from '@/components/Git/GitFunc';
         const puttitle = await getFunc(octokit, `Posts/${GenreType}.html`);
         let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
         console.log(puttitle.status);
-        console.log(returnString);
         return returnString;
       };
 
     const handleButtonClick = async () => {
-      console.log(GenreType);
       const ContentHtml = await GetContents();
-      console.log(ContentHtml);
       props.tiptapeditor.commands.setContent(ContentHtml);
     }
 
