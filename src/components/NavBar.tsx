@@ -12,17 +12,24 @@ import menu2home from "@/assets/menu2-home.png";
 import menu2note from "@/assets/menu2-note.png";
 import menu2works from "@/assets/menu2-works.png";
 import menu2contact from "@/assets/menu2-contact.png";
+import menu1memo from "@/assets/menu1-memo.png";
+import menu2memo from "@/assets/menu2-memo.png";
+import menu1editor from "@/assets/menu1-editor.png";
+import menu2editor from "@/assets/menu2-editor.png";
+
+
+import { LoginValid } from "@/atoms/LoginValidAtom";
+import { useRecoilState } from "recoil";
 
 
 
 
-// import Dropdown from "./Dropdown";
 
 const NavBar = () => {
     const location = useLocation();
-    // const [dropdownstate, ToggleDropdown] = useState(false);
 
     const [currentPath, setCurrentPath] = useState(location.pathname);
+    const [ loginvaild , ] = useRecoilState(LoginValid);
 
     useEffect(() => {
         setCurrentPath(location.pathname);
@@ -72,27 +79,24 @@ const NavBar = () => {
                     }
                 </Link>                
                 </div>
+
+                { loginvaild === 1 && <div className="mt-[2vh] w-[45px] md:w-[55px]">
+                <Link to="/memo" >
+                    {
+                        currentPath==="/memo" ? <img src={menu1memo}/> : <img src={menu2memo}/>
+                    }
+                </Link>                
+                </div>}
+
+                { loginvaild === 1 && <div className="mt-[1.7vh] w-[45px] md:w-[57px]">
+                <Link to="/editor" >
+                    {
+                        currentPath==="/editor" ? <img src={menu1editor}/> : <img src={menu2editor}/>
+                    }
+                </Link>                
+                </div>}
             </div>
         </div>
-
-        {/* <div className=" md:hidden block fixed right-0 end z-50 ">
-            <div className=" pt-[1vh] text-xs font-medium 2sm:flex 2sm:justify-end text-right w-full ">
-                <div className=" mx-1">
-                    DULDOL JUNG
-                </div>
-                <div className="">
-                    <button className="mr-2 2sm:mt-1 mt-2 2sm:ml-10 2sm:justify-end" onClick={()=>{ToggleDropdown(!dropdownstate)}}>
-                        <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"/>
-                        </svg>
-                    </button>
-                    <div className={ dropdownstate ? " duration-300 transition-opacity bg-dul-gray bg-opacity-10 opacity-100 " : " opacity-0 bg-opacity-0 duration-500 transition-opacity bg-dul-gray mr-10 "}>
-                        {dropdownstate && <Dropdown/>}
-                    </div>
-                </div>
-            </div>
-            
-        </div> */}
         </>
     );
 }

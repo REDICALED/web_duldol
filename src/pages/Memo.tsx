@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ParseHtml from "@/components/ParseHtml";
 import parse from 'html-react-parser';
 
-const CvPage = () => {
+const MemoPage = () => {
 
     const [htmlcontents, sethtmlcontents] = useState("");
     useEffect(() => {
@@ -11,7 +11,7 @@ const CvPage = () => {
     }, []);
     const inithtml =  async () => {
     
-    await fetch('/Posts/cv.html')
+    await fetch('/Posts/memo.html')
     .then(response => response.text())
     .then(html => {
       // html 변수에 cv.html 파일의 내용이 문자열 형태로 저장됨
@@ -31,4 +31,4 @@ const CvPage = () => {
     );
 }
 
-export default CvPage;
+export default MemoPage;
