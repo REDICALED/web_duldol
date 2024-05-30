@@ -6,17 +6,20 @@ import SetContents from '@/components/TipTap/SetContents';
 import { Octokit } from 'octokit';
 import { tiptapMainText } from '@/atoms/TiptapAtom';
 import { updateFunc } from '@/components/Git/GitFunc';
+import { GitFileBlock } from '@/atoms/ModalAtom';
 
 export const UploadButton = () => {
   const [ MainText ] = useRecoilState(tiptapMainText);
   const [ GenreType , ] = useRecoilState(PostGenreType);
+    const [ ,SetGitFileBlock ] = useRecoilState(GitFileBlock);
 
     const uploadContents = async () => {
       const octokit = new Octokit({
         auth: import.meta.env.VITE_APP_TOKEN,
       });
-    
+      SetGitFileBlock(true);
       const puttitle = await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
+      SetGitFileBlock(false);
       console.log(puttitle.status);
     }
     return (
