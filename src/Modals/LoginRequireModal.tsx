@@ -78,7 +78,7 @@ export const LoginRequireModal = () => {
                 <form onSubmit={passwordcheck}>
                 <div className="p-4 space-y-4">
                     <p className="text-base leading-relaxed text-gray-500">
-                        Hello hyun
+                        Hi Deuldol
                     </p>
                     <input
                     name="main_content" placeholder="Password" 
@@ -87,7 +87,7 @@ export const LoginRequireModal = () => {
                     />
                     <button onClick={passwordcheck} type="button" className="mt-10 font-medium rounded-lg w-full h-10 text-sm px-5 py-2.5 me-2 mb-2 text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300">로그인</button>
                 </div>
-                {wrongpassword && <p className="text-red-600"> 비번 틀림 </p>
+                {wrongpassword && <p className="text-red-600"> Password incorrect </p>
                 }
                 </form>
             </motion.div>

@@ -1,30 +1,7 @@
-import { tiptapMainText } from '@/atoms/TiptapAtom';
-import { useRecoilState } from "recoil";
-import parse from 'html-react-parser';
 import Slick from '@/components/Slick';
 import '@/styles.scss'
 
-const Preview = () => {
-  const [ MainText ] = useRecoilState(tiptapMainText);
-
-
-  // function downloadHtml(filename: string, htmlContent: any) {
-  //   const blob = new Blob([htmlContent], { type: 'text/html' });
-  //   const url = URL.createObjectURL(blob);
-  //   const a = document.createElement('a');
-  //   a.href = url;
-  //   a.download = filename;
-  //   document.body.appendChild(a);
-  //   a.click();
-  //   document.body.removeChild(a);
-  //   URL.revokeObjectURL(url);
-  // }
-
-  // const handleDownload = () => {
-  //   downloadHtml('example.html', MainText);
-  // };
-
-  const options = {
+  const ParseHtml = {
     replace: (node: any) => {
       if (node.type === 'text' && node.data.includes('[슬라이더입니다!]')) {
         let string = node.data;
@@ -61,12 +38,5 @@ const Preview = () => {
     }
   };
 
-  return (
-    <div className="">
-      {parse(MainText, options)}
-      {/* <button onClick={handleDownload}>Download HTML</button> */}
-    </div>
-  );
-};
 
-export default Preview;
+export default ParseHtml;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import ParseHtml from "@/components/ParseHtml";
 import parse from 'html-react-parser';
 
-const CvPage = () => {
+const TestPage = () => {
 
     const [htmlcontents, sethtmlcontents] = useState("");
     useEffect(() => {
@@ -31,4 +31,4 @@ const CvPage = () => {
     );
 }
 
-export default CvPage;
+export default TestPage;
