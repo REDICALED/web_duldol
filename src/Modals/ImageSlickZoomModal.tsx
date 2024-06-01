@@ -1,15 +1,11 @@
-import { ImageZoom,ImageSlickZoom } from '@/atoms/ModalAtom';
+import { ImageSlickZoom } from '@/atoms/ModalAtom';
 import { useEffect } from 'react';
 import { useRecoilState } from "recoil";
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
-import ReactDOM from 'react-dom';
-import Slick from '@/components/Slick';
 import ZoomSlick from '@/components/ZoomSlick';
 
 export const ImageSlickZoomModal = () => {
-  const [imagezoom, setImageZoom] = useRecoilState(ImageZoom);
   const [imageslickzoom, setImageSlickZoom] = useRecoilState(ImageSlickZoom);
 
   const closeModal = () => {
@@ -29,7 +25,6 @@ export const ImageSlickZoomModal = () => {
       window.removeEventListener('popstate', handlePopstate);
     };
   }, []);
-  const modalRoot = document.getElementById('modal-root') || document.body;
 
   return (
     <div className=' transition-all duration-500 ease-in-out'>
