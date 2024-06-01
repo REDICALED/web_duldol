@@ -34,10 +34,8 @@ export const ZoomSlick = (props: { images: string[], images_cap: string[] }) => 
 </TransformComponent>
     </TransformWrapper>
 }
-                { currentImage === index && <div className=" text-xxs md:text-xs font-sans flex justify-between " >
-                  <p>{props.images_cap[index]}</p>
-                </div>}
-            </div>
+
+    </div>
       ))}
         <div className="w-full text-center justify-end flex text-white ">
           <div className="flex">
