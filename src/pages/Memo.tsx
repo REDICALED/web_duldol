@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
-import ParseHtml from "@/components/ParseHtml";
+import ParseHtml from "@/components/TipTap/ParseHtml";
 import parse from 'html-react-parser';
+import { Navigate } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { LoginValid } from "@/atoms/LoginValidAtom";
 
 const MemoPage = () => {
+  const [loginvalid] = useRecoilState(LoginValid);
 
+  if (loginvalid === 0) {
+    return (
+      <Navigate to="/login" />
+    )
+  }
+  
     const [htmlcontents, sethtmlcontents] = useState("");
     useEffect(() => {
         inithtml();

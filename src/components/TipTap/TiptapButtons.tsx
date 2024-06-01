@@ -6,17 +6,26 @@ import SetContents from '@/components/TipTap/SetContents';
 import { Octokit } from 'octokit';
 import { tiptapMainText } from '@/atoms/TiptapAtom';
 import { updateFunc } from '@/components/Git/GitFunc';
-import { GitFileBlock } from '@/atoms/ModalAtom';
+import { FileRequire, GitFileBlock } from '@/atoms/ModalAtom';
+import SetTitleImage from '@/components/TipTap/SetTitleImage';
 
-export const UploadButton = () => {
+export const UploadButton = (props:any) => {
   const [ MainText ] = useRecoilState(tiptapMainText);
   const [ GenreType , ] = useRecoilState(PostGenreType);
     const [ ,SetGitFileBlock ] = useRecoilState(GitFileBlock);
-
+    const [ , setFileRequire] = useRecoilState(FileRequire);
     const uploadContents = async () => {
       const octokit = new Octokit({
         auth: import.meta.env.VITE_APP_TOKEN,
       });
+      if ( GenreType === "post" )
+      {
+        if ( props.titapPostTitle === '' || props.titapPostDate === '' || props.titapPostTitleImage === null )
+        {
+          setFileRequire(true);
+          return;
+        }
+      }
       SetGitFileBlock(true);
       const puttitle = await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
       SetGitFileBlock(false);
@@ -44,6 +53,12 @@ export const UploadButton = () => {
           onChange={
             (e:any) => {
                 setGenreType(e.target.value);
+                if ( GenreType !== "post" )
+                {
+                  props.settitapPostDate('');
+                  props.settitapPostTitleImage(null);
+                  props.settitapPostTitle('');
+                }
               }
           } 
           className=" min-h-[5vh] max-h-[5vh] bg-gray-50 border border-gray-300 text-gray-900 text-l rounded-lg focus:ring-blue-500 focus:border-blue-500 block  w-[30vw] ">
@@ -54,7 +69,9 @@ export const UploadButton = () => {
             <option value="post">post</option>
           </select>
           { GenreType !== "post" && <SetContents tiptapeditor={props.tiptapeditor}/>}
-        </div>      
+        </div>
+        { GenreType === "post" && <SetTitleImage {... props}/>}
+
         </div>
     );
   };

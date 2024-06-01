@@ -9,10 +9,25 @@ import { UploadButton, SetGenreButton } from '@/components/TipTap/TiptapButtons'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
+// import Filelist from '@/components/TipTap/Filelist'
 
 const Editor = () => {
   const [tiptapeditor, settiptapeditor] = useState(null);
+  const [titapPostDate, settitapPostDate] = useState('');
+  const [titapPostTitleImage, settitapPostTitleImage] = useState<null | File>(null);
+  const [titapPostTitle, settitapPostTitle] = useState('');
   const [loginvalid] = useRecoilState(LoginValid);
+
+  const TipTapProps = {
+    tiptapeditor: tiptapeditor,
+    titapPostDate: titapPostDate,
+    titapPostTitleImage: titapPostTitleImage,
+    titapPostTitle: titapPostTitle,
+    settitapPostDate: settitapPostDate,
+    settitapPostTitleImage: settitapPostTitleImage,
+    settitapPostTitle: settitapPostTitle
+  };
+
   if (loginvalid === 0) {
     return (
       <Navigate to="/login" />
@@ -20,19 +35,26 @@ const Editor = () => {
   }
 
   return (
-    <div className=" flex pt-[5vh] pl-[1vw] w-[100vw]">
+    <div className=" flex pt-[1vh] pl-[1vw] w-[100vw]">
       <div className=' space-y-[1vh]'>
-        <SetGenreButton tiptapeditor={tiptapeditor}/>
+        <SetGenreButton {... TipTapProps}/>
         <EditorProvider slotBefore={<MenuBar settiptapeditor={settiptapeditor} />} extensions={extensions} content={''}></EditorProvider>
-        <UploadButton/>
+        <UploadButton {... TipTapProps}/>
       </div>
- 
-      <div className=" ml-[1vw] preview w-[43vw] border-2 border-dul-gray h-[80vh] overflow-y-scroll">
-          <div className=" leading-5 md:leading-6 w-[40vw] mx-[1vw]  text-dul-gray pt-[5vh] text-xxs md:text-xs"
+
+    <div className='ml-[1vw] w-[43vw] pt-[5.6vh]'>
+    <SetGenreButton tiptapeditor={tiptapeditor}/>
+
+      <div className=" preview border-2 border-dul-gray h-[80vh] overflow-y-scroll overflow-x-auto ">
+          <div className=" leading-5 md:leading-6 w-[40vw] mx-[1vw]  text-dul-gray pt-[3vh] text-xxs md:text-xs"
           >
             <Preview/>
           </div>
+
       </div>
+
+      </div>
+      
     </div>
   )
 }
