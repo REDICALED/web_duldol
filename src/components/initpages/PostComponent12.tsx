@@ -7,31 +7,23 @@ import pics21 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합�
 import pics22 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2-2.jpg";
 import pics23 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2-3.jpg";
 import title from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s1.jpg";
-import Zoom from "react-medium-image-zoom";
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-
-
 
 import Slick from '@/components/Slick';
+import { useRecoilState } from "recoil";
+import { ImageZoom } from "@/atoms/ModalAtom";
 
 const PostComponent12 = () => {
+    const [, setImageZoom] = useRecoilState(ImageZoom);
 
     return (
         <div className=" leading-5 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <Zoom>
-                <img src={title} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-                </Zoom>
+                <img onClick={()=>{setImageZoom(title)}} src={title} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
                 <span className='w-full text-xxs md:text-xs'>murmur-mural ensemble <br/>(웅얼웅얼-벽화 합창)</span>
             </div>
 
             <div className="flex items-center justify-between">
-            <TransformWrapper>
-                <TransformComponent>
-                    <img src={picfull1} className="w-[100vw] object-cover" ></img>
-                </TransformComponent>
-            </TransformWrapper>
-
+                <img   onClick={()=>{setImageZoom(picfull1)}} src={picfull1} className="w-[100vw] object-cover" ></img>
             </div>
             <span className="text-right justify-end flex">murmur-mural ensemble(웅얼웅얼-벽화 합창) 1~3_installation view</span>
             
