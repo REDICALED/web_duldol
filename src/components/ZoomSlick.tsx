@@ -25,8 +25,8 @@ export const ZoomSlick = (props: { images: string[], images_cap: string[] }) => 
     <img 
   loading="lazy" 
   className={currentImage === index ? 
-    " opacity-100 block transition-opacity duration-500 w-full h-[90vh] object-contain" 
-    : "opacity-0 absolute w-full h-[90vh] object-contain pointer-events-none"
+    " opacity-100 block transition-opacity duration-500 md:h-[90vh] h-[80vh] object-contain" 
+    : "opacity-0 absolute w-full md:h-[90vh] h-[80vh] object-contain pointer-events-none"
   } 
   src={imgurl} 
   alt='asd'
@@ -40,14 +40,11 @@ export const ZoomSlick = (props: { images: string[], images_cap: string[] }) => 
             </div>
       ))}
         <div className="w-full text-center justify-end flex text-white ">
-          <span className=" mx-4 right-0 text-3xl font-semibold">{currentImage + 1}</span>
           <div className="flex">
           <div className="fixed bottom-0 left-0 flex justify-center items-center  mb-[50vh] md:mb-[45vh]">
               <img src={arrow_back} className={ currentImage > 0 ? "opacity-100 md:h-[20vh] h-[5vh]" : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage-1)}></img>
             </div>
-            <div className=" mx-2  right-0 text-3xl">
-              1 - {images.length}
-            </div>
+
             <div className="fixed bottom-0 right-0  flex justify-center items-center mb-[50vh] md:mb-[45vh]">
               <img src={arrow_forward} className={ currentImage < images.length - 1 ? "opacity-100 md:h-[20vh] h-[5vh]" : "opacity-0 pointer-events-none  "} onClick={()=>setCurrentImage(currentImage+1)}></img>
             </div>
