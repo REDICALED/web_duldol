@@ -31,10 +31,7 @@ const PostComponent12 = () => {
             </div>
             <span className="text-right justify-end flex">murmur-mural ensemble(웅얼웅얼-벽화 합창) 1~3_installation view</span>
             
-            <br />
-            <br />
 
-            <span className="text-right justify-end flex">murmur-mural ensemble(웅얼웅얼-벽화 합창) 1_210*197(cm)_혼합 종이(닥종이, 한지, 마분지 등), 흑연, 화이트젯소, 겔, 페이스트_2024</span>
 
             <br />
             <br />

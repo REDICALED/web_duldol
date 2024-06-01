@@ -23,7 +23,7 @@ export const FileRequireModal = () => {
       className="bg-white p-4 w-full max-w-2xl rounded-lg shadow-lg"
     >
       <div className="flex items-center justify-between border-b border-gray-300 pb-2">
-        <h3 className="text-xl font-semibold text-gray-900">파일 선택</h3>
+        <h3 className="text-xl font-semibold text-gray-900">😲</h3>
         <button
           type="button"
           className="text-gray-400 hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8"
@@ -51,7 +51,7 @@ export const FileRequireModal = () => {
       </div>
       <div className="p-4 space-y-4">
         <p className="text-base leading-relaxed text-gray-500">
-          이미지와 타이틀 이미지를 업로드 해주세요.
+          타이틀 이미지, 날짜, 제목을 모두 입력해주세요.
         </p>
       </div>
     </motion.div>

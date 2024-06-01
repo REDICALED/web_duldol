@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import ParseHtml from "@/components/ParseHtml";
+import ParseHtml from "@/components/TipTap/ParseHtml";
 import parse from 'html-react-parser';
 
 const CvPage = () => {
