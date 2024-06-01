@@ -1,10 +1,12 @@
+import { ImageZoom } from "@/atoms/ModalAtom";
 import { useState } from "react";
-import Zoom from "react-medium-image-zoom";
 import 'react-medium-image-zoom/dist/styles.css'
+import { useRecoilState } from "recoil";
 
 export const Slick = (props: { images: string[], images_cap: string[] }) => {
   const { images } = props;
   const { images_cap } = props;
+  const [, setImageZoom] = useRecoilState(ImageZoom);
 
   const [currentImage, setCurrentImage] = useState(0);
   console.log(images);
@@ -14,7 +16,6 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
         <div className=" md:pr-[0]  ">
           {images.map((imgurl, index) => (
               <div>
-                <Zoom>
 {<img 
   loading="lazy" 
   className={currentImage === index ? 
@@ -23,8 +24,8 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
   } 
   src={imgurl} 
   alt='asd'
+  onClick={()=>{setImageZoom(imgurl)}}
 />}
-                </Zoom>
                 { currentImage === index && <div className=" text-xxs md:text-xs font-sans flex justify-between " >
                   <p>{props.images_cap[index]}</p>
                 </div>}
