@@ -42,6 +42,22 @@ export const UploadButton = (props:any) => {
         </div>
     );
   };
+
+
+  export const UploadPreviewButton = (props:any) => {
+      return (
+        <div className=" pb-[2vh] ">
+          <button onClick={()=>{
+            props.setPreviewSwitch(!props.PreviewSwitch);
+          }} type="button" className=" transition-all duration-300 mt-[1vh] mr-[1vw] min-w-[19vw] max-w-[20vw] min-h-[10vh] max-h-[10vh] text-gray-900 bg-white hover:bg-gray-200 border-2 border-dul-gray focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-lg text-center inline-flex items-center">
+            <p className=" justify-center min-w-[15vw] max-w-[15vw] xs:min-w-[20vw] sm:min-w-[20vw] sm:text-l md:min-w-[20vw] md:text-xl lg:text-xl xl:text-3xl pr-[1vw]">미리보기</p> 
+          </button>        
+          
+          </div>
+      );
+    };
+
+  
   export const SetGenreButton = (props:any) => {
 
     const [ GenreType , setGenreType] = useRecoilState(PostGenreType);

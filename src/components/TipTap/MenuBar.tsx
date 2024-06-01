@@ -36,28 +36,17 @@ const MenuBar = (props: any) => {
   
   
     useEffect(() => {
-      if (editor) {
-        props.settiptapeditor(editor);
-        const onUpdate = () => {
-          setMainText(editor.getHTML());
-        };
-  
-        editor.on('update', onUpdate);
-  
-        return () => {
-          editor.off('update', onUpdate);
-        };
-      }
-    }, [editor]);
+      setMainText(editor.getHTML());     
+    }, [props.PreviewSwitch]);
   
     const resizeFile = (file: File): Promise<File>  =>
         new Promise((res) => {
           Resizer.imageFileResizer(
             file, // target file
-            1500, // maxWidth
-            1500, // maxHeight
+            2500, // maxWidth
+            2500, // maxHeight
             "JPEG", // compressFormat : Can be either JPEG, PNG or WEBP.
-            80, // quality : 0 and 100. Used for the JPEG compression
+            100, // quality : 0 and 100. Used for the JPEG compression
             0, // rotation
             (uri) => res(uri as File), // responseUriFunc
             "file" // outputType : Can be either base64, blob or file.(Default type is base64)	

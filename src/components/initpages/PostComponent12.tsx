@@ -1,11 +1,12 @@
-import pic1 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/1.png";
-import picfull1 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/full1.png";
-import pics1 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s1.jpeg";
-import pics2 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2.jpeg";
-import pics3 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s3.jpeg";
-import pics21 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2-1.png";
-import pics22 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2-2.png";
-import pics23 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2-3.png";
+import pic1 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/1.jpg";
+import picfull1 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/full1.jpg";
+import pics1 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s1.jpg";
+import pics2 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2.jpg";
+import pics3 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s3.jpg";
+import pics21 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2-1.jpg";
+import pics22 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2-2.jpg";
+import pics23 from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s2-3.jpg";
+import title from "/images/Works/murmur-mural ensemble(웅얼웅얼-벽화 합창)/s1.jpg";
 import Zoom from "react-medium-image-zoom";
 
 
@@ -18,7 +19,7 @@ const PostComponent12 = () => {
         <div className=" leading-5 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
                 <Zoom>
-                <img src={pics1} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
+                <img src={title} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
                 </Zoom>
                 <span className='w-full text-xxs md:text-xs'>murmur-mural ensemble <br/>(웅얼웅얼-벽화 합창)</span>
             </div>

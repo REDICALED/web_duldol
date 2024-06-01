@@ -5,7 +5,7 @@ import { LoginValid } from '@/atoms/LoginValidAtom'
 import Preview from '@/components/TipTap/Preview'
 import MenuBar from '@/components/TipTap/MenuBar'
 import extensions from '@/components/TipTap/Extensions'
-import { UploadButton, SetGenreButton } from '@/components/TipTap/TiptapButtons'
+import { UploadButton, SetGenreButton, UploadPreviewButton } from '@/components/TipTap/TiptapButtons'
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
@@ -17,7 +17,7 @@ const Editor = () => {
   const [titapPostTitleImage, settitapPostTitleImage] = useState<null | File>(null);
   const [titapPostTitle, settitapPostTitle] = useState('');
   const [loginvalid] = useRecoilState(LoginValid);
-
+  const [PreviewSwitch, setPreviewSwitch ] = useState(false);
   const TipTapProps = {
     tiptapeditor: tiptapeditor,
     titapPostDate: titapPostDate,
@@ -38,8 +38,12 @@ const Editor = () => {
     <div className=" flex pt-[1vh] pl-[1vw] w-[100vw]">
       <div className=' space-y-[1vh]'>
         <SetGenreButton {... TipTapProps}/>
-        <EditorProvider slotBefore={<MenuBar settiptapeditor={settiptapeditor} />} extensions={extensions} content={''}></EditorProvider>
-        <UploadButton {... TipTapProps}/>
+        <EditorProvider slotBefore={<MenuBar settiptapeditor={settiptapeditor} PreviewSwitch={PreviewSwitch}/>} extensions={extensions} content={''}></EditorProvider>
+        <div className='flex'>
+        <UploadButton {... TipTapProps } />
+        <UploadPreviewButton {... TipTapProps} setPreviewSwitch={setPreviewSwitch} PreviewSwitch={PreviewSwitch} />
+        </div>
+
       </div>
 
     <div className='ml-[1vw] w-[43vw] pt-[5.6vh]'>
