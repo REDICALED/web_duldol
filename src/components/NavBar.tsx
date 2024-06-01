@@ -37,7 +37,7 @@ const NavBar = () => {
     return (
         <>
         
-        <div className=" w-[80px] md:w-[130px] ml-[3vw] fixed mt-[2vh] text-xs md:text-xl z-50">
+        <div className=" w-[80px] md:w-[130px] ml-[3vw] fixed mt-[2vh] text-xs md:text-xl z-40">
             <img src={name} className="my-10 "/>
             <div className=" font-medium text-xxs md:text-base">
                 <div className="mt-[2vh] w-[40px] md:w-[50px]">
