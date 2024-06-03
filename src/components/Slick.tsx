@@ -19,7 +19,7 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
 {<img 
   loading="lazy" 
   className={currentImage === index ? 
-    "opacity-100 block transition-opacity duration-500 w-[100vw] md:w-[60vw] h-[15vh] md:h-[40vh] object-contain" 
+    "opacity-100 block transition-opacity duration-500 w-[100vw] md:w-[60vw]  object-contain" 
     : "opacity-0 absolute w-[100vw] md:w-[60vw] h-0 object-contain pointer-events-none"
   } 
   src={imgurl} 
