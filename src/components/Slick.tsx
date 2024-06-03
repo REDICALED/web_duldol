@@ -5,12 +5,9 @@ import { useRecoilState } from "recoil";
 
 export const Slick = (props: { images: string[], images_cap: string[] }) => {
   const { images } = props;
-  const { images_cap } = props;
   const [, setImageSlickZoom] = useRecoilState(ImageSlickZoom);
 
   const [currentImage, setCurrentImage] = useState(0);
-  console.log(images);
-  console.log(images_cap);
       
       return (
         <div className=" md:pr-[0]  ">

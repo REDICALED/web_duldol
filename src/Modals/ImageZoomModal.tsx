@@ -1,6 +1,7 @@
 import { ImageZoom } from '@/atoms/ModalAtom';
 import { useEffect } from 'react';
 import { useRecoilState } from "recoil";
+import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 export const ImageZoomModal = () => {
   const [imagezoom, setImageZoom] = useRecoilState(ImageZoom);
@@ -26,10 +27,14 @@ export const ImageZoomModal = () => {
   return (
     <div className=' transition-all duration-500 ease-in-out'>
       <div
-        className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-75 flex justify-center items-center z-50"
+        className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-75 flex justify-center items-center z-50"
         onClick={closeModal}
       >
+        <TransformWrapper>
+      <TransformComponent>
           <img src={imagezoom} className=' max-h-[100vh]' />
+          </TransformComponent>
+        </TransformWrapper>
       </div>
     </div>
   );

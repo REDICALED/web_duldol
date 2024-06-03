@@ -9,6 +9,7 @@ import { UploadButton, SetGenreButton, UploadPreviewButton } from '@/components/
 import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
+import { PostGenreType } from '@/atoms/PostingAtom'
 // import Filelist from '@/components/TipTap/Filelist'
 
 const Editor = () => {
@@ -18,6 +19,8 @@ const Editor = () => {
   const [titapPostTitle, settitapPostTitle] = useState('');
   const [loginvalid] = useRecoilState(LoginValid);
   const [PreviewSwitch, setPreviewSwitch ] = useState(false);
+  const [ GenreType ] = useRecoilState(PostGenreType);
+
   const TipTapProps = {
     tiptapeditor: tiptapeditor,
     titapPostDate: titapPostDate,
@@ -46,9 +49,7 @@ const Editor = () => {
 
       </div>
 
-    <div className='ml-[1vw] w-[43vw] pt-[5.6vh]'>
-    <SetGenreButton tiptapeditor={tiptapeditor}/>
-
+    <div className={GenreType === "post" ? 'ml-[1vw] w-[43vw] pt-[30vh]' : 'ml-[1vw] w-[43vw] pt-[15vh]'}>
       <div className=" preview border-2 border-dul-gray h-[80vh] overflow-y-scroll overflow-x-auto ">
           <div className=" leading-5 md:leading-6 w-[40vw] mx-[1vw]  text-dul-gray pt-[3vh] text-xxs md:text-xs"
           >
