@@ -2,9 +2,9 @@ import { ImageSlickZoom } from "@/atoms/ModalAtom";
 import { useState } from "react";
 import 'react-medium-image-zoom/dist/styles.css'
 import { useRecoilState } from "recoil";
-import arrow_back from '@/assets/icons/arrow_back.png'
-import arrow_forward from '@/assets/icons/arrow_forward.png'
-import x_button from '@/assets/icons/x_button.png'
+import arrow_back from '@/assets/icons/arrow_l.png'
+import arrow_forward from '@/assets/icons/arrow_r.png'
+import x_button from '@/assets/icons/sign_x.png'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 export const ZoomSlick = (props: { images: string[], images_cap: string[] }) => {
@@ -39,17 +39,17 @@ export const ZoomSlick = (props: { images: string[], images_cap: string[] }) => 
       ))}
         <div className="w-full text-center justify-end flex text-white ">
           <div className="flex">
-          <div className="fixed bottom-0 left-0 flex justify-center items-center  mb-[50vh] md:mb-[45vh]">
-              <img src={arrow_back} className={ currentImage > 0 ? "opacity-100 md:h-[20vh] h-[5vh]" : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage-1)}></img>
+          <div className="fixed bottom-1/2 mb-[-1.25vh] md:mb-[-2.5vh] left-0 ">
+              <img src={arrow_back} className={ currentImage > 0 ? "opacity-100 md:h-[5vh] h-[2.5vh]" : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage-1)}></img>
             </div>
 
-            <div className="fixed bottom-0 right-0  flex justify-center items-center mb-[50vh] md:mb-[45vh]">
-              <img src={arrow_forward} className={ currentImage < images.length - 1 ? "opacity-100 md:h-[20vh] h-[5vh]" : "opacity-0 pointer-events-none  "} onClick={()=>setCurrentImage(currentImage+1)}></img>
+            <div className="fixed bottom-1/2 mb-[-1.25vh] md:mb-[-2.5vh] right-0 ">
+              <img src={arrow_forward} className={ currentImage < images.length - 1 ? "opacity-100 md:h-[5vh] h-[2.5vh]" : "opacity-0 pointer-events-none  "} onClick={()=>setCurrentImage(currentImage+1)}></img>
             </div>
           </div>
         </div>
-        <div className="fixed top-0 right-0 flex justify-center items-center  mb-[50vh] md:mb-[45vh]">
-              <img src={x_button} className={ "opacity-100 md:h-[15vh] h-[5vh]" } onClick={()=>setImageSlickZoom({SlickImages: [], index: 0})}></img>
+        <div className="fixed top-[5vh] md:top-[0vh] mb-[-1.25vh] md:mb-[-2.5vh] right-0 ">
+              <img src={x_button} className={ "opacity-100 md:h-[5vh] h-[2.5vh]" } onClick={()=>setImageSlickZoom({SlickImages: [], index: 0})}></img>
         </div>
 
         </div>
