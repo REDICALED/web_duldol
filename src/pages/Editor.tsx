@@ -19,7 +19,7 @@ const Editor = () => {
   const [titapPostTitle, settitapPostTitle] = useState('');
   const [loginvalid] = useRecoilState(LoginValid);
   const [PreviewSwitch, setPreviewSwitch ] = useState(false);
-  const [ GenreType ] = useRecoilState(PostGenreType);
+  const [ GenreType , ] = useRecoilState(PostGenreType);
 
   const TipTapProps = {
     tiptapeditor: tiptapeditor,
@@ -49,7 +49,9 @@ const Editor = () => {
 
       </div>
 
-    <div className={GenreType === "post" ? 'ml-[1vw] w-[43vw] pt-[30vh]' : 'ml-[1vw] w-[43vw] pt-[15vh]'}>
+      <div className={GenreType === "post" ? 'ml-[1vw] w-[43vw] pt-[30vh]' : 'ml-[1vw] w-[43vw] pt-[15vh]'}>
+    <SetGenreButton tiptapeditor={tiptapeditor}/>
+
       <div className=" preview border-2 border-dul-gray h-[80vh] overflow-y-scroll overflow-x-auto ">
           <div className=" leading-5 md:leading-6 w-[40vw] mx-[1vw]  text-dul-gray pt-[3vh] text-xxs md:text-xs"
           >
