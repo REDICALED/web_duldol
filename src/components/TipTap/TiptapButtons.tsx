@@ -84,7 +84,7 @@ export const UploadButton = (props:any) => {
             <option value="note">note</option>
             <option value="post">post</option>
           </select>
-          { GenreType !== "post" && <SetContents tiptapeditor={props.tiptapeditor}/>}
+          { GenreType !== "post" && <SetContents {... props}/>}
         </div>
         { GenreType === "post" && <SetTitleImage {... props}/>}
 

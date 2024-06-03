@@ -36,6 +36,7 @@ const MenuBar = (props: any) => {
   
   
     useEffect(() => {
+      props.settiptapeditor(editor);
       setMainText(editor.getHTML());     
     }, [props.PreviewSwitch]);
   

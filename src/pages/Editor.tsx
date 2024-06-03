@@ -28,7 +28,10 @@ const Editor = () => {
     titapPostTitle: titapPostTitle,
     settitapPostDate: settitapPostDate,
     settitapPostTitleImage: settitapPostTitleImage,
-    settitapPostTitle: settitapPostTitle
+    settitapPostTitle: settitapPostTitle,
+    setPreviewSwitch: setPreviewSwitch,
+    PreviewSwitch: PreviewSwitch,
+    settiptapeditor: settiptapeditor,
   };
 
   if (loginvalid === 0) {
@@ -44,13 +47,13 @@ const Editor = () => {
         <EditorProvider slotBefore={<MenuBar settiptapeditor={settiptapeditor} PreviewSwitch={PreviewSwitch}/>} extensions={extensions} content={''}></EditorProvider>
         <div className='flex'>
         <UploadButton {... TipTapProps } />
-        <UploadPreviewButton {... TipTapProps} setPreviewSwitch={setPreviewSwitch} PreviewSwitch={PreviewSwitch} />
+        <UploadPreviewButton {... TipTapProps} />
         </div>
 
       </div>
 
       <div className={GenreType === "post" ? 'ml-[1vw] w-[43vw] pt-[30vh]' : 'ml-[1vw] w-[43vw] pt-[15vh]'}>
-    <SetGenreButton tiptapeditor={tiptapeditor}/>
+    <SetGenreButton {... TipTapProps}/>
 
       <div className=" preview border-2 border-dul-gray h-[80vh] overflow-y-scroll overflow-x-auto ">
           <div className=" leading-5 md:leading-6 w-[40vw] mx-[1vw]  text-dul-gray pt-[3vh] text-xxs md:text-xs"
