@@ -2,20 +2,16 @@ import { ImageSlickZoom } from "@/atoms/ModalAtom";
 import { useState } from "react";
 import 'react-medium-image-zoom/dist/styles.css'
 import { useRecoilState } from "recoil";
-import arrow_back from '@/assets/icons/arrow_l.png'
-import arrow_forward from '@/assets/icons/arrow_r.png'
-import x_button from '@/assets/icons/sign_x.png'
+import arrow_back from '@/assets/icons/arrow_l_2.png'
+import arrow_forward from '@/assets/icons/arrow_r_2.png'
+import x_button from '@/assets/icons/sign_x_2.png'
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 
 export const ZoomSlick = (props: { images: string[], images_cap: string[] }) => {
   const { images } = props;
-  const { images_cap } = props;
   const [, setImageSlickZoom] = useRecoilState(ImageSlickZoom);
 
   const [currentImage, setCurrentImage] = useState(0);
-  console.log(images);
-  console.log(images_cap);
-      
       return (
         <div className=" md:pr-[0] w-full  ">
           {images.map((imgurl, index) => (
