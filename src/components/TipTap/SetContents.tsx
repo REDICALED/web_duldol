@@ -4,12 +4,14 @@ import '@/styles.scss'
 import { useRecoilState } from 'recoil';
 import { Octokit } from "octokit";
 import { getFunc } from '@/components/Git/GitFunc';
+import { tiptapMainText } from '@/atoms/TiptapAtom';
 
  const SetContents = (props:any) => {
     const [ GenreType , ] = useRecoilState(PostGenreType);
-    
+    const [  , setMainText] = useRecoilState(tiptapMainText);
 
-    const GetContents = async () => {
+
+    const GetContents = async (props:any) => {
         const octokit = new Octokit({
           auth: import.meta.env.VITE_APP_TOKEN,
         });
@@ -17,12 +19,15 @@ import { getFunc } from '@/components/Git/GitFunc';
         const puttitle = await getFunc(octokit, `Posts/${GenreType}.html`);
         let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
         console.log(puttitle.status);
+        console.log(returnString);
+      
+        await props.tiptapeditor.commands.setContent(returnString);
+        await setMainText(returnString); 
         return returnString;
       };
 
     const handleButtonClick = async () => {
-      const ContentHtml = await GetContents();
-      props.tiptapeditor.commands.setContent(ContentHtml);
+      await GetContents(props);
     }
 
     return (
