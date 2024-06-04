@@ -83,21 +83,28 @@ const MenuBar = (props: any) => {
         if (file) {
           resizedFiles.push(file);
         }
+        // await new Promise(resolve => setTimeout(resolve, 1000));
+
       }
       console.log(resizedFiles);
       const NameArray = Array.from(resizedFiles).map(file => file.name);
       const BlobImageArray = Array.from(resizedFiles).map(file => URL.createObjectURL(file));
       console.log(BlobImageArray);
-      const base64ImageArray = Array.from(resizedFiles);
-      let Resultbase64ImageArray: (string | ArrayBuffer | null)[] = [];
-      for (let i = 0; i < base64ImageArray.length; i++) {
-        const reader = new FileReader();
-        reader.readAsDataURL(base64ImageArray[i]);
-        reader.onload = () => {
-          Resultbase64ImageArray.push(reader.result);
-        };
-      }
-      props.settiptapPostSliderStack([...props.tiptapPostSliderStack, { blobUrl:BlobImageArray, base64:Resultbase64ImageArray, ImageName:NameArray}]);
+
+    const base64ImageArray = resizedFiles.map(file => {
+        return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => resolve(reader.result);
+          reader.onerror = error => reject(error);
+        });
+      });
+      const Resultbase64ImageArray = await Promise.all(base64ImageArray);
+      props.settiptapPostSliderStack([...props.tiptapPostSliderStack, {
+        blobUrl: BlobImageArray,
+        base64: Resultbase64ImageArray,
+        ImageName: NameArray
+      }]);
       const NameStr = NameArray.join('%^& ');
       const ImageStr = BlobImageArray.join('%^& ');
       

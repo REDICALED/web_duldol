@@ -21,7 +21,7 @@ export const UploadButton = (props:any) => {
         auth: import.meta.env.VITE_APP_TOKEN,
       });
   
-      const result = await createFunc(octokit, `images/Works/${props.tiptapPostTitle}/sub.txt`, "as", "tmp file generated");
+      const result = await createFunc(octokit, `images/Works/${props.tiptapPostTitle}/main.html`, props.tiptapeditor.getHTML(), "tmp file generated");
       console.log("create sub.txt put request:" + result.status);
 
       if (props.tiptapPostSliderStack) {
@@ -113,29 +113,38 @@ export const UploadButton = (props:any) => {
   export const UploadPreviewButton = (props:any) => {
     const [ MainText , setMainText] = useRecoilState(tiptapMainText);
 
-    const resetSliderStack = () => {
+    const resetSliderStack = async () => {
     console.log(props.tiptapPostSliderStack);
     for (let i = 0; i < props.tiptapPostSliderStack.length; i++)
       {
-        for (let j = 0; j < props.tiptapPostSliderStack[i].blobUrl.length; j++)
-        {
-          if (!props.tiptapeditor.getHTML().includes(props.tiptapPostSliderStack[i].blobUrl[j]))
+        // for (let j = 0; j < props.tiptapPostSliderStack[i].blobUrl.length; j++)
+        // {
+        //   if (!props.tiptapeditor.getHTML().includes(props.tiptapPostSliderStack[i].blobUrl[j]))
+        //   {
+        //     console.log(props.tiptapPostSliderStack[i].blobUrl[j]);
+        //     props.tiptapPostSliderStack[i].blobUrl.splice(j,1);
+        //     props.tiptapPostSliderStack[i].base64.splice(j,1);
+        //     props.tiptapPostSliderStack[i].ImageName.splice(j,1);
+        //   }
+        // }
+        if (!props.tiptapeditor.getHTML().includes(props.tiptapPostSliderStack[i].blobUrl[0]))
           {
-            console.log(props.tiptapPostSliderStack[i].blobUrl[j]);
-            props.tiptapPostSliderStack[i].blobUrl.splice(j,1);
-            props.tiptapPostSliderStack[i].base64.splice(j,1);
-            props.tiptapPostSliderStack[i].ImageName.splice(j,1);
+            console.log("aa");
+            const temp = props.tiptapPostSliderStack[i];
+            console.log(temp);
+            const updatedStack = props.tiptapPostSliderStack.filter((item: any) => item !== temp);
+            console.log(updatedStack);
+
+            await props.settiptapPostSliderStack(updatedStack);
           }
-        }
       }
-      props.settiptapPostSliderStack(props.tiptapPostSliderStack.filter( (stack:any) => stack.blobUrl.length > 0))
       console.log(props.tiptapPostSliderStack);
     }
       return (
         <div className=" pb-[2vh] ">
-          <button onClick={()=>{
+          <button onClick={async ()=>{
             props.setPreviewSwitch(!props.PreviewSwitch);
-            awaitresetSliderStack();
+            await resetSliderStack();
             console.log(props.tiptapPostTitleImage)
           }} type="button" className=" transition-all duration-300 mt-[1vh] mr-[1vw] min-w-[19vw] max-w-[20vw] min-h-[10vh] max-h-[10vh] text-gray-900 bg-white hover:bg-gray-200 border-2 border-dul-gray focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-lg text-center inline-flex items-center">
             <p className=" justify-center min-w-[15vw] max-w-[15vw] xs:min-w-[20vw] sm:min-w-[20vw] sm:text-l md:min-w-[20vw] md:text-xl lg:text-xl xl:text-3xl pr-[1vw]">미리보기</p> 
