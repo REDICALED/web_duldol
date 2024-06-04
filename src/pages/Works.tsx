@@ -11,7 +11,7 @@ const WorksPage = () => {
         .then(data => {
           // posts 배열 추출
           const posts = data.posts;
-      
+            console.log(posts);
           // 년도별로 그룹화하는 객체 생성
           const postsByYear = posts.reduce((acc: { [x: number]: any[]; }, post: { year: number; }) => {
             if (!acc[post.year]) {
@@ -26,7 +26,7 @@ const WorksPage = () => {
           setRealArray(postsByYear);
         })
         .catch(error => console.error('Error fetching JSON:', error));
-        return ;       
+        
     }
 
 

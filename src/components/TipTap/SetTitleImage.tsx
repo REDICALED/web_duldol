@@ -47,8 +47,8 @@ import Resizer from "react-image-file-resizer";
 
     const handleChange = (selectedDate: Date) => {
 		setSelectedDate(selectedDate)
-		console.log(selectedDate)
-        props.settiptapPostDate(selectedDate.toISOString())
+		console.log(selectedDate.toISOString().split('T')[0])
+    props.settiptapPostDate(selectedDate.toISOString().split('T')[0])
 	}
 	const handleClose = (state: boolean) => {
 		setShow(state)

@@ -12,38 +12,72 @@ import PostComponent10 from "@/components/initpages/PostComponent10";
 import PostComponent11 from "@/components/initpages/PostComponent11";
 import PostComponent12 from "@/components/initpages/PostComponent12";
 import ErrPage from "@/pages/ErrPage";
+import PostNewPage from "@/pages/PostNewPage";
+import { useEffect, useState } from "react";
 
 
 
 const PostPage = () => {
     const tags = useParams();
-    console.log(tags.id);
-    if (tags.id === "감정의 정반합") 
-        return <PostComponent1 />;
-    else if (tags.id === "단단한 여자애의 소망") 
-        return <PostComponent2 />;
-    else if (tags.id === "돌계란(stonegg)") 
-        return <PostComponent3 />;
-    else if (tags.id === "모양들(shapes)") 
-        return <PostComponent4 />;
-    else if (tags.id === "미뢔(MIRWAE)") 
-        return <PostComponent5 />;
-    else if (tags.id === "신원계 新圓界 - 파고착조 破觚斲雕_") 
-        return <PostComponent6 />;
-    else if (tags.id === "여린 것들의 슬픔") 
-        return <PostComponent7 />;
-    else if (tags.id === "유하다") 
-        return <PostComponent8 />;
-    else if (tags.id === "중성인간(neutral person)") 
-        return <PostComponent9 />;
-    else if (tags.id === "thinking about pebble") 
-        return <PostComponent10 />;
-    else if (tags.id === "metamorphosis") 
-        return <PostComponent11 />;
-    else if (tags.id === "murmur-mural ensemble(웅얼웅얼-벽화 합창)") 
-        return <PostComponent12 />;
-    else
-        return <ErrPage/>
+    const [titlelistState, settitlelistState] = useState("");
+    const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+
+    const getlist =  async (props: string) => {
+        await fetch(`/Posts/Works/titlelist.txt`)
+        .then(response => response.text())
+        .then(titlestring => {
+          settitlelistState(titlestring);
+          if (titlelistState.includes(props) === false) {
+            console.log(titlelistState);
+        }
+        })
+        .catch(error => {
+          console.error('Fetch error:', error);
+        }
+    );
+    setIsLoading(false); // 로딩 완료
+    }
+
+    useEffect(() => {
+        const dd:string = tags.id!;
+        getlist(dd);
+    }, []);
+
+    if (isLoading) {
+        return <div>Loading...</div>; // 로딩 중이라면 로딩 표시
+    } 
+     else {
+        if (tags.id === "감정의 정반합") 
+            return <PostComponent1 />;
+        else if (tags.id === "단단한 여자애의 소망") 
+            return <PostComponent2 />;
+        else if (tags.id === "돌계란(stonegg)") 
+            return <PostComponent3 />;
+        else if (tags.id === "모양들(shapes)") 
+            return <PostComponent4 />;
+        else if (tags.id === "미뢔(MIRWAE)") 
+            return <PostComponent5 />;
+        else if (tags.id === "신원계 新圓界 - 파고착조 破觚斲雕_") 
+            return <PostComponent6 />;
+        else if (tags.id === "여린 것들의 슬픔") 
+            return <PostComponent7 />;
+        else if (tags.id === "유하다") 
+            return <PostComponent8 />;
+        else if (tags.id === "중성인간(neutral person)") 
+            return <PostComponent9 />;
+        else if (tags.id === "thinking about pebble") 
+            return <PostComponent10 />;
+        else if (tags.id === "metamorphosis") 
+            return <PostComponent11 />;
+        else if (tags.id === "murmur-mural ensemble(웅얼웅얼-벽화 합창)") 
+            return <PostComponent12 />;
+        else if (tags.id && titlelistState.includes(tags.id) === true) {
+            return <PostNewPage />;
+        }
+        else {
+            return <ErrPage />;
+        }
+    }
 };
 
 

@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import SetContents from '@/components/TipTap/SetContents';
 import { Octokit } from 'octokit';
 import { tiptapMainText } from '@/atoms/TiptapAtom';
-import { createFunc, updateFunc } from '@/components/Git/GitFunc';
+import { createFunc, getFunc, updateFunc } from '@/components/Git/GitFunc';
 import { FileRequire, GitFileBlock } from '@/atoms/ModalAtom';
 import SetTitleImage from '@/components/TipTap/SetTitleImage';
 import axios from 'axios';
@@ -20,15 +20,51 @@ export const UploadButton = (props:any) => {
       const octokit = new Octokit({
         auth: import.meta.env.VITE_APP_TOKEN,
       });
-  
-      const result = await createFunc(octokit, `images/Works/${props.tiptapPostTitle}/main.html`, props.tiptapeditor.getHTML(), "tmp file generated");
-      console.log("create sub.txt put request:" + result.status);
+      const hashdate = Date.now();
+      //main.html 업로드
+      const result = await createFunc(octokit, `Posts/Works/${hashdate}/main.html`, props.tiptapeditor.getHTML(), "main html generated");
+      console.log("create main.html put request:" + result.status);
+      const titlename = await createFunc(octokit, `Posts/Works/${hashdate}/titlename.txt`, `${props.tiptapPostTitle}\n${props.tiptapPostDate}`, "titlename.txt generated");
+      console.log("create title.txt put request:" + titlename.status);
 
+      //title 이미지 업로드
+      if (props.tiptapPostTitleImage) {
+        let base64encoded = props.tiptapPostTitleImage.base64;
+        const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/title.JPEG`;
+        console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
+        console.log('Uploading image:', 'title.jpg');
+        if (base64encoded.startsWith('data:image/jpeg;base64,')) {
+          base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
+        }
+        try {
+          const response = await axios.put(
+            apiURL,
+            {
+              message: "Add image",
+              content: base64encoded,
+              branch: "main",
+            },
+            {
+              headers: {
+                Authorization: `token ${import.meta.env.VITE_APP_TOKEN}`,
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          console.log("Image uploaded successfully:", response.data.content.name);
+        } catch (e) {
+          console.error("Error uploading image:", e);
+        }
+        // 각 업로드 요청 사이에 5초 지연
+        await new Promise(resolve => setTimeout(resolve, 5000));
+      }
+
+      //이미지 업로드
       if (props.tiptapPostSliderStack) {
         for (let i = 0; i < props.tiptapPostSliderStack.length; i++) {
           for (let j = 0; j < props.tiptapPostSliderStack[i].blobUrl.length; j++) {
             let base64encoded = props.tiptapPostSliderStack[i].base64[j];
-            const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/images/Works/${props.tiptapPostTitle}/${props.tiptapPostSliderStack[i].ImageName[j]}`;
+            const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/${props.tiptapPostSliderStack[i].ImageName[j]}`;
             console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
             console.log('Uploading image:', props.tiptapPostSliderStack[i].ImageName[j]);
             console.log(props.tiptapPostSliderStack);
@@ -60,7 +96,30 @@ export const UploadButton = (props:any) => {
         }
       }
       //state에서 base64 이미지들 전부 업로드 
-      //maintext에 있는 애들 bloburl을 'images/...'로 바꿔서 업로드
+      
+      const titleresult = await getFunc(octokit, `Posts/Works/titlelist.txt`);
+      let tmp = decodeURIComponent(escape(window.atob(titleresult.data.content))) + `${hashdate}` + ","; 
+      const puttitle = await updateFunc(octokit, `Posts/Works/titlelist.txt`, tmp, 'titlelist updated');
+      console.log("fix titlelist.txt put request:" + puttitle.status);
+      //titlelist.txt 업데이트
+
+     
+        const tmpPosts = await fetch('/Posts.json')
+        .then(response => response.json()) 
+        .then(data => {
+          // posts 배열 추출
+          const posts: { title: string, year: number }[] = data.posts;
+            console.log(posts);
+            posts.push({title: props.tiptapPostTitle, year: parseInt(props.tiptapPostDate.split('-')[0])});
+            console.log(posts);
+            return posts;
+          })
+        .catch(error => console.error('Error fetching JSON:', error));
+        
+        const postresult = await updateFunc(octokit, `Posts.json`, tmpPosts, `post.json updated`);
+        console.log("fix titlelist.txt put request:" + postresult.status);
+        //posts.json 업데이트
+
     }
 
     const uploadContents = async () => {
@@ -109,24 +168,12 @@ export const UploadButton = (props:any) => {
     );
   };
 
-
+  //미리보기 버튼
   export const UploadPreviewButton = (props:any) => {
-    const [ MainText , setMainText] = useRecoilState(tiptapMainText);
-
     const resetSliderStack = async () => {
     console.log(props.tiptapPostSliderStack);
     for (let i = 0; i < props.tiptapPostSliderStack.length; i++)
       {
-        // for (let j = 0; j < props.tiptapPostSliderStack[i].blobUrl.length; j++)
-        // {
-        //   if (!props.tiptapeditor.getHTML().includes(props.tiptapPostSliderStack[i].blobUrl[j]))
-        //   {
-        //     console.log(props.tiptapPostSliderStack[i].blobUrl[j]);
-        //     props.tiptapPostSliderStack[i].blobUrl.splice(j,1);
-        //     props.tiptapPostSliderStack[i].base64.splice(j,1);
-        //     props.tiptapPostSliderStack[i].ImageName.splice(j,1);
-        //   }
-        // }
         if (!props.tiptapeditor.getHTML().includes(props.tiptapPostSliderStack[i].blobUrl[0]))
           {
             console.log("aa");
@@ -153,9 +200,7 @@ export const UploadButton = (props:any) => {
       );
     };
 
-  
   export const SetGenreButton = (props:any) => {
-
     const [ GenreType , setGenreType] = useRecoilState(PostGenreType);
     return (
       <div className=" ">

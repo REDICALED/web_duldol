@@ -25,10 +25,13 @@ import Resizer from "react-image-file-resizer";
 
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
+import { GitFileBlock } from '@/atoms/ModalAtom';
 
 const MenuBar = (props: any) => {
     const { editor } = useCurrentEditor()
     const [  , setMainText] = useRecoilState(tiptapMainText);
+    const [, setFileBlock] = useRecoilState(GitFileBlock);
+
   
     if (!editor) {
       return null
@@ -60,6 +63,7 @@ const MenuBar = (props: any) => {
       if (!files) {
         return;
       }
+
       const file = await resizeFile(files[0]);
       if (file) {
         const reader = new FileReader();
@@ -78,14 +82,15 @@ const MenuBar = (props: any) => {
       }
       
       const resizedFiles: File [] = [];
+      setFileBlock(true);
       for (let i = 0; i < files.length; i++) {
         const file = await resizeFile(files[i]);
         if (file) {
           resizedFiles.push(file);
         }
         // await new Promise(resolve => setTimeout(resolve, 1000));
-
       }
+      setFileBlock(false);
       console.log(resizedFiles);
       const NameArray = Array.from(resizedFiles).map(file => file.name);
       const BlobImageArray = Array.from(resizedFiles).map(file => URL.createObjectURL(file));
@@ -105,8 +110,8 @@ const MenuBar = (props: any) => {
         base64: Resultbase64ImageArray,
         ImageName: NameArray
       }]);
-      const NameStr = NameArray.join('%^& ');
-      const ImageStr = BlobImageArray.join('%^& ');
+      const NameStr = NameArray.join('#$%^');
+      const ImageStr = BlobImageArray.join('#$%^');
       
       editor.commands.insertContent(`------\n[슬라이더입니다!]\nimages=<<<${ImageStr}>>> images_cap=<<<${NameStr}>>>\n[!슬라이더입니다]\n------`);
   };
