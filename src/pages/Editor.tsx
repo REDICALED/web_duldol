@@ -10,6 +10,7 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useRecoilState } from 'recoil'
 import { PostGenreType } from '@/atoms/PostingAtom'
+import Postlist from '@/components/TipTap/Postlist'
 // import Filelist from '@/components/TipTap/Filelist'
 
 const Editor = () => {
@@ -59,8 +60,8 @@ const Editor = () => {
 
       </div>
 
-      <div className={GenreType === "post" ? 'ml-[1vw] w-[43vw] pt-[30vh]' : 'ml-[1vw] w-[43vw] pt-[15vh]'}>
-    <SetGenreButton {... TipTapProps}/>
+      <div className={GenreType === "post" ? 'ml-[1vw] w-[43vw] pt-[0vh]' : 'ml-[1vw] w-[43vw] pt-[15vh]'}>
+    <Postlist {... TipTapProps}/>
 
       <div className=" preview border-2 border-dul-gray h-[80vh] overflow-y-scroll overflow-x-auto ">
           <div className=" leading-5 md:leading-6 w-[40vw] mx-[1vw]  text-dul-gray pt-[3vh] text-xxs md:text-xs"

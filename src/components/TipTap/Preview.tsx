@@ -31,14 +31,14 @@ const Preview = () => {
         const imagesRegex = /images=<<<(.*?)>>>/;
         const imagesMatch = string.match(imagesRegex);
         const imagesStr = imagesMatch ? imagesMatch[1] : '';
-        const imagesArray = imagesStr.split('%^&').map((url: string) => url.trim());
+        const imagesArray = imagesStr.split('#$%^').map((url: string) => url.trim());
 
 
         // images_cap 추출
         const imagesCapRegex = /images_cap=<<<(.*?)>>>/;
         const imagesCapMatch = string.match(imagesCapRegex);
         const imagesCapStr = imagesCapMatch ? imagesCapMatch[1] : '';
-        const imagesCapArray = imagesCapStr.split('%^&').map((cap: string) => cap.trim());
+        const imagesCapArray = imagesCapStr.split('#$%^').map((cap: string) => cap.trim());
         
 
         return <Slick images={imagesArray} images_cap={imagesCapArray} />;
