@@ -76,15 +76,31 @@ const MenuBar = (props: any) => {
       if (!files) {
         return;
       }
-    
-      // FileList 객체를 배열로 변환
-      const NameArray = Array.from(files).map(file => file.name);
-      console.log("------------------------------------")
-      console.log(files[0])
-      const ImageArray = Array.from(files).map(file => URL.createObjectURL(file));
+      
+      const resizedFiles: File [] = [];
+      for (let i = 0; i < files.length; i++) {
+        const file = await resizeFile(files[i]);
+        if (file) {
+          resizedFiles.push(file);
+        }
+      }
+      console.log(resizedFiles);
+      const NameArray = Array.from(resizedFiles).map(file => file.name);
+      const BlobImageArray = Array.from(resizedFiles).map(file => URL.createObjectURL(file));
+      console.log(BlobImageArray);
+      const base64ImageArray = Array.from(resizedFiles);
+      let Resultbase64ImageArray: (string | ArrayBuffer | null)[] = [];
+      for (let i = 0; i < base64ImageArray.length; i++) {
+        const reader = new FileReader();
+        reader.readAsDataURL(base64ImageArray[i]);
+        reader.onload = () => {
+          Resultbase64ImageArray.push(reader.result);
+        };
+      }
+      props.settiptapPostSliderStack([...props.tiptapPostSliderStack, { blobUrl:BlobImageArray, base64:Resultbase64ImageArray, ImageName:NameArray}]);
       const NameStr = NameArray.join('%^& ');
-      const ImageStr = ImageArray.join('%^& ');
-  
+      const ImageStr = BlobImageArray.join('%^& ');
+      
       editor.commands.insertContent(`------\n[슬라이더입니다!]\nimages=<<<${ImageStr}>>> images_cap=<<<${NameStr}>>>\n[!슬라이더입니다]\n------`);
   };
   
@@ -254,7 +270,7 @@ const MenuBar = (props: any) => {
   
       <button
         type="button"
-        className="relative cursor-pointer border border-black p-[10px] hover:bg-gray-200  "
+        className={props.GenreType !== "post" ? " hidden relative cursor-pointer border border-black p-[10px] hover:bg-gray-200" : "relative cursor-pointer border border-black p-[10px] hover:bg-gray-200"}
       >
         <input
           type="file"
@@ -265,8 +281,7 @@ const MenuBar = (props: any) => {
           }}
           multiple
         />
-        <img src={AddSlider} className="w-5 h-5"/>
-  
+        <img src={AddSlider} className={"w-5 h-5"}/>
       </button>
   
       <button

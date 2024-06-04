@@ -25,7 +25,7 @@ export const ZoomSlick = (props: { images: string[], images_cap: string[] }) => 
     : "opacity-0 absolute w-full md:h-[90vh] h-[80vh] object-contain pointer-events-none"
   } 
   src={imgurl} 
-  alt='asd'
+  alt='이미지가 로드되지 않았습니다'
 />
 </TransformComponent>
     </TransformWrapper>

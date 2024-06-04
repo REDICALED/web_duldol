@@ -22,7 +22,7 @@ import { tiptapMainText } from '@/atoms/TiptapAtom';
         console.log(returnString);
       
         await props.tiptapeditor.commands.setContent(returnString);
-        await setMainText(returnString); 
+        await setMainText(returnString);
         return returnString;
       };
 

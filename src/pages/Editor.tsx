@@ -14,24 +14,31 @@ import { PostGenreType } from '@/atoms/PostingAtom'
 
 const Editor = () => {
   const [tiptapeditor, settiptapeditor] = useState(null);
-  const [titapPostDate, settitapPostDate] = useState('');
-  const [titapPostTitleImage, settitapPostTitleImage] = useState<null | File>(null);
-  const [titapPostTitle, settitapPostTitle] = useState('');
+  const [tiptapPostDate, settiptapPostDate] = useState('');
+  const [tiptapPostTitleImage, settiptapPostTitleImage] = useState<{ blobUrl: string; base64: string; }>({
+    blobUrl: '',
+    base64: '',
+  });
+  const [tiptapPostSliderStack, settiptapPostSliderStack] = useState<{ blobUrl: string[]; base64: string[]; ImageName: string[]; }[]>([]);
+  const [tiptapPostTitle, settiptapPostTitle] = useState('');
   const [loginvalid] = useRecoilState(LoginValid);
   const [PreviewSwitch, setPreviewSwitch ] = useState(false);
   const [ GenreType , ] = useRecoilState(PostGenreType);
 
   const TipTapProps = {
     tiptapeditor: tiptapeditor,
-    titapPostDate: titapPostDate,
-    titapPostTitleImage: titapPostTitleImage,
-    titapPostTitle: titapPostTitle,
-    settitapPostDate: settitapPostDate,
-    settitapPostTitleImage: settitapPostTitleImage,
-    settitapPostTitle: settitapPostTitle,
+    tiptapPostDate: tiptapPostDate,
+    tiptapPostTitleImage: tiptapPostTitleImage,
+    tiptapPostTitle: tiptapPostTitle,
+    settiptapPostDate: settiptapPostDate,
+    settiptapPostTitleImage: settiptapPostTitleImage,
+    settiptapPostTitle: settiptapPostTitle,
     setPreviewSwitch: setPreviewSwitch,
     PreviewSwitch: PreviewSwitch,
     settiptapeditor: settiptapeditor,
+    GenreType: GenreType,
+    settiptapPostSliderStack: settiptapPostSliderStack,
+    tiptapPostSliderStack: tiptapPostSliderStack,
   };
 
   if (loginvalid === 0) {
@@ -44,7 +51,7 @@ const Editor = () => {
     <div className=" flex pt-[1vh] pl-[1vw] w-[100vw]">
       <div className=' space-y-[1vh]'>
         <SetGenreButton {... TipTapProps}/>
-        <EditorProvider slotBefore={<MenuBar settiptapeditor={settiptapeditor} PreviewSwitch={PreviewSwitch}/>} extensions={extensions} content={''}></EditorProvider>
+        <EditorProvider slotBefore={<MenuBar {... TipTapProps}/>} extensions={extensions} content={''}></EditorProvider>
         <div className='flex'>
         <UploadButton {... TipTapProps } />
         <UploadPreviewButton {... TipTapProps} />
