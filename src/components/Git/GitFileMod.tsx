@@ -1,4 +1,4 @@
-import { getFunc, updateFunc, createFunc, createImage } from "@/components/Git/GitFunc";
+import { getFunc, updateFunc, createFunc, createImage, getJsonFunc } from "@/components/Git/GitFunc";
 import { Octokit } from "octokit";
 import Resizer from "react-image-file-resizer";
 
@@ -87,12 +87,6 @@ export const resizeFile = (file: File): Promise<File>  =>
     const pathkey = Date.now();
     const result = await createFunc(octokit, `${repo}/${pathkey}-${tags}-${tmpPath}/sub.txt`, `${fileList?.length}\n${contents}`, path);
     console.log("create sub.txt put request:" + result.status);
-    //titlelist add
-    const titleresult = await getFunc(octokit, `${repo}/titlelist.txt`);
-    let tmp = decodeURIComponent(escape(window.atob(titleresult.data.content))) + `${pathkey}` + "-" + `${tags}` + "-"  + `${tmpPath}` + ","; 
-    const puttitle = await updateFunc(octokit, `${repo}/titlelist.txt`, tmp, path);
-    console.log("fix titlelist.txt put request:" + puttitle.status);
-    //sub.txt 생성, titlelist.txt에 추가
     
     let finished = false;
     const uploadImageWithDelay = async () => {
@@ -136,51 +130,70 @@ export const resizeFile = (file: File): Promise<File>  =>
   };
 
   //파일 지우기
-  export const fileDelete = async (repo:any, modifyprojecttitle:any, setFileBlock:any) => {
+  export const fileDelete = async (repo:any, modtitle:any, setFileBlock:any) => {
     setFileBlock(true);
-    console.log(modifyprojecttitle);
+    console.log(modtitle);
     const octokit = new Octokit({
       auth: import.meta.env.VITE_APP_TOKEN,
     });
-    for (let i = 0; i < modifyprojecttitle.length; i++) {
-      const array: string[] = ["title.jpg", "sub.txt"];
-      for (let i = 0; i <= 20; i++) {
-          array.push(`${i}image.jpg`);
+    for (let i = 0; i < modtitle.length; i++) {
+      if (modtitle[i].hashdate === 0) {
+        const titleresult = await getJsonFunc(octokit, `Posts.json`);
+
+        titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
+        console.log(JSON.stringify(titleresult));
+        updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
+        return ;
       }
-      const titleresult = await getFunc(octokit, `${repo}/${modifyprojecttitle[i]}/sub.txt`);
-      let tmp = decodeURIComponent(escape(window.atob(titleresult.data.content)));
-      const cnt = parseInt(tmp.split('\n')[0], 10);
-      console.log(cnt);
-      for (let j = 0; j < cnt + 2; j++){
-        let currentSHA;
-        try {
-          currentSHA = await getFunc(octokit, `${repo}/${modifyprojecttitle[i]}/${array[j]}`).then((result: any) => result.data.sha);
-          // 성공적으로 SHA 값을 가져온 경우에 대한 로직
-          } catch (error) {
-              // 실패한 경우에 대한 예외 처리
-              setFileBlock(false);
-              console.error('Failed to fetch SHA:', error);
-              // 여기서 필요한 추가 작업을 수행할 수 있습니다. 예를 들어, 사용자에게 알림을 표시하거나 다른 처리를 수행할 수 있습니다.
-          }
-          const result = await octokit.request(
-          `DELETE /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/${repo}/${modifyprojecttitle[i]}/${array[j]}`,
-          {
-            owner: import.meta.env.VITE_APP_OWNER,
-            repo: import.meta.env.VITE_APP_REPO,
-            path: `${modifyprojecttitle[i]}/${array[j]}`,
-            message : "delete!!",
-            sha: currentSHA,        
-          }
-        );
-        const titleresult = await getFunc(octokit, `${repo}/titlelist.txt`);
-        let tmp = decodeURIComponent(escape(window.atob(titleresult.data.content)))
-        .replace(`${modifyprojecttitle[i]},`, "") // 쉼표와 함께 삭제
-        .replace(`${modifyprojecttitle[i]}`, ""); // 쉼표 없이 삭제
-        const puttitle = await updateFunc(octokit, `${repo}/titlelist.txt`, tmp, `${modifyprojecttitle[i]} deleted`);        
-        console.log("fix titlelist.txt, delete request:" + puttitle.status );
-        console.log(result);
+      else {
+        const puttitle = await getFunc(octokit, `Posts/Works/${modtitle[i].hashdate}/main.html`);
+        let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)));
+        console.log(returnString);
+        const regex = /images_cap=&lt;&lt;&lt;(.*?)&gt;&gt;&gt;/gs;
+        let match;
+        const jpegFileNames: string[] = [];
+
+        while ((match = regex.exec(returnString)) !== null) {
+          const fileNamesStr = match[1];  // 첫 번째 캡처 그룹을 가져옴
+          const fileNames = fileNamesStr.split('#$%^');  // 쉼표로 구분된 파일 이름 배열
+          console.log(fileNamesStr)
+          console.log(fileNames)          
+          fileNames.forEach(fileName => {
+            jpegFileNames.push(fileName.trim());  // 각 파일 이름을 배열에 추가 (trim()으로 앞뒤 공백 제거)
+          });
+        }
+        console.log(jpegFileNames);
+        const array: string[] = ["title.JPEG", "main.html", "titlename.txt"].concat(jpegFileNames);    
+        const cnt = array.length;
+        for (let j = 0; j < cnt; j++){
+          let currentSHA;
+          try {
+            currentSHA = await getFunc(octokit, `${repo}${modtitle[i].hashdate}/${array[j]}`).then((result: any) => result.data.sha);
+            // 성공적으로 SHA 값을 가져온 경우에 대한 로직
+            } catch (error) {
+                // 실패한 경우에 대한 예외 처리
+                setFileBlock(false);
+                console.error('Failed to fetch SHA:', error);
+                // 여기서 필요한 추가 작업을 수행할 수 있습니다. 예를 들어, 사용자에게 알림을 표시하거나 다른 처리를 수행할 수 있습니다.
+            }
+            const result = await octokit.request(
+            `DELETE /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${modtitle[i].hashdate}/${array[j]}`,
+            {
+              owner: import.meta.env.VITE_APP_OWNER,
+              repo: import.meta.env.VITE_APP_REPO,
+              path: `${modtitle[i]}/${array[j]}`,
+              message : `delete ${modtitle[i].hashdate}/${array[j]}`,
+              sha: currentSHA,        
+            }
+          );
+          const titleresult = await getJsonFunc(octokit, `Posts.json`);
+          titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
+          console.log(JSON.stringify(titleresult));
+          updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
+      }    
+      setFileBlock(false);
+      console.log("delete done");
+      }
     }
+      
     }
-    setFileBlock(false);
-    console.log("delete done");
-  };

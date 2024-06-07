@@ -60,8 +60,8 @@ const Editor = () => {
 
       </div>
 
-      <div className={GenreType === "post" ? 'ml-[1vw] w-[43vw] pt-[0vh]' : 'ml-[1vw] w-[43vw] pt-[15vh]'}>
-    <Postlist {... TipTapProps}/>
+      <div className={GenreType === "post" ? 'ml-[1vw] w-[43vw] pt-[0vh]' : 'ml-[1vw] w-[43vw] pt-[0vh]'}>
+      {GenreType === "post" ? <Postlist {... TipTapProps}/> : <div></div>}
 
       <div className=" preview border-2 border-dul-gray h-[80vh] overflow-y-scroll overflow-x-auto ">
           <div className=" leading-5 md:leading-6 w-[40vw] mx-[1vw]  text-dul-gray pt-[3vh] text-xxs md:text-xs"

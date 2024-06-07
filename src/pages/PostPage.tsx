@@ -20,27 +20,25 @@ import { useEffect, useState } from "react";
 const PostPage = () => {
     const tags = useParams();
     const [titlelistState, settitlelistState] = useState("");
+    const [titlearray, settitlearray] = useState<string []>([]);
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
-    const getlist =  async (props: string) => {
-        await fetch(`/Posts/Works/titlelist.txt`)
-        .then(response => response.text())
-        .then(titlestring => {
-          settitlelistState(titlestring);
-          if (titlelistState.includes(props) === false) {
-            console.log(titlelistState);
-        }
+    const getlist =  async () => {
+        const tmpPosts = await fetch('/Posts.json')
+        .then(response => response.json()) 
+        .then(data => {
+          // posts 배열 추출
+          const posts: { title: string, year: number, hashdate: number }[] = data.posts;
+          console.log(posts);
+          settitlearray(posts.map((post) => post.title));
         })
-        .catch(error => {
-          console.error('Fetch error:', error);
-        }
-    );
-    setIsLoading(false); // 로딩 완료
+        .catch(error => console.error('Error fetching JSON:', error));
+        setIsLoading(false); // 로딩 완료
+        console.log(titlearray);
     }
 
     useEffect(() => {
-        const dd:string = tags.id!;
-        getlist(dd);
+        getlist();
     }, []);
 
     if (isLoading) {
@@ -71,7 +69,7 @@ const PostPage = () => {
             return <PostComponent11 />;
         else if (tags.id === "murmur-mural ensemble(웅얼웅얼-벽화 합창)") 
             return <PostComponent12 />;
-        else if (tags.id && titlelistState.includes(tags.id) === true) {
+        else if (tags.id && titlearray.includes(tags.id) === true) {
             return <PostNewPage />;
         }
         else {
