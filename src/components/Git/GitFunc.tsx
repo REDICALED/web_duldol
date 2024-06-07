@@ -12,6 +12,25 @@ export const staticGetFunc = async (shapath: any): Promise<string> => {
   }
 };
 
+export const getJsonFunc = async (octokit: any, shapath: any) => {
+  const result = await octokit.request(
+    `GET /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/${shapath}`,
+    {
+      owner: import.meta.env.VITE_APP_OWNER,
+      repo: import.meta.env.VITE_APP_REPO,
+      path: `${shapath}`,
+      headers: {
+        'If-None-Match': ''
+      }
+    }
+  );
+  console.log(result.status);
+  const content = decodeURIComponent(escape(window.atob(result.data.content)));
+  const jsonData = JSON.parse(content);
+  return jsonData;
+};
+
+
 export const getFunc = async (octokit: any, shapath: any) => {
     const result = await octokit.request(
       `GET /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/${shapath}`,

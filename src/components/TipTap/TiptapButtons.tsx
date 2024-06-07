@@ -108,16 +108,18 @@ export const UploadButton = (props:any) => {
         .then(response => response.json()) 
         .then(data => {
           // posts 배열 추출
-          const posts: { title: string, year: number }[] = data.posts;
+          const posts: { title: string, year: number, hashdate: number }[] = data.posts;
             console.log(posts);
-            posts.push({title: props.tiptapPostTitle, year: parseInt(props.tiptapPostDate.split('-')[0])});
-            console.log(posts);
-            return posts;
+            posts.push({title: props.tiptapPostTitle, year: parseInt(props.tiptapPostDate.split('-')[0]), hashdate: hashdate});
+            console.log(JSON.stringify(posts));
+            const tmpPosts = `{ "posts": ` + JSON.stringify(posts) + ` }`;
+            
+            return tmpPosts;
           })
         .catch(error => console.error('Error fetching JSON:', error));
         
         const postresult = await updateFunc(octokit, `Posts.json`, tmpPosts, `post.json updated`);
-        console.log("fix titlelist.txt put request:" + postresult.status);
+        console.log("fix titlelist.txt put request:" + postresult .status);
         //posts.json 업데이트
 
     }
