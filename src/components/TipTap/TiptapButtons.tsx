@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil';
 import SetContents from '@/components/TipTap/SetContents';
 import { Octokit } from 'octokit';
 import { tiptapMainText } from '@/atoms/TiptapAtom';
-import { createFunc, getFunc, updateFunc } from '@/components/Git/GitFunc';
+import { createFunc, updateFunc } from '@/components/Git/GitFunc';
 import { FileRequire, GitFileBlock } from '@/atoms/ModalAtom';
 import SetTitleImage from '@/components/TipTap/SetTitleImage';
 import axios from 'axios';
@@ -96,10 +96,7 @@ export const UploadButton = (props:any) => {
         }
       }
       //state에서 base64 이미지들 전부 업로드 
-      
 
-
-     
         const tmpPosts = await fetch('/Posts.json')
         .then(response => response.json()) 
         .then(data => {
