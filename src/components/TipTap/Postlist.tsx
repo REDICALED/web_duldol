@@ -1,7 +1,5 @@
 import { tiptapMainText } from '@/atoms/TiptapAtom';
 import { useRecoilState } from "recoil";
-import parse from 'html-react-parser';
-import Slick from '@/components/Slick';
 import '@/styles.scss'
 import { getJsonFunc } from '../Git/GitFunc';
 import { Octokit } from 'octokit';
@@ -17,6 +15,7 @@ const Postlist = (props: any) => {
   const [, setFileBlock] = useRecoilState(GitFileBlock);
 
   const getlist =  async () => {
+    console.log(props.GenreType + MainText);
     setPostListswitch(!PostListswitch);
     const octokit = new Octokit({
       auth: import.meta.env.VITE_APP_TOKEN,
@@ -57,7 +56,7 @@ const Postlist = (props: any) => {
         for (let i = 0; i < PostList.length; i++) {
           if (PostList[i].selected) {
             if (PostList[i].hashdate === 0) {
-              tmplist.push(PostList[i].title);
+              tmplist.push("0"+PostList[i].title);
             }
             else {
               tmplist.push(PostList[i].hashdate);
