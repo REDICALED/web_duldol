@@ -97,11 +97,7 @@ export const UploadButton = (props:any) => {
       }
       //state에서 base64 이미지들 전부 업로드 
       
-      const titleresult = await getFunc(octokit, `Posts/Works/titlelist.txt`);
-      let tmp = decodeURIComponent(escape(window.atob(titleresult.data.content))) + `${hashdate}` + ","; 
-      const puttitle = await updateFunc(octokit, `Posts/Works/titlelist.txt`, tmp, 'titlelist updated');
-      console.log("fix titlelist.txt put request:" + puttitle.status);
-      //titlelist.txt 업데이트
+
 
      
         const tmpPosts = await fetch('/Posts.json')
@@ -119,7 +115,7 @@ export const UploadButton = (props:any) => {
         .catch(error => console.error('Error fetching JSON:', error));
         
         const postresult = await updateFunc(octokit, `Posts.json`, tmpPosts, `post.json updated`);
-        console.log("fix titlelist.txt put request:" + postresult .status);
+        console.log("fix Posts.json put request:" + postresult .status);
         //posts.json 업데이트
 
     }
