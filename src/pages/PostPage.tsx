@@ -19,12 +19,11 @@ import { useEffect, useState } from "react";
 
 const PostPage = () => {
     const tags = useParams();
-    const [titlelistState, settitlelistState] = useState("");
     const [titlearray, settitlearray] = useState<string []>([]);
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
     const getlist =  async () => {
-        const tmpPosts = await fetch('/Posts.json')
+        await fetch('/Posts.json')
         .then(response => response.json()) 
         .then(data => {
           // posts 배열 추출

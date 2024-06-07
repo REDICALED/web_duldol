@@ -186,6 +186,7 @@ export const resizeFile = (file: File): Promise<File>  =>
               sha: currentSHA,        
             }
           );
+          console.log(result.status);
           const titleresult = await getJsonFunc(octokit, `Posts.json`);
           titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
           console.log(JSON.stringify(titleresult));
