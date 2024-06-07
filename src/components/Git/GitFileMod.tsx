@@ -168,7 +168,7 @@ export const resizeFile = (file: File): Promise<File>  =>
         for (let j = 0; j < cnt; j++){
           let currentSHA;
           try {
-            currentSHA = await getFunc(octokit, `${repo}${modtitle[i].hashdate}/${array[j]}`).then((result: any) => result.data.sha);
+            currentSHA = await getFunc(octokit, `${repo}${modtitle[i].hashdate}/${encodeURIComponent(array[j])}`).then((result: any) => result.data.sha);
             // 성공적으로 SHA 값을 가져온 경우에 대한 로직
             } catch (error) {
                 // 실패한 경우에 대한 예외 처리
@@ -177,7 +177,7 @@ export const resizeFile = (file: File): Promise<File>  =>
                 // 여기서 필요한 추가 작업을 수행할 수 있습니다. 예를 들어, 사용자에게 알림을 표시하거나 다른 처리를 수행할 수 있습니다.
             }
             const result = await octokit.request(
-            `DELETE /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${modtitle[i].hashdate}/${array[j]}`,
+            `DELETE /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${modtitle[i].hashdate}/${encodeURIComponent(array[j])}`,
             {
               owner: import.meta.env.VITE_APP_OWNER,
               repo: import.meta.env.VITE_APP_REPO,
