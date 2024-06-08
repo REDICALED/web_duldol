@@ -21,6 +21,7 @@ const PostPage = () => {
     const tags = useParams();
     const [titlearray, settitlearray] = useState<string []>([]);
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+    const [isError, setIsError] = useState(false); // 에러 상태 추가
 
     const getlist =  async () => {
         await fetch('/Posts.json')
@@ -30,10 +31,13 @@ const PostPage = () => {
           const posts: { title: string, year: number, hashdate: number }[] = data.posts;
           console.log(posts);
           settitlearray(posts.map((post) => post.title));
+          console.log(titlearray);
+        if (tags.id && titlearray.includes(tags.id) === true) {
+            setIsError(true);
+        }
         })
         .catch(error => console.error('Error fetching JSON:', error));
         setIsLoading(false); // 로딩 완료
-        console.log(titlearray);
     }
 
     useEffect(() => {
@@ -68,12 +72,10 @@ const PostPage = () => {
             return <PostComponent11 />;
         else if (tags.id === "murmur-mural ensemble(웅얼웅얼-벽화 합창)") 
             return <PostComponent12 />;
-        else if (tags.id && titlearray.includes(tags.id) === true) {
+        else {
             return <PostNewPage />;
         }
-        else {
-            return <ErrPage />;
-        }
+
     }
 };
 
