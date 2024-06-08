@@ -1,7 +1,7 @@
 import { tiptapMainText } from '@/atoms/TiptapAtom';
 import { useRecoilState } from "recoil";
 import '@/styles.scss'
-import { getJsonFunc } from '../Git/GitFunc';
+import { getFunc, getJsonFunc } from '../Git/GitFunc';
 import { Octokit } from 'octokit';
 import { useState } from 'react';
 import hamburger from '@/assets/icons/hamburger.png'
@@ -13,6 +13,7 @@ const Postlist = (props: any) => {
   const [ PostList, setPostList ] = useState<any[]>([]);
   const [ PostListswitch, setPostListswitch ] = useState(false);
   const [, setFileBlock] = useRecoilState(GitFileBlock);
+  const [  , setMainText] = useRecoilState(tiptapMainText);
 
   const getlist =  async () => {
     console.log(props.GenreType + MainText);
@@ -28,6 +29,25 @@ const Postlist = (props: any) => {
     console.log(postsWithCheckbox)
     setPostList(postsWithCheckbox);
     
+  }
+
+  const getPost = async (title: string, hashdate: number) => {
+    const octokit = new Octokit({
+      auth: import.meta.env.VITE_APP_TOKEN,
+    });
+    
+    if(hashdate === 0) {
+      const puttitle = await getFunc(octokit, `images/Works/${title}/main.html`);
+      let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
+      console.log(puttitle.status);
+      console.log(returnString);
+      await props.tiptapeditor.commands.setContent(returnString);
+      await setMainText(returnString);
+      return returnString;
+    }
+    else {
+      
+    }
   }
 
   return (
@@ -74,9 +94,11 @@ const Postlist = (props: any) => {
     {/* list */}
       <div className={PostListswitch ? ' border-l border-r border-t border-black h-[30vh] overflow-y-scroll' : ' border-l border-r border-t border-black h-0 hidden'}>
       {PostList && PostList.sort((a, b) => a.year - b.year).reverse().map((item, index) => (
-        <label key={index} htmlFor={item.title}>
+        
+        <div className='flex border-b border-1 border-black'>
+          <label className='w-1/2' key={index} htmlFor={item.title}>
         <div  className=' bg-white hover:bg-gray-200 transition-all duration-300' key={index}>
-          <div className=' place-items-center text-xxs flex border-b border-black'>
+          <div className=' place-items-center text-xxs flex border-black'>
           { item.hashdate === 0 ?  <img className=' h-10 w-10' src={`/images/Works/${item.title}/title.jpg`} /> : <img className=' h-10 w-10' src={`/Posts/Works/${item.hashdate}/title.JPEG`} />}
             {item.title } /  
              {item.year}
@@ -84,6 +106,11 @@ const Postlist = (props: any) => {
           </div>
         </div>
         </label>
+
+        <button onClick={()=>{getPost(item.title, item.hashdate);}} className=' border my-1 bg-gray-100 text-xs pl-1 pr-1 border-black ml-10'>
+          불러오기
+        </button>
+        </div>
       ))}
       </div>
     </div>
