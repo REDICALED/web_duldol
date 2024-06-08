@@ -1,22 +1,17 @@
 import pic1 from "/images/Works/감정의 정반합/1.jpg";
 import pic2 from "/images/Works/감정의 정반합/2.jpg";
 
-
-
-import Zoom from "react-medium-image-zoom";
-
-
-
 import Slick from '@/components/Slick';
+import { useRecoilState } from "recoil";
+import { ImageZoom } from "@/atoms/ModalAtom";
 const PostComponent1 = () => {
+    const [, setImageZoom] = useRecoilState(ImageZoom);
 
 
     return (
         <div className=" leading-5 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <Zoom>
-                <img src={pic1} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-                </Zoom>
+                <img onClick={()=>{setImageZoom(pic1)}} src={pic1} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
                 <span className='w-full text-xxs md:text-xs'>감정의 정반합</span>
             </div>
 

@@ -1,3 +1,4 @@
+import { useRecoilState } from "recoil";
 import pic1_1 from "/images/Works/metamorphosis/1/1.jpg";
 import pic1_2 from "/images/Works/metamorphosis/1/2.jpg";
 import pic1_3 from "/images/Works/metamorphosis/1/3.jpg";
@@ -20,15 +21,15 @@ import pic4_2 from "/images/Works/metamorphosis/4/2.jpg";
 import pic4_3 from "/images/Works/metamorphosis/4/3.jpg";
 import pic4_4 from "/images/Works/metamorphosis/4/4.jpg";
 import Slick from '@/components/Slick';
-import Zoom from "react-medium-image-zoom";
+import { ImageZoom } from "@/atoms/ModalAtom";
 
 const PostComponent11 = () => {
+    const [, setImageZoom] = useRecoilState(ImageZoom);
+
     return (
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <Zoom>
-                <img src={pic2_2} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-                </Zoom>
+                <img onClick={()=>{setImageZoom(pic2_2)}} src={pic2_2} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
                 <span className='w-full text-xxs md:text-xs'>Metamorphosis</span>
             </div>
             <Slick images={[pic1_1, pic1_2, pic1_3, pic1_4]} images_cap={["Metamorphosis_installation view","Metamorphosis_installation view","Metamorphosis_installation view","Metamorphosis_installation view"]}/>

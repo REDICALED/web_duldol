@@ -9,11 +9,10 @@ import { fileDelete, fileMainImageSet } from '../Git/GitFileMod';
 import { GitFileBlock } from '@/atoms/ModalAtom';
 
 const Postlist = (props: any) => {
-  const [ MainText ] = useRecoilState(tiptapMainText);
+  const [ MainText, setMainText ] = useRecoilState(tiptapMainText);
   const [ PostList, setPostList ] = useState<any[]>([]);
   const [ PostListswitch, setPostListswitch ] = useState(false);
   const [, setFileBlock] = useRecoilState(GitFileBlock);
-  const [  , setMainText] = useRecoilState(tiptapMainText);
 
   const getlist =  async () => {
     console.log(props.GenreType + MainText);
@@ -37,12 +36,14 @@ const Postlist = (props: any) => {
     });
     
     if(hashdate === 0) {
+      title = encodeURIComponent(title);
       const puttitle = await getFunc(octokit, `images/Works/${title}/main.html`);
       let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
       console.log(puttitle.status);
       console.log(returnString);
       await props.tiptapeditor.commands.setContent(returnString);
       await setMainText(returnString);
+      console.log(MainText);
       return returnString;
     }
     else {

@@ -1,25 +1,24 @@
+import { useRecoilState } from "recoil";
 import pic1 from "/images/Works/돌계란(stonegg)/1.jpg";
 import pic2 from "/images/Works/돌계란(stonegg)/2.jpg";
 import pic3 from "/images/Works/돌계란(stonegg)/3.jpg";
 import pic4 from "/images/Works/돌계란(stonegg)/4.jpg";
 import Slick from '@/components/Slick';
-import Zoom from "react-medium-image-zoom";
+import { ImageZoom } from "@/atoms/ModalAtom";
 
 
 const PostComponent3 = () => {
+
+    const [, setImageZoom] = useRecoilState(ImageZoom);
+
     return (
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
         
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-            <Zoom>
-                <img src={pic2} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-            </Zoom>
-
+                <img onClick={()=>{setImageZoom(pic2)}} src={pic2} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
                 <span className='w-full text-xxs md:text-xs'>돌계란 stonegg</span>
             </div>
-            <Zoom>
-            <img src={pic2} className="w-[100vw] object-cover " ></img>
-            </Zoom>
+            <img onClick={()=>{setImageZoom(pic2)}} src={pic2} className="w-[100vw] object-cover " ></img>
             <span>돌계란 2_21*28(cm)_혼합재료_2022</span>
             <br />
             <br />
@@ -39,9 +38,7 @@ const PostComponent3 = () => {
             <br />
 
             <div className="flex text-right justify-end">
-            <Zoom>
-                <img src={pic1} className="md:h-[50vh] ml-auto " ></img>
-            </Zoom>
+                <img onClick={()=>{setImageZoom(pic1)}} src={pic1} className="md:h-[50vh] ml-auto " ></img>
             </div>
             <span className="text-right justify-end flex">돌계란 1_25*31(cm)_종이에 연필_2022</span>
 
