@@ -47,7 +47,21 @@ const Postlist = (props: any) => {
       return returnString;
     }
     else {
+      title = encodeURIComponent(title);
+      const puttitle = await getFunc(octokit, `Posts/Works/${hashdate}/main.html`);
+      let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
+      console.log(puttitle.status);
+      console.log(returnString);
+      const sliderPattern = /\[슬라이더입니다!\].*?\[!슬라이더입니다\]/gs;
+      returnString = returnString.replace(sliderPattern, '');
+      const imgTagPattern = /<img[^>]*>/g;
+      returnString = returnString.replace(imgTagPattern, '');
+      console.log(returnString);
+      await props.tiptapeditor.commands.setContent(returnString);
       
+      await setMainText(returnString);
+      console.log(MainText);
+      return returnString;
     }
   }
 

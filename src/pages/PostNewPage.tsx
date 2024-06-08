@@ -16,6 +16,29 @@ const PostNewPage = () => {
     }, []);
 
     const getlist =  async () => {
+
+      const tmpPosts = await fetch('/Posts.json')
+      .then(response => response.json()) 
+      .then(data => {
+        // posts 배열 추출
+        const posts: { title: string, year: number, hashdate: number }[] = data.posts;
+          console.log(posts);
+          return posts;
+        })
+      .catch(error => console.error('Error fetching JSON:', error));
+      let tmp = false;
+      if (tmpPosts)
+        {
+          for(let i = 0; i < tmpPosts.length; i++) {
+            if (tags.id === tmpPosts[i].hashdate.toString() ) {
+              tmp = true;
+              break;
+            }
+          }
+        }
+      if (tmp === false) {
+        window.location.href = '/';
+      }
         await fetch(`/Posts/Works/${tags.id}/main.html`)
         .then(response => response.text())
         .then(html => {
@@ -23,6 +46,7 @@ const PostNewPage = () => {
         })
         .catch(error => {
           console.error('Fetch error:', error);
+          window.location.href = '/';
         });
         await fetch(`/Posts/Works/${tags.id}/titlename.txt`)
         .then(response => response.text())
