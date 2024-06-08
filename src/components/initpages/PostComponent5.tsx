@@ -12,21 +12,19 @@ import pic11 from "/images/Works/미뢔(MIRWAE)/11.jpg";
 import pic12 from "/images/Works/미뢔(MIRWAE)/12.jpg";
 import pic13 from "/images/Works/미뢔(MIRWAE)/13.jpg";
 import pic14 from "/images/Works/미뢔(MIRWAE)/14.jpg";
-import Zoom from "react-medium-image-zoom";
-
-
 
 import Slick from '@/components/Slick';
+import { ImageZoom } from "@/atoms/ModalAtom";
+import { useRecoilState } from "recoil";
 
 const PostComponent5 = () => {
     const strings: string[] = Array.from({ length: 14 }, () => "미뢔 Mirwae_1 channel 2D·3D animation still cut_00:02:26_2023");
+    const [, setImageZoom] = useRecoilState(ImageZoom);
 
     return (
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-            <Zoom>
-                <img src={pic13} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-            </Zoom>
+                <img onClick={()=>{setImageZoom(pic13)}} src={pic13} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
                 <span className='w-full text-xxs md:text-xs'>미뢔 MIRWAE</span>
             </div>
 

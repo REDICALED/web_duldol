@@ -9,22 +9,17 @@ import pic8 from "/images/Works/중성인간(neutral person)/8.jpg";
 import pic9 from "/images/Works/중성인간(neutral person)/9.jpg";
 import pic10 from "/images/Works/중성인간(neutral person)/10.jpg";
 
-
-import Zoom from "react-medium-image-zoom";
-
-
-
 import Slick from '@/components/Slick';
+import { useRecoilState } from "recoil";
+import { ImageZoom } from "@/atoms/ModalAtom";
 const PostComponent9 = () => {
     const strings: string[] = Array.from({ length: 10 }, () => "중성인간 Neutral person_1 channel 2D animation_00:01:36_ 2022");
-
+    const [, setImageZoom] = useRecoilState(ImageZoom);
 
     return (
         <div className=" leading-5 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <Zoom>
-                <img src={pic1} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-                </Zoom>
+                <img onClick={()=>{setImageZoom(pic1)}} src={pic1} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
                 <span className='w-full text-xxs md:text-xs'>중성인간 Neutral person</span>
             </div>
 
