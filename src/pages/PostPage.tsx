@@ -11,7 +11,6 @@ import PostComponent9 from "@/components/initpages/PostComponent9";
 import PostComponent10 from "@/components/initpages/PostComponent10";
 import PostComponent11 from "@/components/initpages/PostComponent11";
 import PostComponent12 from "@/components/initpages/PostComponent12";
-import ErrPage from "@/pages/ErrPage";
 import PostNewPage from "@/pages/PostNewPage";
 import { useEffect, useState } from "react";
 
@@ -21,7 +20,7 @@ const PostPage = () => {
     const tags = useParams();
     const [titlearray, settitlearray] = useState<string []>([]);
     const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
-    const [isError, setIsError] = useState(false); // 에러 상태 추가
+    const [, setIsError] = useState(false); // 에러 상태 추가
 
     const getlist =  async () => {
         await fetch('/Posts.json')
