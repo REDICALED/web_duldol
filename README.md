@@ -1,30 +1,22 @@
-# React + TypeScript + Vite
+# duldoljimi.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img src="./src/assets/Readme/readme1.png" alt="Getting started" />
 
-Currently, two official plugins are available:
+정들돌 작가 포트폴리오 웹 사이트
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+## 기술 스택
+* React + Vite + Vercel
+* Tailwind CSS
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+* Tiptap Editor
+<img src="./src/assets/Readme/readme2.png" alt="Getting started" />
 
-- Configure the top-level `parserOptions` property like this:
+## 설명
+예술 작가 포트폴리오 사이트 제작 프로젝트
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
+적은 예산으로 게시물 포스팅이 가능한 것을 목표로 둔 프로젝트입니다.
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+tiptap editor로 나온 output html 파일을 git 레포지토리에 덮어쓰거나 생성하는 구조로, DB 역할의 파일들은 Json 파일로 저장됩니다.
+
+서버리스보다 더 저수준 단계의 구조를 구현 방향으로 설계하였습니다.
