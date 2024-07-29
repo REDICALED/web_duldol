@@ -1,4 +1,4 @@
-# duldoljimi.com
+# https://www.duldoljimi.com
 
 <img src="./src/assets/Readme/readme1.png" alt="Getting started" />
 
