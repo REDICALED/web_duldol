@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import ParseHtml from "@/components/TipTap/ParseHtml";
 import parse from 'html-react-parser';
+import { useRecoilState } from "recoil";
+import { ImageZoom } from "@/atoms/ModalAtom";
 
 const CvPage = () => {
+  const [, setImageZoom] = useRecoilState(ImageZoom);
 
     const [htmlcontents, sethtmlcontents] = useState("");
     useEffect(() => {
@@ -26,8 +29,8 @@ const CvPage = () => {
 
     return (
         <div className=" leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
-            {parse(htmlcontents, ParseHtml)}
-        </div>
+          {parse(htmlcontents, {replace: (node) => ParseHtml.replace(node, setImageZoom)})}
+      </div>
     );
 }
 

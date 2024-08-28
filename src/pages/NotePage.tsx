@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import ParseHtml from "@/components/TipTap/ParseHtml";
 import parse from 'html-react-parser';
+import { ImageZoom } from "@/atoms/ModalAtom";
+import { useRecoilState } from "recoil";
 
 const NotePage = () => {
 
     const [htmlcontents, sethtmlcontents] = useState("");
+    const [, setImageZoom] = useRecoilState(ImageZoom);
     useEffect(() => {
         inithtml();
         //console.log(htmlcontents);
@@ -26,7 +29,7 @@ const NotePage = () => {
 
     return (
         <div className=" leading-6 md:leading-8 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
-            {parse(htmlcontents, ParseHtml)}
+          {parse(htmlcontents, {replace: (node) => ParseHtml.replace(node, setImageZoom)})}
         </div>
     );
 }

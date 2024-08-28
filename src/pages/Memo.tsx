@@ -4,9 +4,11 @@ import parse from 'html-react-parser';
 import { Navigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { LoginValid } from "@/atoms/LoginValidAtom";
+import { ImageZoom } from "@/atoms/ModalAtom";
 
 const MemoPage = () => {
   const [loginvalid] = useRecoilState(LoginValid);
+  const [, setImageZoom] = useRecoilState(ImageZoom);
 
   if (loginvalid === 0) {
     return (
@@ -36,7 +38,7 @@ const MemoPage = () => {
 
     return (
         <div className=" leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
-            {parse(htmlcontents, ParseHtml)}
+          {parse(htmlcontents, {replace: (node) => ParseHtml.replace(node, setImageZoom)})}
         </div>
     );
 }
