@@ -48,7 +48,7 @@ const Postlist = (props: any) => {
     }
     else {
       title = encodeURIComponent(title);
-      const puttitle = await getFunc(octokit, `Posts/Works/${hashdate}/main.html`);
+      const puttitle = await getFunc(octokit, `Posts/Works/${hashdate.toString}/main.html`);
       let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
       console.log(puttitle.status);
       console.log(returnString);
