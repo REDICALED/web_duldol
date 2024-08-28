@@ -38,6 +38,7 @@ const Postlist = (props: any) => {
     if(hashdate === 0) {
       title = encodeURIComponent(title);
       const puttitle = await getFunc(octokit, `images/Works/${title}/main.html`);
+      console.log(puttitle.data.content);
       let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
       console.log(puttitle.status);
       console.log(returnString);
@@ -47,24 +48,55 @@ const Postlist = (props: any) => {
       return returnString;
     }
     else {
-      title = encodeURIComponent(title);
-      const puttitle = await getFunc(octokit, `Posts/Works/${hashdate}/main.html`);
-      console.log(title);
-      console.log(hashdate);
-      console.log(puttitle.data.content);
-      let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
-      console.log(puttitle.status);
-      console.log(returnString);
-      const sliderPattern = /\[슬라이더입니다!\].*?\[!슬라이더입니다\]/gs;
-      returnString = returnString.replace(sliderPattern, '');
-      const imgTagPattern = /<img[^>]*>/g;
-      returnString = returnString.replace(imgTagPattern, '');
-      console.log(returnString);
-      await props.tiptapeditor.commands.setContent(returnString);
+      // title = encodeURIComponent(title);
+      // const puttitle = await getFunc(octokit, `Posts/Works/${hashdate.toString()}/main.html`);
+      // console.log(title);
+      // console.log(hashdate.toString());
+      // console.log(puttitle);
+      // let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
+      // console.log(puttitle.status);
+      // console.log(returnString);
+      // const sliderPattern = /\[슬라이더입니다!\].*?\[!슬라이더입니다\]/gs;
+      // returnString = returnString.replace(sliderPattern, '');
+      // const imgTagPattern = /<img[^>]*>/g;
+      // returnString = returnString.replace(imgTagPattern, '');
+      // console.log(returnString);
+      // await props.tiptapeditor.commands.setContent(returnString);
       
-      await setMainText(returnString);
-      console.log(MainText);
-      return returnString;
+      // await setMainText(returnString);
+      // console.log(MainText);
+      // return returnString;
+
+      title = encodeURIComponent(title);
+      const url = `https://raw.githubusercontent.com/REDICALED/web_duldol/main/public/Posts/Works/${hashdate.toString()}/main.html`;
+
+      try {
+          // Fetch the HTML content from the raw GitHub URL
+          const response = await fetch(url);
+          if (!response.ok) {
+              throw new Error('Failed to fetch the HTML content');
+          }
+          // Read the content as text
+          let returnString = await response.text();
+          
+          const sliderPattern = /------ \[슬라이더입니다!\].*?\[!슬라이더입니다\] ------/gs;
+          returnString = returnString.replace(sliderPattern, '');
+          const imgTagPattern = /<img[^>]*>/g;
+          returnString = returnString.replace(imgTagPattern, '');
+
+          console.log(returnString);
+
+          // Set the content in the editor
+          await props.tiptapeditor.commands.setContent(returnString);
+
+          // Update the state
+          await setMainText(returnString);
+          console.log(MainText);
+          return returnString;
+
+      } catch (error) {
+          console.error('Error:', error);
+      }
     }
   }
 

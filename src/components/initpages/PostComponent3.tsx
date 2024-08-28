@@ -15,8 +15,8 @@ const PostComponent3 = () => {
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
         
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(pic2)}} src={pic2} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-                <span className='w-full text-xxs md:text-xs'>돌계란 stonegg</span>
+                <img onClick={()=>{setImageZoom(pic2)}} src={pic2} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <span className='w-full text-xxs md:text-xs m-1'>돌계란 stonegg</span>
             </div>
             <img onClick={()=>{setImageZoom(pic2)}} src={pic2} className="w-[100vw] object-cover " ></img>
             <span>돌계란 2_21*28(cm)_혼합재료_2022</span>

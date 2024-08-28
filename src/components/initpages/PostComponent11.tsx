@@ -29,13 +29,13 @@ const PostComponent11 = () => {
     return (
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(pic2_2)}} src={pic2_2} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-                <span className='w-full text-xxs md:text-xs'>Metamorphosis</span>
+                <img onClick={()=>{setImageZoom(pic2_2)}} src={pic2_2} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <span className='w-full text-xxs md:text-xs m-1'>Metamorphosis</span>
             </div>
             <Slick images={[pic1_1, pic1_2, pic1_3, pic1_4]} images_cap={["Metamorphosis_installation view","Metamorphosis_installation view","Metamorphosis_installation view","Metamorphosis_installation view"]}/>
 
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <span className='w-full text-xxs md:text-xs'>Metamorphosis</span>
+                <span className='w-full text-xxs md:text-xs m-1'>Metamorphosis</span>
             </div>
             <br />
             <span className=" justify-start flex text-left w-full ">
@@ -83,7 +83,7 @@ const PostComponent11 = () => {
                 <iframe src="https://player.vimeo.com/video/898474520?autoplay=0" className="w-full md:h-[550px]" ></iframe>
             </div>
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <span className='w-full text-xxs md:text-xs'>Metamorphosis 4_1 channel, 4 moving images_00:00:29_2023</span>
+                <span className='w-full text-xxs md:text-xs m-1'>Metamorphosis 4_1 channel, 4 moving images_00:00:29_2023</span>
             </div>
             <br />
 

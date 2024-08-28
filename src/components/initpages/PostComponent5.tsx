@@ -24,15 +24,15 @@ const PostComponent5 = () => {
     return (
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(pic13)}} src={pic13} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-                <span className='w-full text-xxs md:text-xs'>미뢔 MIRWAE</span>
+                <img onClick={()=>{setImageZoom(pic13)}} src={pic13} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <span className='w-full text-xxs md:text-xs m-1'>미뢔 MIRWAE</span>
             </div>
 
             <div className=" justify-start flex text-left w-full ">
                 <iframe src="https://player.vimeo.com/video/827133486?autoplay=0" className="w-full md:h-[600px]" ></iframe>
             </div>
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <span className='w-full text-xxs md:text-xs'>미뢔 Mirwae_1 channel 2D·3D animation_00:02:26_2023
+                <span className='w-full text-xxs md:text-xs m-1'>미뢔 Mirwae_1 channel 2D·3D animation_00:02:26_2023
                 </span>
             </div>
 

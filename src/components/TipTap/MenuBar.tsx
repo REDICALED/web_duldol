@@ -20,6 +20,7 @@ import Paragraphimage from '@/assets/icons/Paragraph.png'
 import Undo from '@/assets/icons/Undo.png'
 import Redo from '@/assets/icons/Redo.png'
 import Horizontal from '@/assets/icons/Horizontal.png'
+import Gif from '@/assets/icons/gif.png'
 import { tiptapMainText } from '@/atoms/TiptapAtom'
 import Resizer from "react-image-file-resizer";
 
@@ -73,6 +74,22 @@ const MenuBar = (props: any) => {
           editor.commands.insertContent(`<div>${file.name}</div>`); // file이름
         };
         reader.readAsDataURL(file); // 파일을 base64로 변환
+      }
+    };
+
+    const handleUploadGif = async (files: FileList | null) => {
+      if (!files) {
+        return;
+      }
+
+      if (files[0].type === "image/gif") {
+        const reader = new FileReader();
+        reader.onload = () => {
+          const imageData = reader.result as string; // Cast the result to string
+          editor.commands.setImage({ src: imageData }); // 이미지 삽입
+          editor.commands.insertContent(`<div>${files[0].name}</div>`); // file이름
+        };
+        reader.readAsDataURL(files[0]); // 파일을 base64로 변환
       }
     };
   
@@ -305,6 +322,22 @@ const MenuBar = (props: any) => {
   
       </button>
   
+      <button
+        type="button"
+        className="relative cursor-pointer border border-black p-[10px] hover:bg-gray-200  "
+      >
+        <input
+          type="file"
+          className="absolute top-0 left-0 w-8 h-8 outline-none opacity-0 file:cursor-pointer"
+          accept="image/*"
+          onChange={(e) => {
+            handleUploadGif(e.target.files);
+          }}
+        />
+        <img src={Gif} className="w-5 h-5"/>
+  
+      </button>
+
       </div>
     )
   }

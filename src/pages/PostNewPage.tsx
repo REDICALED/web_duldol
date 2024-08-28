@@ -62,8 +62,8 @@ const PostNewPage = () => {
     return (
         <div className=" leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                    <img onClick={()=>{setImageZoom(`/Posts/Works/${tags.id}/title.JPEG`)}} src={`/Posts/Works/${tags.id}/title.JPEG`} className=' md:w-[160px] w-[80px] h-[50px] md:h-[100px] object-cover'></img>
-                <span className='w-full text-xxs md:text-xs'>{titlename}</span>
+                    <img onClick={()=>{setImageZoom(`/Posts/Works/${tags.id}/title.JPEG`)}} src={`/Posts/Works/${tags.id}/title.JPEG`} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <span className='w-full text-xxs md:text-xs m-1'>{titlename}</span>
             </div>
             {parse(htmlcontents, ParseHtml)}
         </div>
