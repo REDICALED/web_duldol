@@ -25,7 +25,7 @@ export const ImageZoomModal = () => {
   }, []);
 
   return (
-    <div className=' transition-all duration-500 ease-in-out'>
+    <div className=' cursor-pointer transition-all duration-500 ease-in-out'>
       <div
         className="fixed top-0 left-0 w-full h-full bg-white bg-opacity-75 flex justify-center items-center z-50"
         onClick={closeModal}
