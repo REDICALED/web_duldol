@@ -15,7 +15,7 @@ const PostComponent10 = () => {
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
         
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(pic2)}} src={pic2} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <img onClick={()=>{setImageZoom(pic2)}} src={pic2} className=' cursor-zoom-in md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
                 <span className='w-full text-xxs md:text-xs m-1'>thinking about pebble</span>
             </div>
             <Slick images={[pic1, pic2, pic3]} images_cap={["돌멩이에 대해 생각해 thinking about pebble 1_digital print_2022","돌멩이에 대해 생각해 thinking about pebble 2_digital print_2022","돌멩이에 대해 생각해 thinking about pebble 3_digital print_2022"]}/>
@@ -32,9 +32,9 @@ const PostComponent10 = () => {
                 <br />사람들이, 세상이, 서로에게, 돌멩이처럼 씩씩하고 다정하면 좋겠다고 생각했다. 
             </span>
             <br />
-            <img onClick={()=>{setImageZoom(gif1)}} src={gif1} className="w-[100vw]" ></img>
+            <img onClick={()=>{setImageZoom(gif1)}} src={gif1} className="w-[100vw] cursor-zoom-in" ></img>
             <span>돌멩이에 대해 생각해 thinking about pebble 4_digital gif_2022</span>
-            <img onClick={()=>{setImageZoom(gif2)}} src={gif2} className="w-[100vw]" ></img>
+            <img onClick={()=>{setImageZoom(gif2)}} src={gif2} className="w-[100vw] cursor-zoom-in" ></img>
             <span>돌멩이에 대해 생각해 thinking about pebble 5_digital gif_2022</span>
             <br />
             <br />

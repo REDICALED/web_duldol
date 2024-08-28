@@ -16,8 +16,8 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
 {<img 
   loading="lazy" 
   className={currentImage === index ? 
-    "opacity-100 block transition-opacity duration-500 w-[100vw] md:w-[60vw]  object-contain" 
-    : "opacity-0 absolute w-[100vw] md:w-[60vw] h-0 object-contain pointer-events-none"
+    "opacity-100 block transition-opacity duration-500 w-[100vw] md:w-[60vw]  object-contain cursor-zoom-in" 
+    : "opacity-0 absolute w-[100vw] md:w-[60vw] h-0 object-contain pointer-events-none cursor-zoom-in"
   } 
   src={imgurl} 
   alt='이미지가 로드되지 않았습니다'
@@ -33,13 +33,13 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
           <span className=" mx-4 right-0 text-xs md:text-sm font-semibold">{currentImage + 1}</span>
           <div className="flex">
             <div className=" mx-2  right-0 text-xs md:text-sm">
-              <button className={ currentImage > 0 ? "opacity-100 " : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage-1)}>&lt;</button>
+              <button className={ currentImage > 0 ? "opacity-100 cursor-pointer" : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage-1)}>&lt;</button>
             </div>
             <div className=" mx-2  right-0 text-xs md:text-sm">
               1 - {images.length}
             </div>
             <div className=" mx-2  right-0 text-xs md:text-sm">
-              <button className={ currentImage < images.length - 1 ? "opacity-100 " : "opacity-0 pointer-events-none  "} onClick={()=>setCurrentImage(currentImage+1)}>&gt;</button>
+              <button className={ currentImage < images.length - 1 ? "opacity-100 cursor-pointer " : "opacity-0 pointer-events-none "} onClick={()=>setCurrentImage(currentImage+1)}>&gt;</button>
             </div>
           </div>
         </div>

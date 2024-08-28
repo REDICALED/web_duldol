@@ -25,7 +25,7 @@ const PostComponent6 = () => {
     return (
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(title)}} src={title} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <img onClick={()=>{setImageZoom(title)}} src={title} className=' cursor-zoom-in md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
                 <span className='w-full text-xxs md:text-xs m-1'>신원계 新圓界 - 파고착조 破觚斲雕</span>
             </div>
 

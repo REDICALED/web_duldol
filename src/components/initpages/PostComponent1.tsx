@@ -11,7 +11,7 @@ const PostComponent1 = () => {
     return (
         <div className=" leading-5 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className=' flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(pic1)}} src={pic1} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0 '></img>
+                <img onClick={()=>{setImageZoom(pic1)}} src={pic1} className=' cursor-zoom-in md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0 '></img>
                 <span className='w-full text-xxs md:text-xs m-1'>감정의 정반합</span>
             </div>
 

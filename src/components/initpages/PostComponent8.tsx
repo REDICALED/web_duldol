@@ -13,12 +13,12 @@ const PostComponent8 = () => {
     return (
         <div className=" leading-5 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(pic1)}} src={pic1} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <img onClick={()=>{setImageZoom(pic1)}} src={pic1} className=' cursor-zoom-in md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
                 <span className='w-full text-xxs md:text-xs m-1'>유하다</span>
             </div>
     
             <Slick images={[pic1, pic2,pic3]} images_cap={["유(柔)하다 1_아크릴, 파스텔_60.6*90.9(cm)_2021","유(柔)하다 2_아크릴물감, 파스텔_97*130.3(cm)_2021","유(柔)하다 4_아크릴물감, 파스텔_97*130.3(cm)_2021"]}/>
-            <img onClick={()=>{setImageZoom(pic4)}} src={pic4} className="w-[100vw] object-cover " ></img>
+            <img onClick={()=>{setImageZoom(pic4)}} src={pic4} className="w-[100vw] object-cover cursor-zoom-in" ></img>
             <span>유(有)하다_종이에 연필_47*64(cm)_2021</span>
             <br />
             <br />

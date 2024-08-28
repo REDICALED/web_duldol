@@ -29,7 +29,7 @@ const PostComponent11 = () => {
     return (
         <div className=" leading-4 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(pic2_2)}} src={pic2_2} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <img onClick={()=>{setImageZoom(pic2_2)}} src={pic2_2} className=' cursor-zoom-in md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
                 <span className='w-full text-xxs md:text-xs m-1'>Metamorphosis</span>
             </div>
             <Slick images={[pic1_1, pic1_2, pic1_3, pic1_4]} images_cap={["Metamorphosis_installation view","Metamorphosis_installation view","Metamorphosis_installation view","Metamorphosis_installation view"]}/>

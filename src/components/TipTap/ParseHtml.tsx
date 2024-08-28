@@ -2,9 +2,11 @@ import Slick from '@/components/Slick';
 import '@/styles.scss'
 import { useParams } from 'react-router-dom';
 
+
   const ParseHtml = {
-    replace: (node: any) => {
+    replace: (node:any, setImageZoom:any) => {
       const tags = useParams();
+
       if (node.type === 'text' && node.data.includes('[슬라이더입니다!]')) {
         let string = node.data;
         // images_cap 추출
@@ -30,7 +32,7 @@ import { useParams } from 'react-router-dom';
 
       else if (node.type === 'tag' && node.name === 'img') {
         const imgsrc = node.attribs.src
-        return <img src={imgsrc} className="w-[100vw] object-cover " ></img>
+        return <img onClick={()=>{setImageZoom(imgsrc)}} src={imgsrc} className="w-[100vw] object-cover cursor-zoom-in" ></img>
 
       }
     }

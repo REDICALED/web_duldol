@@ -18,12 +18,12 @@ const PostComponent12 = () => {
     return (
         <div className=" leading-5 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
             <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                <img onClick={()=>{setImageZoom(title)}} src={title} className=' md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
+                <img onClick={()=>{setImageZoom(title)}} src={title} className=' cursor-zoom-in md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
                 <span className='w-full text-xxs md:text-xs m-1'>murmur-mural ensemble <br/>(웅얼웅얼-벽화 합창)</span>
             </div>
 
             <div className="flex items-center justify-between">
-                <img   onClick={()=>{setImageZoom(picfull1)}} src={picfull1} className="w-[100vw] object-cover" ></img>
+                <img   onClick={()=>{setImageZoom(picfull1)}} src={picfull1} className="w-[100vw] object-cover cursor-zoom-in" ></img>
             </div>
             <span className="text-right justify-end flex">murmur-mural ensemble(웅얼웅얼-벽화 합창) 1~3_installation view</span>
             
