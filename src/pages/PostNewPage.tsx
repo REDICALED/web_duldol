@@ -22,7 +22,7 @@ const PostNewPage = () => {
       .then(data => {
         // posts 배열 추출
         const posts: { title: string, year: number, hashdate: number }[] = data.posts;
-          console.log(posts);
+          //console.log(posts);
           return posts;
         })
       .catch(error => console.error('Error fetching JSON:', error));

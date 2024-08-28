@@ -14,7 +14,7 @@ export const resizeFile = (file: File): Promise<File>  =>
         (uri) => res(uri as File), // responseUriFunc
         "file" // outputType : Can be either base64, blob or file.(Default type is base64)	
       );
-    console.log("resizeFile");
+    // console.log("resizeFile");
     }
   );
 
@@ -30,7 +30,7 @@ export const resizeFile = (file: File): Promise<File>  =>
         (uri) => res(uri as File), // responseUriFunc
         "file" // outputType : Can be either base64, blob or file.(Default type is base64)	
       );
-    console.log("resizetitleFile");
+    // console.log("resizetitleFile");
     }
   );
 
@@ -39,9 +39,7 @@ export const resizeFile = (file: File): Promise<File>  =>
     const octokit = new Octokit({
       auth: import.meta.env.VITE_APP_TOKEN,
     }); 
-    console.log("getdiff");
     const result = await updateFunc(octokit, "diff/diff.txt", Date.now() ,path);
-    console.log(result.status);
   };
   
   //파일 수정 /repo, path, contents
@@ -53,8 +51,6 @@ export const resizeFile = (file: File): Promise<File>  =>
     // const result = await updateFunc(octokit, `${repo}/${path}/sub.txt`, `${contents}`, path);
     // console.log(result.status);
     setFileBlock(true);
-    console.log(repo, path, contents);
-    console.log('not yet ..');
     setFileBlock(false);
   };
 
@@ -75,7 +71,6 @@ export const resizeFile = (file: File): Promise<File>  =>
       return;
     }
     if (path === "" && untitled === false) {
-      console.log(path);
       // path가 비어 있으면 모달을 표시
       setTitleRequire(true);
       return;
@@ -86,7 +81,6 @@ export const resizeFile = (file: File): Promise<File>  =>
     const tmpPath = untitled ? "untitled" : `${path}`;
     const pathkey = Date.now();
     const result = await createFunc(octokit, `${repo}/${pathkey}-${tags}-${tmpPath}/sub.txt`, `${fileList?.length}\n${contents}`, path);
-    console.log("create sub.txt put request:" + result.status);
     
     let finished = false;
     const uploadImageWithDelay = async () => {
@@ -125,14 +119,12 @@ export const resizeFile = (file: File): Promise<File>  =>
   
     const mainlist = mainimages.join(',');
     const puttitle = await updateFunc(octokit, `${repo}/mainlist.txt`, mainlist, 'mainlist updated');
-    console.log(puttitle.status);
     setFileBlock(false);
   };
 
   //파일 지우기
   export const fileDelete = async (repo:any, modtitle:any, setFileBlock:any) => {
     setFileBlock(true);
-    console.log(modtitle);
     const octokit = new Octokit({
       auth: import.meta.env.VITE_APP_TOKEN,
     });
@@ -141,28 +133,23 @@ export const resizeFile = (file: File): Promise<File>  =>
         const titleresult = await getJsonFunc(octokit, `Posts.json`);
 
         titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
-        console.log(JSON.stringify(titleresult));
         updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
         return ;
       }
       else {
         const puttitle = await getFunc(octokit, `Posts/Works/${modtitle[i].hashdate}/main.html`);
         let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)));
-        console.log(returnString);
         const regex = /images_cap=&lt;&lt;&lt;(.*?)&gt;&gt;&gt;/gs;
         let match;
         const jpegFileNames: string[] = [];
 
         while ((match = regex.exec(returnString)) !== null) {
           const fileNamesStr = match[1];  // 첫 번째 캡처 그룹을 가져옴
-          const fileNames = fileNamesStr.split('#$%^');  // 쉼표로 구분된 파일 이름 배열
-          console.log(fileNamesStr)
-          console.log(fileNames)          
+          const fileNames = fileNamesStr.split('#$%^');  // 쉼표로 구분된 파일 이름 배열   
           fileNames.forEach(fileName => {
             jpegFileNames.push(fileName.trim());  // 각 파일 이름을 배열에 추가 (trim()으로 앞뒤 공백 제거)
           });
         }
-        console.log(jpegFileNames);
         const array: string[] = ["title.JPEG", "main.html", "titlename.txt"].concat(jpegFileNames);    
         const cnt = array.length;
         for (let j = 0; j < cnt; j++){
@@ -186,14 +173,11 @@ export const resizeFile = (file: File): Promise<File>  =>
               sha: currentSHA,        
             }
           );
-          console.log(result.status);
           const titleresult = await getJsonFunc(octokit, `Posts.json`);
           titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
-          console.log(JSON.stringify(titleresult));
           updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
       }    
       setFileBlock(false);
-      console.log("delete done");
       }
     }
       

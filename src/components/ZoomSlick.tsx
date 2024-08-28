@@ -15,7 +15,7 @@ export const ZoomSlick = (props: { images: string[], images_cap: string[] }) => 
       return (
         <div className=" md:pr-[0] w-full  ">
           {images.map((imgurl, index) => (
-              <div className="grid place-items-center cursor-all-scroll">
+              <div key={ index } className="grid place-items-center cursor-all-scroll">
 {<TransformWrapper>
       <TransformComponent>
     <img 

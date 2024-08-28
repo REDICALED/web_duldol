@@ -17,7 +17,7 @@ const HomePage = () => {
         .then(response => response.text()) 
         .then(data => {
           // posts 배열 추출
-          console.log(data);
+          //console.log(data);
           return data;
         })
         .catch(error => console.error('Error fetching mainlist:', error));
@@ -25,11 +25,11 @@ const HomePage = () => {
         if(!mainlist){
             return;
         }
-        console.log(mainlist);
+        //console.log(mainlist);
         const tmparray = [];
         for (let i = 0; i < titleresult.posts.length; i++) {
             if (mainlist.includes(titleresult.posts[i].title)) {
-                console.log(titleresult.posts[i]);
+                //console.log(titleresult.posts[i]);
                 tmparray.push(titleresult.posts[i]);
             }
             else{
@@ -37,7 +37,7 @@ const HomePage = () => {
             }
         }
         settitlelistState(tmparray);
-        console.log(titlelistState)    
+        //console.log(titlelistState)    
     }
     useEffect(() => {
         getmainlist();

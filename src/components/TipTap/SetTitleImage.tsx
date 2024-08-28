@@ -26,7 +26,6 @@ import Resizer from "react-image-file-resizer";
             (uri) => res(uri as File), // responseUriFunc
             "file" // outputType : Can be either base64, blob or file.(Default type is base64)	
           );
-        console.log("resizeFile");
         }
       );
     // const GetContents = async () => {
@@ -47,7 +46,6 @@ import Resizer from "react-image-file-resizer";
 
     const handleChange = (selectedDate: Date) => {
 		setSelectedDate(selectedDate)
-		console.log(selectedDate.toISOString().split('T')[0])
     props.settiptapPostDate(selectedDate.toISOString().split('T')[0])
 	}
 	const handleClose = (state: boolean) => {

@@ -15,7 +15,6 @@ const Postlist = (props: any) => {
   const [, setFileBlock] = useRecoilState(GitFileBlock);
 
   const getlist =  async () => {
-    console.log(props.GenreType + MainText);
     setPostListswitch(!PostListswitch);
     const octokit = new Octokit({
       auth: import.meta.env.VITE_APP_TOKEN,
@@ -38,13 +37,9 @@ const Postlist = (props: any) => {
     if(hashdate === 0) {
       title = encodeURIComponent(title);
       const puttitle = await getFunc(octokit, `images/Works/${title}/main.html`);
-      console.log(puttitle.data.content);
       let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
-      console.log(puttitle.status);
-      console.log(returnString);
       await props.tiptapeditor.commands.setContent(returnString);
       await setMainText(returnString);
-      console.log(MainText);
       return returnString;
     }
     else {
@@ -83,15 +78,11 @@ const Postlist = (props: any) => {
           returnString = returnString.replace(sliderPattern, '');
           const imgTagPattern = /<img[^>]*>/g;
           returnString = returnString.replace(imgTagPattern, '');
-
-          console.log(returnString);
-
           // Set the content in the editor
           await props.tiptapeditor.commands.setContent(returnString);
 
           // Update the state
           await setMainText(returnString);
-          console.log(MainText);
           return returnString;
 
       } catch (error) {
@@ -134,7 +125,6 @@ const Postlist = (props: any) => {
           }
         }
         const mainset = await fileMainImageSet(`Posts`, tmplist, setFileBlock);
-        console.log(mainset);
         setPostList([]);
       }} type="button" className=" transition-all duration-300 mt-[1vh] mr-[1vw] min-w-[19vw] max-w-[20vw] min-h-[3vh] max-h-[3vh] text-gray-900 bg-white hover:bg-gray-200 border-2 border-dul-gray focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-lg text-center inline-flex items-center">
         <p className=" justify-center min-w-[15vw] max-w-[15vw] xs:min-w-[20vw] sm:min-w-[20vw]  md:min-w-[20vw] text-md pr-[1vw]">메인 이미지 설정</p> 

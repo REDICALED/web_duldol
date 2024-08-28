@@ -12,7 +12,7 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
       return (
         <div className=" md:pr-[0]  ">
           {images.map((imgurl, index) => (
-              <div>
+              <div key={ index }>
 {<img 
   loading="lazy" 
   className={currentImage === index ? 

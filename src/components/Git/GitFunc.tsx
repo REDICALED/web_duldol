@@ -24,7 +24,6 @@ export const getJsonFunc = async (octokit: any, shapath: any) => {
       }
     }
   );
-  console.log(result.status);
   const content = decodeURIComponent(escape(window.atob(result.data.content)));
   const jsonData = JSON.parse(content);
   return jsonData;
@@ -43,7 +42,6 @@ export const getFunc = async (octokit: any, shapath: any) => {
         }
       }
     );
-    console.log(result.status);
     return result;
 };
 
@@ -67,7 +65,6 @@ export const updateFunc = async (octokit: any, shapath: any, value: any, path: a
         },
       }
     );
-    console.log(result.status);
     return result;
   };
 
@@ -89,7 +86,6 @@ export const createFunc = async (octokit: any, shapath: any, value: any, path: s
         },
       }
     );
-    console.log(result.status);
     return result;
   };
 
@@ -115,8 +111,6 @@ export const createFunc = async (octokit: any, shapath: any, value: any, path: s
             },
           }
         );
-  
-        console.log("Image uploaded successfully:", response.data.content.name);
       } catch (error) {
         console.error("Error uploading image:", error);
       }

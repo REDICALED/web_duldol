@@ -23,16 +23,16 @@ export const UploadButton = (props:any) => {
       const hashdate = Date.now();
       //main.html 업로드
       const result = await createFunc(octokit, `Posts/Works/${hashdate}/main.html`, props.tiptapeditor.getHTML(), "main html generated");
-      console.log("create main.html put request:" + result.status);
+      //console.log("create main.html put request:" + result.status);
       const titlename = await createFunc(octokit, `Posts/Works/${hashdate}/titlename.txt`, `${props.tiptapPostTitle}\n${props.tiptapPostDate}`, "titlename.txt generated");
-      console.log("create title.txt put request:" + titlename.status);
+      //console.log("create title.txt put request:" + titlename.status);
 
       //title 이미지 업로드
       if (props.tiptapPostTitleImage) {
         let base64encoded = props.tiptapPostTitleImage.base64;
         const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/title.JPEG`;
-        console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
-        console.log('Uploading image:', 'title.jpg');
+        //console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
+        //console.log('Uploading image:', 'title.jpg');
         if (base64encoded.startsWith('data:image/jpeg;base64,')) {
           base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
         }
@@ -51,7 +51,7 @@ export const UploadButton = (props:any) => {
               },
             }
           );
-          console.log("Image uploaded successfully:", response.data.content.name);
+          //console.log("Image uploaded successfully:", response.data.content.name);
         } catch (e) {
           console.error("Error uploading image:", e);
         }
@@ -65,9 +65,9 @@ export const UploadButton = (props:any) => {
           for (let j = 0; j < props.tiptapPostSliderStack[i].blobUrl.length; j++) {
             let base64encoded = props.tiptapPostSliderStack[i].base64[j];
             const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/${props.tiptapPostSliderStack[i].ImageName[j]}`;
-            console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
-            console.log('Uploading image:', props.tiptapPostSliderStack[i].ImageName[j]);
-            console.log(props.tiptapPostSliderStack);
+            //console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
+            //console.log('Uploading image:', props.tiptapPostSliderStack[i].ImageName[j]);
+            //console.log(props.tiptapPostSliderStack);
             if (base64encoded.startsWith('data:image/jpeg;base64,')) {
               base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
             }
@@ -86,7 +86,7 @@ export const UploadButton = (props:any) => {
                   },
                 }
               );
-              console.log("Image uploaded successfully:", response.data.content.name);
+              //console.log("Image uploaded successfully:", response.data.content.name);
             } catch (e) {
               console.error("Error uploading image:", e);
             }
@@ -102,9 +102,9 @@ export const UploadButton = (props:any) => {
         .then(data => {
           // posts 배열 추출
           const posts: { title: string, year: number, hashdate: number }[] = data.posts;
-            console.log(posts);
+            //console.log(posts);
             posts.push({title: props.tiptapPostTitle, year: parseInt(props.tiptapPostDate.split('-')[0]), hashdate: hashdate});
-            console.log(JSON.stringify(posts));
+            //console.log(JSON.stringify(posts));
             const tmpPosts = `{ "posts": ` + JSON.stringify(posts) + ` }`;
             
             return tmpPosts;
@@ -112,7 +112,7 @@ export const UploadButton = (props:any) => {
         .catch(error => console.error('Error fetching JSON:', error));
         
         const postresult = await updateFunc(octokit, `Posts.json`, tmpPosts, `post.json updated`);
-        console.log("fix Posts.json put request:" + postresult .status);
+        //console.log("fix Posts.json put request:" + postresult .status);
         //posts.json 업데이트
 
     }
@@ -123,7 +123,7 @@ export const UploadButton = (props:any) => {
       });
       if ( GenreType === "post" )
       {
-        console.log(props.tiptapPostTitleImage)
+        //console.log(props.tiptapPostTitleImage)
         if ( props.tiptapPostTitle === '' || props.tiptapPostDate === '' || (props.tiptapPostTitleImage.base64 === '' && props.tiptapPostTitleImage.blobUrl === ''))
         {
           setFileRequire(true);
@@ -134,7 +134,7 @@ export const UploadButton = (props:any) => {
           SetGitFileBlock(true);
           // const puttitle = await createFunc(octokit, `Posts/Works/${props.tiptapPostTitle}/main.html`, MainText, `${props.tiptapPostTitle} main.html uploaded`);
           await getBlob();
-          console.log(props.tiptapeditor.getHTML());
+          //console.log(props.tiptapeditor.getHTML());
           //Main Text의 슬라이더들의 이미지 파싱, 후처리 (paesehtml 수정?) 나중에 확인
           //Main Text 상단에, 제목/제목이미지 삽입 이것도 나중에 확인
           //createFunc로 MainText html, title 이미지 업로드 
@@ -148,7 +148,7 @@ export const UploadButton = (props:any) => {
         SetGitFileBlock(true);
         const puttitle = await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
         SetGitFileBlock(false);
-        console.log(puttitle.status);
+        //console.log(puttitle.status);
       }
     }
     return (
@@ -166,28 +166,28 @@ export const UploadButton = (props:any) => {
   //미리보기 버튼
   export const UploadPreviewButton = (props:any) => {
     const resetSliderStack = async () => {
-    console.log(props.tiptapPostSliderStack);
+    //console.log(props.tiptapPostSliderStack);
     for (let i = 0; i < props.tiptapPostSliderStack.length; i++)
       {
         if (!props.tiptapeditor.getHTML().includes(props.tiptapPostSliderStack[i].blobUrl[0]))
           {
-            console.log("aa");
+            //console.log("aa");
             const temp = props.tiptapPostSliderStack[i];
-            console.log(temp);
+            //console.log(temp);
             const updatedStack = props.tiptapPostSliderStack.filter((item: any) => item !== temp);
-            console.log(updatedStack);
+            //console.log(updatedStack);
 
             await props.settiptapPostSliderStack(updatedStack);
           }
       }
-      console.log(props.tiptapPostSliderStack);
+      //console.log(props.tiptapPostSliderStack);
     }
       return (
         <div className=" pb-[2vh] ">
           <button onClick={async ()=>{
             props.setPreviewSwitch(!props.PreviewSwitch);
             await resetSliderStack();
-            console.log(props.tiptapPostTitleImage)
+            //console.log(props.tiptapPostTitleImage)
           }} type="button" className=" transition-all duration-300 mt-[1vh] mr-[1vw] min-w-[19vw] max-w-[20vw] min-h-[10vh] max-h-[10vh] text-gray-900 bg-white hover:bg-gray-200 border-2 border-dul-gray focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-lg text-center inline-flex items-center">
             <p className=" justify-center min-w-[15vw] max-w-[15vw] xs:min-w-[20vw] sm:min-w-[20vw] sm:text-l md:min-w-[20vw] md:text-xl lg:text-xl xl:text-3xl pr-[1vw]">미리보기</p> 
           </button>

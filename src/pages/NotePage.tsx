@@ -7,7 +7,7 @@ const NotePage = () => {
     const [htmlcontents, sethtmlcontents] = useState("");
     useEffect(() => {
         inithtml();
-        console.log(htmlcontents);
+        //console.log(htmlcontents);
     }, []);
     const inithtml =  async () => {
     
@@ -15,7 +15,7 @@ const NotePage = () => {
     .then(response => response.text())
     .then(html => {
       // html 변수에 cv.html 파일의 내용이 문자열 형태로 저장됨
-      console.log(html);
+      //console.log(html);
       sethtmlcontents(html);
       // 여기서 필요한 처리를 수행할 수 있음
     })

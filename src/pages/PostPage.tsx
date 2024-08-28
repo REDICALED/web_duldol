@@ -28,9 +28,7 @@ const PostPage = () => {
         .then(data => {
           // posts 배열 추출
           const posts: { title: string, year: number, hashdate: number }[] = data.posts;
-          console.log(posts);
           settitlearray(posts.map((post) => post.title));
-          console.log(titlearray);
         if (tags.id && titlearray.includes(tags.id) === true) {
             setIsError(true);
         }

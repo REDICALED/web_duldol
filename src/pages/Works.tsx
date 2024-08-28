@@ -11,7 +11,6 @@ const WorksPage = () => {
         .then(data => {
           // posts 배열 추출
           const posts = data.posts;
-            console.log(posts);
           // 년도별로 그룹화하는 객체 생성
           const postsByYear = posts.reduce((acc: { [x: number]: any[]; }, post: { year: number; }) => {
             if (!acc[post.year]) {
@@ -22,7 +21,7 @@ const WorksPage = () => {
           }, {});
       
           // 그룹화된 데이터 확인
-          console.log(postsByYear);
+          //console.log(postsByYear);
           setRealArray(postsByYear);
         })
         .catch(error => console.error('Error fetching JSON:', error));
@@ -88,7 +87,7 @@ const renderImages = () => {
     useEffect(() => {
         GetImages();
         if (realarray[2024] && realarray[2024][0]) {
-            console.log(realarray[2024][0].title); 
+            //console.log(realarray[2024][0].title); 
         }
     }
     ,[]);

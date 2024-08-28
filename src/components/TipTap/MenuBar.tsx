@@ -56,7 +56,6 @@ const MenuBar = (props: any) => {
             (uri) => res(uri as File), // responseUriFunc
             "file" // outputType : Can be either base64, blob or file.(Default type is base64)	
           );
-        console.log("resizeFile");
         }
       );
 
@@ -108,10 +107,8 @@ const MenuBar = (props: any) => {
         // await new Promise(resolve => setTimeout(resolve, 1000));
       }
       setFileBlock(false);
-      console.log(resizedFiles);
       const NameArray = Array.from(resizedFiles).map(file => file.name);
       const BlobImageArray = Array.from(resizedFiles).map(file => URL.createObjectURL(file));
-      console.log(BlobImageArray);
 
     const base64ImageArray = resizedFiles.map(file => {
         return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
@@ -136,9 +133,7 @@ const MenuBar = (props: any) => {
   const handleButtonClick = () => {
     const url = prompt('Please enter URL:');
     if (url) {
-      console.log("url:", url)
       editor.commands.insertContent(`------\n[비디오입니다!]\nVideourl=<<<${url}>>>\n[!비디오입니다]\n------`);
-  
     }
   };
   

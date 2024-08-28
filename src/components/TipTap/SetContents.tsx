@@ -17,10 +17,7 @@ import { tiptapMainText } from '@/atoms/TiptapAtom';
         });
       
         const puttitle = await getFunc(octokit, `Posts/${GenreType}.html`);
-        let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))
-        console.log(puttitle.status);
-        console.log(returnString);
-      
+        let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))      
         await props.tiptapeditor.commands.setContent(returnString);
         await setMainText(returnString);
         return returnString;

@@ -25,10 +25,10 @@ export const LoginRequireModal = () => {
         if(inputpassword === import.meta.env.VITE_APP_PASSWORD){
             closeModal(false);
             setLoginValid(loginvaild + 1)
-            console.log("00.")
+            //console.log("00.")
         }else{
             IsWrongPassword(true);
-            console.log("nono")
+            //console.log("nono")
             await setIsShaking(true); // 흔들리는 애니메이션 시작
             controls.start({ x: [-10, 10, -10, 10, 0], transition: { duration: 0.4 } }); // 흔들리는 애니메이션 제어
             setTimeout(() => setIsShaking(false), 500);
