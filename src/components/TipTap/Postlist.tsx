@@ -9,7 +9,7 @@ import { fileDelete, fileMainImageSet } from '../Git/GitFileMod';
 import { GitFileBlock } from '@/atoms/ModalAtom';
 
 const Postlist = (props: any) => {
-  const [ MainText, setMainText ] = useRecoilState(tiptapMainText);
+  const [ , setMainText ] = useRecoilState(tiptapMainText);
   const [ PostList, setPostList ] = useState<any[]>([]);
   const [ PostListswitch, setPostListswitch ] = useState(false);
   const [, setFileBlock] = useRecoilState(GitFileBlock);
@@ -124,7 +124,7 @@ const Postlist = (props: any) => {
             }
           }
         }
-        const mainset = await fileMainImageSet(`Posts`, tmplist, setFileBlock);
+        await fileMainImageSet(`Posts`, tmplist, setFileBlock);
         setPostList([]);
       }} type="button" className=" transition-all duration-300 mt-[1vh] mr-[1vw] min-w-[19vw] max-w-[20vw] min-h-[3vh] max-h-[3vh] text-gray-900 bg-white hover:bg-gray-200 border-2 border-dul-gray focus:ring-4 focus:outline-none focus:ring-gray-100 rounded-lg text-center inline-flex items-center">
         <p className=" justify-center min-w-[15vw] max-w-[15vw] xs:min-w-[20vw] sm:min-w-[20vw]  md:min-w-[20vw] text-md pr-[1vw]">메인 이미지 설정</p> 

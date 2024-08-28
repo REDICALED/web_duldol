@@ -39,22 +39,9 @@ export const resizeFile = (file: File): Promise<File>  =>
     const octokit = new Octokit({
       auth: import.meta.env.VITE_APP_TOKEN,
     }); 
-    const result = await updateFunc(octokit, "diff/diff.txt", Date.now() ,path);
+    await updateFunc(octokit, "diff/diff.txt", Date.now() ,path);
   };
   
-  //파일 수정 /repo, path, contents
-  export const fileWrite = async (repo:any, path:any, contents:any, setFileBlock:any) => {
-    // const octokit = new Octokit({
-    //   auth: import.meta.env.VITE_APP_TOKEN,
-    // }); 
-
-    // const result = await updateFunc(octokit, `${repo}/${path}/sub.txt`, `${contents}`, path);
-    // console.log(result.status);
-    setFileBlock(true);
-    setFileBlock(false);
-  };
-
-
   //파일 생성 repo, path, contents, imageuploaded, titleimageuploaded, untitled, setFileRequire, setTitleRequire
   export const fileCreate = async (repo:any, path:any, contents:any, tags:string, imageuploaded:any , titleimageuploaded:any, untitled:any, setFileRequire:any, setTitleRequire:any, setFileBlock:any ) => {
     
@@ -80,7 +67,7 @@ export const resizeFile = (file: File): Promise<File>  =>
     //sub.txt add
     const tmpPath = untitled ? "untitled" : `${path}`;
     const pathkey = Date.now();
-    const result = await createFunc(octokit, `${repo}/${pathkey}-${tags}-${tmpPath}/sub.txt`, `${fileList?.length}\n${contents}`, path);
+    await createFunc(octokit, `${repo}/${pathkey}-${tags}-${tmpPath}/sub.txt`, `${fileList?.length}\n${contents}`, path);
     
     let finished = false;
     const uploadImageWithDelay = async () => {
@@ -118,7 +105,7 @@ export const resizeFile = (file: File): Promise<File>  =>
     });
   
     const mainlist = mainimages.join(',');
-    const puttitle = await updateFunc(octokit, `${repo}/mainlist.txt`, mainlist, 'mainlist updated');
+    await updateFunc(octokit, `${repo}/mainlist.txt`, mainlist, 'mainlist updated');
     setFileBlock(false);
   };
 
@@ -163,7 +150,7 @@ export const resizeFile = (file: File): Promise<File>  =>
                 console.error('Failed to fetch SHA:', error);
                 // 여기서 필요한 추가 작업을 수행할 수 있습니다. 예를 들어, 사용자에게 알림을 표시하거나 다른 처리를 수행할 수 있습니다.
             }
-            const result = await octokit.request(
+            await octokit.request(
             `DELETE /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${modtitle[i].hashdate}/${encodeURIComponent(array[j])}`,
             {
               owner: import.meta.env.VITE_APP_OWNER,

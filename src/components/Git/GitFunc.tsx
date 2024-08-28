@@ -97,7 +97,7 @@ export const createFunc = async (octokit: any, shapath: any, value: any, path: s
       const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/${shapath}/${name}.jpg`;
   
       try {
-        const response = await axios.put(
+        await axios.put(
           apiURL,
           {
             message: "Add image",

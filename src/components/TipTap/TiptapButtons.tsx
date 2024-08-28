@@ -22,9 +22,9 @@ export const UploadButton = (props:any) => {
       });
       const hashdate = Date.now();
       //main.html 업로드
-      const result = await createFunc(octokit, `Posts/Works/${hashdate}/main.html`, props.tiptapeditor.getHTML(), "main html generated");
+      await createFunc(octokit, `Posts/Works/${hashdate}/main.html`, props.tiptapeditor.getHTML(), "main html generated");
       //console.log("create main.html put request:" + result.status);
-      const titlename = await createFunc(octokit, `Posts/Works/${hashdate}/titlename.txt`, `${props.tiptapPostTitle}\n${props.tiptapPostDate}`, "titlename.txt generated");
+      await createFunc(octokit, `Posts/Works/${hashdate}/titlename.txt`, `${props.tiptapPostTitle}\n${props.tiptapPostDate}`, "titlename.txt generated");
       //console.log("create title.txt put request:" + titlename.status);
 
       //title 이미지 업로드
@@ -37,7 +37,7 @@ export const UploadButton = (props:any) => {
           base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
         }
         try {
-          const response = await axios.put(
+          await axios.put(
             apiURL,
             {
               message: "Add image",
@@ -72,7 +72,7 @@ export const UploadButton = (props:any) => {
               base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
             }
             try {
-              const response = await axios.put(
+              await axios.put(
                 apiURL,
                 {
                   message: "Add image",
@@ -111,7 +111,7 @@ export const UploadButton = (props:any) => {
           })
         .catch(error => console.error('Error fetching JSON:', error));
         
-        const postresult = await updateFunc(octokit, `Posts.json`, tmpPosts, `post.json updated`);
+        await updateFunc(octokit, `Posts.json`, tmpPosts, `post.json updated`);
         //console.log("fix Posts.json put request:" + postresult .status);
         //posts.json 업데이트
 
@@ -146,7 +146,7 @@ export const UploadButton = (props:any) => {
       else
       {
         SetGitFileBlock(true);
-        const puttitle = await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
+        await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
         SetGitFileBlock(false);
         //console.log(puttitle.status);
       }
