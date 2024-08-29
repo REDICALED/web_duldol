@@ -100,10 +100,10 @@ export const UploadButton = (props:any) => {
         const tmpPosts = await fetch('/Posts.json')
         .then(response => response.json()) 
         .then(data => {
-          // posts 배열 추출
-          const posts: { title: string, year: number, hashdate: number }[] = data.posts;
+          // posts 배열 추출.split('-')[0]
+          const posts: { title: string, year: string, hashdate: number }[] = data.posts;
             //console.log(posts);
-            posts.push({title: props.tiptapPostTitle, year: parseInt(props.tiptapPostDate.split('-')[0]), hashdate: hashdate});
+            posts.push({title: props.tiptapPostTitle, year: props.tiptapPostDate, hashdate: hashdate});
             //console.log(JSON.stringify(posts));
             const tmpPosts = `{ "posts": ` + JSON.stringify(posts) + ` }`;
             

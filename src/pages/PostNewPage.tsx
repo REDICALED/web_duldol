@@ -21,7 +21,7 @@ const PostNewPage = () => {
       .then(response => response.json()) 
       .then(data => {
         // posts 배열 추출
-        const posts: { title: string, year: number, hashdate: number }[] = data.posts;
+        const posts: { title: string, year: string, hashdate: number }[] = data.posts;
           //console.log(posts);
           return posts;
         })

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-    const [titlelistState, settitlelistState] = useState<{title: string, year: number, hashdate: number}[]>([]);
+    const [titlelistState, settitlelistState] = useState<{title: string, year: string, hashdate: number}[]>([]);
     const getmainlist =  async () => {
         const titleresult = await fetch('/Posts.json')
         .then(response => response.json()) 

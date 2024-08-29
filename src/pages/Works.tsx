@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const WorksPage = () => {
 
-    const [realarray, setRealArray] = useState<{ [year: number]: { title: string, year: number, hashdate: number }[] }>({});
+    const [realarray, setRealArray] = useState<{ [year: string]: { title: string, year: string, hashdate: number }[] }>({});
     
     const GetImages = async () => {
         await fetch('/Posts.json')
@@ -12,11 +12,11 @@ const WorksPage = () => {
           // posts 배열 추출
           const posts = data.posts;
           // 년도별로 그룹화하는 객체 생성
-          const postsByYear = posts.reduce((acc: { [x: number]: any[]; }, post: { year: number; }) => {
-            if (!acc[post.year]) {
-              acc[post.year] = [];
+          const postsByYear = posts.reduce((acc: { [x: string]: any[]; }, post: { year: string; }) => {
+            if (!acc[post.year.split('-')[0]]) {
+              acc[post.year.split('-')[0]] = [];
             }
-            acc[post.year].push(post);
+            acc[post.year.split('-')[0]].push(post);
             return acc; 
           }, {});
       
@@ -32,13 +32,13 @@ const WorksPage = () => {
     // renderImages 함수 수정
 const renderImages = () => {
     // 연도별로 이미지 그룹화
-    const groupedByYear: { [year: number]: { title: string, year: number, hashdate: number }[] } = {};
+    const groupedByYear: { [year: string]: { title: string, year: string, hashdate: number }[] } = {};
     Object.values(realarray).forEach((yearArray) => {
         yearArray.forEach((item) => {
-            if (!groupedByYear[item.year]) {
-                groupedByYear[item.year] = [];
+            if (!groupedByYear[item.year.split('-')[0]]) {
+                groupedByYear[item.year.split('-')[0]] = [];
             }
-            groupedByYear[item.year].push(item);
+            groupedByYear[item.year.split('-')[0]].push(item);
         });
     });
 
@@ -48,10 +48,10 @@ const renderImages = () => {
             {/* 연도별 이미지 출력 */}
         <div className=" text-dul-gray md:text-sm">
             {Object.keys(groupedByYear).reverse().map((year) => (
-                <div key={year} className="">
-                    <div className="mt-[0.5vh]">{year}</div>
+                <div key={year.split('-')[0]} className="">
+                    <div className="mt-[0.5vh]">{year.split('-')[0]}</div>
                     <div className="flex ">
-                        { groupedByYear[parseInt(year)].map((item: { title: string, year: number, hashdate: number }, index: number) => (
+                        { groupedByYear[year.split('-')[0]].map((item: { title: string, year: string, hashdate: number }, index: number) => (
                             <div key={`${year}-${index}`} className="">
                             <Link key={index} to={'/Works/' + (item.hashdate === 0 ? item.title : item.hashdate)} className=''>
                             { item.hashdate === 0 ? <img
