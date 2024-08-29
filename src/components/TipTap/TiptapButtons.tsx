@@ -103,8 +103,20 @@ export const UploadButton = (props:any) => {
           // posts 배열 추출.split('-')[0]
           const posts: { title: string, year: string, hashdate: number }[] = data.posts;
             //console.log(posts);
-            posts.push({title: props.tiptapPostTitle, year: props.tiptapPostDate, hashdate: hashdate});
-            //console.log(JSON.stringify(posts));
+            const newPost = { title: props.tiptapPostTitle, year: props.tiptapPostDate, hashdate: hashdate };
+
+            let insertIndex = posts.length;
+
+            // 삽입할 위치를 찾기
+            for (let i = 0; i < posts.length; i++) {
+                if (new Date(newPost.year).getTime() > new Date(posts[i].year).getTime()) {
+                    insertIndex = i;
+                    break;
+                }
+            }
+    
+            // 찾은 위치에 새로운 포스트 삽입
+            posts.splice(insertIndex, 0, newPost);
             const tmpPosts = `{ "posts": ` + JSON.stringify(posts) + ` }`;
             
             return tmpPosts;
