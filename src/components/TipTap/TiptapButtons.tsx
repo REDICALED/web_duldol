@@ -109,16 +109,22 @@ export const UploadButton = (props:any) => {
 
             // 삽입할 위치를 찾기
             for (let i = 0; i < posts.length; i++) {
-                if (new Date(newPost.year).getTime() > new Date(posts[i].year).getTime()) {
-                    insertIndex = i;
-                    break;
+                if ((newPost.year.split('-')[0] >= posts[i].year.split('-')[0])) {
+                  if ((newPost.year.split('-')[1] <= posts[i].year.split('-')[1])) {
+                    if ((newPost.year.split('-')[2] <= posts[i].year.split('-')[2])) {
+                      console.log("uploaded"+newPost.year);
+                      console.log("past"+posts[i].year);
+                      insertIndex = i;
+                      break;
+                  }
+                }
                 }
             }
     
             // 찾은 위치에 새로운 포스트 삽입
             posts.splice(insertIndex, 0, newPost);
             const tmpPosts = `{ "posts": ` + JSON.stringify(posts) + ` }`;
-            
+            console.log(tmpPosts);
             return tmpPosts;
           })
         .catch(error => console.error('Error fetching JSON:', error));
