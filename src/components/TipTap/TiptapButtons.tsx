@@ -110,13 +110,10 @@ export const UploadButton = (props:any) => {
             // 삽입할 위치를 찾기
             for (let i = 0; i < posts.length; i++) {
                 if ((newPost.year.split('-')[0] >= posts[i].year.split('-')[0])) {
-                  if ((newPost.year.split('-')[1] <= posts[i].year.split('-')[1])) {
-                    if ((newPost.year.split('-')[2] <= posts[i].year.split('-')[2])) {
-                      console.log("uploaded"+newPost.year);
-                      console.log("past"+posts[i].year);
+                  if ((newPost.year.split('-')[1] < posts[i].year.split('-')[1]) || ((newPost.year.split('-')[1] === posts[i].year.split('-')[1]) 
+                  && (newPost.year.split('-')[2] <= posts[i].year.split('-')[2])) ) {
                       insertIndex = i;
                       break;
-                  }
                 }
                 }
             }

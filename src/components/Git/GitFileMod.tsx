@@ -123,48 +123,56 @@ export const resizeFile = (file: File): Promise<File>  =>
         updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
         return ;
       }
-      else {
-        const puttitle = await getFunc(octokit, `Posts/Works/${modtitle[i].hashdate}/main.html`);
-        let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)));
-        const regex = /images_cap=&lt;&lt;&lt;(.*?)&gt;&gt;&gt;/gs;
-        let match;
-        const jpegFileNames: string[] = [];
 
-        while ((match = regex.exec(returnString)) !== null) {
-          const fileNamesStr = match[1];  // 첫 번째 캡처 그룹을 가져옴
-          const fileNames = fileNamesStr.split('#$%^');  // 쉼표로 구분된 파일 이름 배열   
-          fileNames.forEach(fileName => {
-            jpegFileNames.push(fileName.trim());  // 각 파일 이름을 배열에 추가 (trim()으로 앞뒤 공백 제거)
-          });
+      else {
+        try {
+          const puttitle = await getFunc(octokit, `Posts/Works/${modtitle[i].hashdate}/main.html`);
+          let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)));
+          const regex = /images_cap=&lt;&lt;&lt;(.*?)&gt;&gt;&gt;/gs;
+          let match;
+          const jpegFileNames: string[] = [];
+  
+          while ((match = regex.exec(returnString)) !== null) {
+            const fileNamesStr = match[1];  // 첫 번째 캡처 그룹을 가져옴
+            const fileNames = fileNamesStr.split('#$%^');  // 쉼표로 구분된 파일 이름 배열   
+            fileNames.forEach(fileName => {
+              jpegFileNames.push(fileName.trim());  // 각 파일 이름을 배열에 추가 (trim()으로 앞뒤 공백 제거)
+            });
+          }
+          const array: string[] = ["title.JPEG", "main.html", "titlename.txt"].concat(jpegFileNames);    
+          const cnt = array.length;
+
+          for (let j = 0; j < cnt; j++){
+            let currentSHA;
+            try {
+              currentSHA = await getFunc(octokit, `${repo}${modtitle[i].hashdate}/${encodeURIComponent(array[j])}`).then((result: any) => result.data.sha);
+              // 성공적으로 SHA 값을 가져온 경우에 대한 로직
+              } catch (error) {
+                  // 실패한 경우에 대한 예외 처리
+                  setFileBlock(false);
+                  console.error('Failed to fetch SHA:', error);
+                  // 여기서 필요한 추가 작업을 수행할 수 있습니다. 예를 들어, 사용자에게 알림을 표시하거나 다른 처리를 수행할 수 있습니다.
+              }
+              await octokit.request(
+              `DELETE /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${modtitle[i].hashdate}/${encodeURIComponent(array[j])}`,
+              {
+                owner: import.meta.env.VITE_APP_OWNER,
+                repo: import.meta.env.VITE_APP_REPO,
+                path: `${modtitle[i]}/${array[j]}`,
+                message : `delete ${modtitle[i].hashdate}/${array[j]}`,
+                sha: currentSHA,        
+              }
+            );
+        } 
         }
-        const array: string[] = ["title.JPEG", "main.html", "titlename.txt"].concat(jpegFileNames);    
-        const cnt = array.length;
-        for (let j = 0; j < cnt; j++){
-          let currentSHA;
-          try {
-            currentSHA = await getFunc(octokit, `${repo}${modtitle[i].hashdate}/${encodeURIComponent(array[j])}`).then((result: any) => result.data.sha);
-            // 성공적으로 SHA 값을 가져온 경우에 대한 로직
-            } catch (error) {
-                // 실패한 경우에 대한 예외 처리
-                setFileBlock(false);
-                console.error('Failed to fetch SHA:', error);
-                // 여기서 필요한 추가 작업을 수행할 수 있습니다. 예를 들어, 사용자에게 알림을 표시하거나 다른 처리를 수행할 수 있습니다.
-            }
-            await octokit.request(
-            `DELETE /repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${modtitle[i].hashdate}/${encodeURIComponent(array[j])}`,
-            {
-              owner: import.meta.env.VITE_APP_OWNER,
-              repo: import.meta.env.VITE_APP_REPO,
-              path: `${modtitle[i]}/${array[j]}`,
-              message : `delete ${modtitle[i].hashdate}/${array[j]}`,
-              sha: currentSHA,        
-            }
-          );
-          const titleresult = await getJsonFunc(octokit, `Posts.json`);
-          titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
-          updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
-      }    
-      setFileBlock(false);
+        catch (error) {
+          console.error('Failed to fetch SHA:', error);
+        setFileBlock(false);
+        }
+        const titleresult = await getJsonFunc(octokit, `Posts.json`);
+        titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
+        updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
+        setFileBlock(false);
       }
     }
       
