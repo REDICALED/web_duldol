@@ -14,9 +14,9 @@ import { useParams } from 'react-router-dom';
         const imagesCapMatch = string.match(imagesCapRegex);
         const imagesCapStr = imagesCapMatch ? imagesCapMatch[1] : '';
         const imagesCapArray = imagesCapStr.split('#$%^').map((cap: string) => cap.trim());
-
+        console.log(imagesCapArray);
         const realimagesArray = imagesCapArray.map((url: string) => {
-          return `/Posts/Works/${tags.id}/${url}.JPEG`;
+          return `/Posts/Works/${tags.id}/${url}`;
         });
         return <Slick images={realimagesArray} images_cap={imagesCapArray} />;
       }

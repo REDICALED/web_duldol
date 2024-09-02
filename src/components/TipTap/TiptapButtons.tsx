@@ -37,7 +37,7 @@ export const UploadButton = (props:any) => {
           base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
         }
         try {
-          await axios.put(
+          const response = await axios.put(
             apiURL,
             {
               message: "Add image",
@@ -51,7 +51,7 @@ export const UploadButton = (props:any) => {
               },
             }
           );
-          //console.log("Image uploaded successfully:", response.data.content.name);
+          console.log("Image uploaded successfully:", response.data.content.name);
         } catch (e) {
           console.error("Error uploading image:", e);
         }
@@ -72,7 +72,7 @@ export const UploadButton = (props:any) => {
               base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
             }
             try {
-              await axios.put(
+              const response = await axios.put(
                 apiURL,
                 {
                   message: "Add image",
@@ -86,7 +86,7 @@ export const UploadButton = (props:any) => {
                   },
                 }
               );
-              //console.log("Image uploaded successfully:", response.data.content.name);
+              console.log("Image uploaded successfully:", response.data.content.name);
             } catch (e) {
               console.error("Error uploading image:", e);
             }
@@ -110,7 +110,11 @@ export const UploadButton = (props:any) => {
             // 삽입할 위치를 찾기
             for (let i = 0; i < posts.length; i++) {
                 if ((newPost.year.split('-')[0] >= posts[i].year.split('-')[0])) {
-                  if ((newPost.year.split('-')[1] < posts[i].year.split('-')[1]) || ((newPost.year.split('-')[1] === posts[i].year.split('-')[1]) 
+                  if ((newPost.year.split('-')[0] > posts[i].year.split('-')[0])) {
+                    insertIndex = i;
+                    break;
+              }
+                  else if ((newPost.year.split('-')[1] < posts[i].year.split('-')[1]) || ((newPost.year.split('-')[1] === posts[i].year.split('-')[1]) 
                   && (newPost.year.split('-')[2] <= posts[i].year.split('-')[2])) ) {
                       insertIndex = i;
                       break;
@@ -138,7 +142,7 @@ export const UploadButton = (props:any) => {
       });
       if ( GenreType === "post" )
       {
-        console.log(props.tiptapPostTitleImage)
+        //console.log(props.tiptapPostTitleImage)
         if ( props.tiptapPostTitle === '' || props.tiptapPostDate === '' || (props.tiptapPostTitleImage.base64 === '' && props.tiptapPostTitleImage.blobUrl === ''))
         {
           setFileRequire(true);
@@ -161,9 +165,9 @@ export const UploadButton = (props:any) => {
       else
       {
         SetGitFileBlock(true);
-        const puttitle = await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
+        await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
         SetGitFileBlock(false);
-        console.log(puttitle.status);
+        //console.log(puttitle.status);
       }
     }
     return (
