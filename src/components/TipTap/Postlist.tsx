@@ -116,11 +116,12 @@ const Postlist = (props: any) => {
         let tmplist: string[] = [];
         for (let i = 0; i < PostList.length; i++) {
           if (PostList[i].selected) {
+            console.log(PostList[i].title);
             if (PostList[i].hashdate === 0) {
               tmplist.push(PostList[i].title);
             }
             else {
-              tmplist.push(PostList[i].hashdate);
+              tmplist.push(PostList[i].hashdate.toString());
             }
           }
         }

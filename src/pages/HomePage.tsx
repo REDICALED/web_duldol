@@ -30,14 +30,16 @@ const HomePage = () => {
         for (let i = 0; i < titleresult.posts.length; i++) {
             console.log(`Post ${i}:`, titleresult.posts[i]);
         }
-
+        console.log(titleresult.posts.length)
         for (let i = 0; i < titleresult.posts.length; i++) {
+            console.log( i + titleresult.posts[i].hashdate.toString())
 
-            if (mainlist.includes(titleresult.posts[i].title) || (mainlist.includes(titleresult.posts[i].hashdate.toString()) && titleresult.posts[i].hashdate !== 0)) {
+            if (mainlist.includes(titleresult.posts[i].title))  {
                 tmparray.push(titleresult.posts[i]);
             }
-            else{
-                titleresult.posts.splice(i, 1);
+            else if(mainlist.includes(titleresult.posts[i].hashdate.toString())){
+                console.log("hashdate:"+titleresult.posts[i].hashdate);
+                tmparray.push(titleresult.posts[i]);
             }
         }
         console.log(tmparray);
