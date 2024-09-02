@@ -138,7 +138,7 @@ export const UploadButton = (props:any) => {
       });
       if ( GenreType === "post" )
       {
-        //console.log(props.tiptapPostTitleImage)
+        console.log(props.tiptapPostTitleImage)
         if ( props.tiptapPostTitle === '' || props.tiptapPostDate === '' || (props.tiptapPostTitleImage.base64 === '' && props.tiptapPostTitleImage.blobUrl === ''))
         {
           setFileRequire(true);
@@ -161,9 +161,9 @@ export const UploadButton = (props:any) => {
       else
       {
         SetGitFileBlock(true);
-        await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
+        const puttitle = await updateFunc(octokit, `Posts/${GenreType}.html`, MainText, `${GenreType} updated`);
         SetGitFileBlock(false);
-        //console.log(puttitle.status);
+        console.log(puttitle.status);
       }
     }
     return (
