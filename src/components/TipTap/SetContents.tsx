@@ -12,16 +12,26 @@ import { tiptapMainText } from '@/atoms/TiptapAtom';
 
 
     const GetContents = async (props:any) => {
-        const octokit = new Octokit({
-          auth: import.meta.env.VITE_APP_TOKEN,
-        });
-      
-        const puttitle = await getFunc(octokit, `Posts/${GenreType}.html`);
-        let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)))      
+      const octokit = new Octokit({
+        auth: import.meta.env.VITE_APP_TOKEN,
+      });
+    
+      const puttitle = await getFunc(octokit, `Posts/${GenreType}.html`);
+    
+      if (puttitle.data.encoding === "base64") {
+        let returnString = decodeURIComponent(escape(window.atob(puttitle.data.content)));
         await props.tiptapeditor.commands.setContent(returnString);
         await setMainText(returnString);
         return returnString;
-      };
+      } else if (puttitle.data.encoding === "none") {
+        const blobData = await octokit.request(puttitle.data.git_url);
+        let returnString = decodeURIComponent(escape(window.atob(blobData.data.content)));
+        await props.tiptapeditor.commands.setContent(returnString);
+        await setMainText(returnString);
+        return returnString;
+      }
+    };
+    
 
     const handleButtonClick = async () => {
       await GetContents(props);
