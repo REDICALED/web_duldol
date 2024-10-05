@@ -10,7 +10,9 @@ module.exports = {
         'dul-gray': '#656262',
         'dul-white': '#afb2b4',
       },
-
+      fontFamily: {
+        dongle: ['Dongle', 'sans-serif'], // Dongle 폰트
+      },
     },
     screens: {
       "2sm": "300px",

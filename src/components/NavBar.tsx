@@ -37,62 +37,45 @@ const NavBar = () => {
     return (
         <>
         
-        <div className=" w-[80px] md:w-[130px] ml-[3vw] fixed mt-[2vh] text-xs md:text-xl z-40">
-            <img src={name} className="my-10 "/>
-            <div className=" font-medium text-xxs md:text-base">
-                <div className="mt-[2vh] w-[40px] md:w-[50px]">
-                    <Link to="/" >
-                    {
-                        currentPath==="/" ? <img src={menu1home}/> : <img src={menu2home}/>
-                    }
-                    </Link>
-                </div>
+        <div className=" w-[100vw] ml-[3vw] fixed mt-[2vh] z-40 lg:flex font-dongle">
+            <div className=" lg:text-5xl text-3xl ">
+                DULDOL JUNG
+            </div>
+            <div className=" font-medium text-2xl lg:text-3xl lg:right-[10vw] lg:absolute lg:flex space-x-10 max-w-full overflow-hidden">
 
-                <div className="mt-[2vh] w-[40px] md:w-[50px]">
+                <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/Works" >
-                    {
-                        currentPath.includes("Works") ? <img src={menu1works}/> : <img src={menu2works}/>
-                    }
+                    <div className={ currentPath.includes("Works") ? ` text-gray-400 ` : ` text-gray-900`}>works</div>
                 </Link>
                 </div>
 
-                <div className="mt-[2vh] w-[30px] md:w-[40px]">
+                <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/Note" >
-                    {
-                        currentPath==="/Note" ? <img src={menu1note}/> : <img src={menu2note}/>
-                    }
+                    <div className={ currentPath.includes("Note") ? ` text-gray-400 ` : ` text-gray-900`}>note</div>
                 </Link>                
                 </div>
 
-                <div className="mt-[2vh] w-[15px] md:w-[20px]">
+                <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/cv" >
-                    {
-                        currentPath==="/cv" ? <img src={menu1cv}/> : <img src={menu2cv}/>
-                    }
+                    <div className={ currentPath.includes("cv") ? ` text-gray-400 ` : ` text-gray-900`}>cv</div>
                 </Link>                
                 </div>
 
-                <div className="mt-[2vh] w-[55px] md:w-[75px]">
+                <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/Contact" >
-                    {
-                        currentPath==="/Contact" ? <img src={menu1contact}/> : <img src={menu2contact}/>
-                    }
+                    <div className={ currentPath.includes("Contact") ? ` text-gray-400 ` : ` text-gray-900`}>contact</div>
                 </Link>                
                 </div>
 
-                { loginvaild === 1 && <div className="mt-[2vh] w-[45px] md:w-[55px]">
+                { loginvaild === 1 && <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/memo" >
-                    {
-                        currentPath==="/memo" ? <img src={menu1memo}/> : <img src={menu2memo}/>
-                    }
+                    <div className={ currentPath.includes("memo") ? ` text-gray-400 ` : ` text-gray-900`}>memo</div>
                 </Link>                
                 </div>}
 
-                { loginvaild === 1 && <div className="mt-[1.7vh] w-[45px] md:w-[57px]">
+                { loginvaild === 1 && <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/editor" >
-                    {
-                        currentPath==="/editor" ? <img src={menu1editor}/> : <img src={menu2editor}/>
-                    }
+                    <div className={ currentPath.includes("editor") ? ` text-gray-400 ` : ` text-gray-900`}>editor</div>
                 </Link>                
                 </div>}
             </div>
