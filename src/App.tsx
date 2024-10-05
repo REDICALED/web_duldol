@@ -1,4 +1,3 @@
-import HomePage from './pages/HomePage'
 import WorksPage from './pages/Works'
 import NotePage from './pages/NotePage'
 import CvPage from './pages/CvPage'

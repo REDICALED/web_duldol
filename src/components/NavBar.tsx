@@ -1,23 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-import name from "@/assets/name.png";
-import menu1contact from "@/assets/menu1-contact.png";
-import menu1cv from "@/assets/menu1-cv.png";
-import menu1home from "@/assets/menu1-home.png";
-import menu1note from "@/assets/menu1-note.png";
-import menu1works from "@/assets/menu1-works.png";
-import menu2cv from "@/assets/menu2-cv.png";
-import menu2home from "@/assets/menu2-home.png";
-import menu2note from "@/assets/menu2-note.png";
-import menu2works from "@/assets/menu2-works.png";
-import menu2contact from "@/assets/menu2-contact.png";
-import menu1memo from "@/assets/menu1-memo.png";
-import menu2memo from "@/assets/menu2-memo.png";
-import menu1editor from "@/assets/menu1-editor.png";
-import menu2editor from "@/assets/menu2-editor.png";
-
-
 import { LoginValid } from "@/atoms/LoginValidAtom";
 import { useRecoilState } from "recoil";
 
@@ -38,10 +21,10 @@ const NavBar = () => {
         <>
         
         <div className=" w-[100vw] ml-[3vw] fixed mt-[2vh] z-40 lg:flex font-dongle">
-            <div className=" lg:text-5xl text-3xl ">
+            <div className=" lg:text-5xl text-3xl m-2 ">
                 DULDOL JUNG
             </div>
-            <div className=" font-medium text-2xl lg:text-3xl lg:right-[10vw] lg:absolute lg:flex space-x-10 max-w-full overflow-hidden">
+            <div className=" m-2 font-medium text-2xl lg:text-3xl lg:right-[10vw] lg:absolute lg:flex lg:space-x-10 max-w-full overflow-hidden">
 
                 <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/Works" >
