@@ -21,10 +21,10 @@ const NavBar = () => {
         <>
         
         <div className=" w-[100vw] ml-[3vw] fixed mt-[2vh] z-40 lg:flex font-dongle">
-            <div className=" lg:text-5xl text-3xl m-2 ">
+            <div className=" lg:text-4xl text-xl m-2 ">
                 DULDOL JUNG
             </div>
-            <div className=" m-2 font-medium text-2xl lg:text-3xl lg:right-[10vw] lg:absolute lg:flex lg:space-x-10 max-w-full overflow-hidden">
+            <div className=" m-2 font-medium text-xl lg:text-3xl lg:right-[10vw] lg:absolute lg:flex lg:space-x-10 max-w-full overflow-hidden">
 
                 <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/Works" >
