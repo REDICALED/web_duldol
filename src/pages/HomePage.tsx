@@ -8,7 +8,6 @@ const HomePage = () => {
         .then(response => response.json()) 
         .then(data => {
           // posts 배열 추출
-        console.log("Posts"+ data.posts);
           return data;
         })
         .catch(error => console.error('Error fetching JSON:', error));

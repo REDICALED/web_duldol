@@ -3,57 +3,37 @@ import { Link } from "react-router-dom";
 
 const WorksPage = () => {
 
-    const [realarray, setRealArray] = useState<{ [year: string]: { title: string, year: string, hashdate: number }[] }>({});
-    
+    const [titlelistState, settitlelistState] = useState<{title: string, year: string, hashdate: number}[]>([]);
+    useEffect(() => {
+        GetImages();
+    }
+    ,[]);
     const GetImages = async () => {
         await fetch('/Posts.json')
         .then(response => response.json()) 
         .then(data => {
           // posts 배열 추출
-          const posts = data.posts;
-          // 년도별로 그룹화하는 객체 생성
-          const postsByYear = posts.reduce((acc: { [x: string]: any[]; }, post: { year: string; }) => {
-            if (!acc[post.year.split('-')[0]]) {
-              acc[post.year.split('-')[0]] = [];
-            }
-            acc[post.year.split('-')[0]].push(post);
-            return acc; 
-          }, {});
-      
-          // 그룹화된 데이터 확인
-          //console.log(postsByYear);
-          setRealArray(postsByYear);
+          const posts = data.posts.sort((a: { year: string | number | Date; }, b: { year: string | number | Date; }) => {
+            const dateA = new Date(a.year).getTime();
+            const dateB = new Date(b.year).getTime();
+            return dateB - dateA; // 최신순 정렬
+          });;
+          settitlelistState(posts);
         })
         .catch(error => console.error('Error fetching JSON:', error));
         
     }
 
-
-    // renderImages 함수 수정
-const renderImages = () => {
-    // 연도별로 이미지 그룹화
-    const groupedByYear: { [year: string]: { title: string, year: string, hashdate: number }[] } = {};
-    Object.values(realarray).forEach((yearArray) => {
-        yearArray.forEach((item) => {
-            if (!groupedByYear[item.year.split('-')[0]]) {
-                groupedByYear[item.year.split('-')[0]] = [];
-            }
-            groupedByYear[item.year.split('-')[0]].push(item);
-        });
-    });
-
     // 이미지 출력
     return (
         <>
             {/* 연도별 이미지 출력 */}
-        <div className=" text-dul-gray md:text-sm">
-            {Object.keys(groupedByYear).reverse().map((year) => (
-                <div key={year.split('-')[0]} className="">
-                    <div className="mt-[0.5vh]">{year.split('-')[0]}</div>
+        <div className=" flex flex-wrap text-dul-gray leading-6 md:leading-6 pt-[15vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs ">
+            {titlelistState.map((item) => (
+                <div key={item.title} className=" md:m-2 m-1">
                     <div className="flex ">
-                        { groupedByYear[year.split('-')[0]].map((item: { title: string, year: string, hashdate: number }, index: number) => (
-                            <div key={`${year}-${index}`} className="">
-                            <Link key={index} to={'/Works/' + (item.hashdate === 0 ? item.title : item.hashdate)} className=''>
+                        { 
+                            <Link key={item.title} to={'/Works/' + (item.hashdate === 0 ? item.title : item.hashdate)} className=''>
                             { item.hashdate === 0 ? <img
                                 loading='lazy'
                                 src={ `/images/Works/${item.title}/title.jpg`}
@@ -66,14 +46,13 @@ const renderImages = () => {
                                 alt={`Work Image ${item.title}`}
                                 className=" peer px-[0.1vw] transition-all duration-500 hover:scale-105 object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px] "
                             />
-                        }
+                            }
                             <div className=" fixed peer-hover:fixed peer-hover:w-fit h-0 peer-hover:h-fit peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
                                 <div>{item.title}</div>
                             </div>
                             <div className="peer-hover:mb-10"></div>
                             </Link>
-                        </div>
-                        ))}
+                        }
                     </div>
                 </div>
             ))}
@@ -81,24 +60,17 @@ const renderImages = () => {
             
         </>
     );
-};
 
 
-    useEffect(() => {
-        GetImages();
-        if (realarray[2024] && realarray[2024][0]) {
-            //console.log(realarray[2024][0].title); 
-        }
-    }
-    ,[]);
+    
     return (
         <>
             <div className="leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
-            {renderImages()}
 
             </div>
         </>
     );
-}
+};
+
 
 export default WorksPage;
