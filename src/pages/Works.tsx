@@ -28,7 +28,7 @@ const WorksPage = () => {
     return (
         <>
             {/* 연도별 이미지 출력 */}
-        <div className=" flex flex-wrap text-dul-gray leading-6 md:leading-6 pt-[15vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs ">
+        <div className=" flex flex-wrap text-dul-gray leading-6 md:leading-6 pt-[10vh] md:pt-[15vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs ">
             {titlelistState.map((item) => (
                 <div key={item.title} className=" md:m-2 m-1">
                     <div className="flex ">
