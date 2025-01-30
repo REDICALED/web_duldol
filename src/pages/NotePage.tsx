@@ -28,7 +28,7 @@ const NotePage = () => {
     }
 
     return (
-        <div className=" leading-6 md:leading-8 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
+        <div className=" mb-10  leading-6 md:leading-8 text-dul-gray pt-[5vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
           {parse(htmlcontents, {replace: (node) => ParseHtml.replace(node, setImageZoom)})}
         </div>
     );

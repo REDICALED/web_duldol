@@ -15,16 +15,24 @@ const NavBar = () => {
     const [ loginvaild , ] = useRecoilState(LoginValid);
 
     useEffect(() => {
+        console.log(location.pathname);
         setCurrentPath(location.pathname);
     }, [location.pathname]);
     return (
         <>
         
         <div className=" lg:w-[100vw] ml-[3vw] fixed mt-[2vh] z-40 lg:flex font-dongle">
-            <div className=" w-fit lg:text-4xl text-xl m-2 ">
+            <Link to="/" className=" w-fit lg:text-4xl text-xl m-2 ">
                 DULDOL JUNG
-            </div>
+            </Link>
             <div className=" w-fit m-2 font-medium text-xl lg:text-3xl lg:right-[10vw] lg:absolute lg:flex lg:space-x-10 max-w-full overflow-hidden">
+
+            <div className=" hover:opacity-55 transition-opacity">
+                
+                <Link to="/" >
+                    <div className={ currentPath === '/' ? ` text-gray-400 ` : ` text-gray-900`}>main</div>
+                </Link>
+                </div>
 
                 <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/Works" >

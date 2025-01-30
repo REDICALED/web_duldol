@@ -13,37 +13,15 @@ const HomePage = () => {
         })
         .catch(error => console.error('Error fetching JSON:', error));
 
-        const mainlist = await fetch('/Posts/mainlist.txt')
-        .then(response => response.text()) 
-        .then(data => {
-          // posts 배열 추출
-          console.log("mainlist:"+ data);
-          return data;
-        })
-        .catch(error => console.error('Error fetching mainlist:', error));
-        
-        if(!mainlist){
-            return;
-        }
         //console.log(mainlist);
-        const tmparray = [];
-        for (let i = 0; i < titleresult.posts.length; i++) {
-            console.log(`Post ${i}:`, titleresult.posts[i]);
-        }
-        console.log(titleresult.posts.length)
-        for (let i = 0; i < titleresult.posts.length; i++) {
-            console.log( i + titleresult.posts[i].hashdate.toString())
-
-            if (mainlist.includes(titleresult.posts[i].title))  {
-                tmparray.push(titleresult.posts[i]);
-            }
-            else if(mainlist.includes(titleresult.posts[i].hashdate.toString())){
-                console.log("hashdate:"+titleresult.posts[i].hashdate);
-                tmparray.push(titleresult.posts[i]);
-            }
-        }
-        console.log(tmparray);
-        settitlelistState(tmparray);
+        const tmparray = titleresult.posts.sort((a: { year: string | number | Date; }, b: { year: string | number | Date; }) => {
+            const dateA = new Date(a.year).getTime();
+            const dateB = new Date(b.year).getTime();
+            return dateB - dateA; // 최신순 정렬
+          });
+        const latestThree = tmparray.slice(0, 3);
+        console.log(latestThree);
+        settitlelistState(latestThree);
         //console.log(titlelistState)    
     }
     useEffect(() => {
@@ -51,19 +29,33 @@ const HomePage = () => {
     },[]);
     return (
     <div className=" text-dul-gray ml-[25vw] pl-10 mx-[15vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-xs md:text-base ">
-        <div  className="">
+        <div className=" ">
         {titlelistState && titlelistState.map((item, index) => {
             return (
-                <div key={index} className="">
-                    {item.hashdate === 0 ? <Link key={item.title} to={`/Works/${item.title}`} className=''> <img className={ "w-full h-[10vh] md:h-[30vh]  object-cover"} src={`/images/Works/${item.title}/title.jpg`} alt={item.title}></img>  </Link> : <Link key={item.title} to={`/Works/${item.hashdate}`} className=''> <img className={ "w-full h-[10vh] md:h-[30vh]  object-cover"} src={`/Posts/Works/${item.hashdate}/title.JPEG`} alt={item.title}></img> </Link> }
-                    <br />
-                    <p className="">{item.title}</p>
-                    <br />
-                </div>
+                <div className=" my-2 md:mx-2">
+        <Link  to={'/Works/' + (item.hashdate === 0 ? item.title : item.hashdate)} className='inline-block'>
+        { item.hashdate === 0 ? <img
+            loading='lazy'
+            src={ `/images/Works/${item.title}/title.jpg`}
+            alt={`Work Image ${item.title}`}
+            className=" peer transition-all duration-500 hover:scale-105 object-cover md:w-[240px] md:h-[144px] w-[100px] h-[70px] "
+        />
+            : <img
+            loading='lazy'
+            src={ `/Posts/Works/${item.hashdate}/title.JPEG`}
+            alt={`Work Image ${item.title}`}
+            className=" peer transition-all duration-500 hover:scale-105 object-cover md:w-[240px] md:h-[144px] w-[100px] h-[70px] "
+        />
+    }
+        <div className=" fixed peer-hover:fixed peer-hover:w-fit h-0 peer-hover:h-fit peer-hover:p-2 transition-all duration-500 opacity-0 peer-hover:opacity-100 ">
+            <div>{item.title}</div>
+        </div>
+        <div className="peer-hover:mb-10"></div>
+        </Link>
+    </div>
             )
         })}
-    </div>
-
+        </div>
     </div>
     );
 }

@@ -5,6 +5,8 @@ import ContactPage from './pages/Contact'
 import PostPage from './pages/PostPage'
 import ErrPage from './pages/ErrPage'
 import Editor from './pages/Editor'
+import HomePage from './pages/HomePage'
+
 
 import {
   createBrowserRouter,
@@ -36,7 +38,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <WorksPage />,
+        element: <HomePage />,
       },
       {
         path: '*',
