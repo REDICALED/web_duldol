@@ -30,7 +30,7 @@ const HomePage = () => {
     return (
     <div className=" text-dul-gray ml-[25vw] pl-10 mx-[15vw] xl:ml-[20vw] md:ml-[30vw] pt-[10vh] text-xs md:text-base ">
         <div className=" ">
-        {titlelistState && titlelistState.map((item, index) => {
+        {titlelistState && titlelistState.map((item) => {
             return (
                 <div className=" my-2 md:mx-2">
         <Link  to={'/Works/' + (item.hashdate === 0 ? item.title : item.hashdate)} className='inline-block'>
