@@ -30,13 +30,13 @@ const NavBar = () => {
             <div className=" hover:opacity-55 transition-opacity">
                 
                 <Link to="/" >
-                    <div className={ currentPath === '/' ? ` text-gray-400 ` : ` text-gray-900`}>main</div>
+                    <div className={ currentPath === '/' ? ` text-gray-400 ` : ` text-gray-900`}>recent work</div>
                 </Link>
                 </div>
 
                 <div className=" hover:opacity-55 transition-opacity">
                 <Link to="/Works" >
-                    <div className={ currentPath.includes("Works") ? ` text-gray-400 ` : ` text-gray-900`}>works</div>
+                    <div className={ currentPath.includes("Works") ? ` text-gray-400 ` : ` text-gray-900`}>all work</div>
                 </Link>
                 </div>
 
