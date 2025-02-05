@@ -14,7 +14,8 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
           {images.map((imgurl, index) => (
               <div key={ index }>
 {<img 
-  loading="lazy" 
+  loading="lazy"
+  referrerPolicy="no-referrer"
   className={currentImage === index ? 
     "opacity-100 block transition-opacity duration-500 w-[100vw] md:w-[60vw]  object-contain cursor-zoom-in" 
     : "opacity-0 absolute w-[100vw] md:w-[60vw] h-0 object-contain pointer-events-none cursor-zoom-in"

@@ -1,11 +1,8 @@
 import Slick from '@/components/Slick';
 import '@/styles.scss'
-import { useParams } from 'react-router-dom';
-
 
   const ParseHtml = {
     replace: (node:any, setImageZoom:any) => {
-      const tags = useParams();
 
       if (node.type === 'text' && node.data.includes('[슬라이더입니다!]')) {
         let string = node.data;
@@ -14,11 +11,16 @@ import { useParams } from 'react-router-dom';
         const imagesCapMatch = string.match(imagesCapRegex);
         const imagesCapStr = imagesCapMatch ? imagesCapMatch[1] : '';
         const imagesCapArray = imagesCapStr.split('#$%^').map((cap: string) => cap.trim());
+        
+        const imagesUrlRegex = /images=<<<(.*?)>>>/;
+        const imagesUrlMatch = string.match(imagesUrlRegex);
+        const imagesUrlStr = imagesUrlMatch ? imagesUrlMatch[1] : '';
+        const imagesUrlArray = imagesUrlStr.split('#$%^').map((cap: string) => cap.trim());
         // console.log(imagesCapArray);
-        const realimagesArray = imagesCapArray.map((url: string) => {
-          return `/Posts/Works/${tags.id}/${url}`;
-        });
-        return <Slick images={realimagesArray} images_cap={imagesCapArray} />;
+        // const realimagesArray = imagesCapArray.map((url: string) => {
+        //   return `/Posts/Works/${tags.id}/${url}`;
+        // });
+        return <Slick images={imagesUrlArray} images_cap={imagesCapArray} />;
       }
 
       else if (node.type === 'text' && node.data.includes('[비디오입니다!]')) {
@@ -32,7 +34,7 @@ import { useParams } from 'react-router-dom';
 
       else if (node.type === 'tag' && node.name === 'img') {
         const imgsrc = node.attribs.src
-        return <img onClick={()=>{setImageZoom(imgsrc)}} src={imgsrc} className="w-[100vw] object-cover cursor-zoom-in" ></img>
+        return <img loading="lazy" onClick={()=>{setImageZoom(imgsrc)}} src={imgsrc} referrerPolicy="no-referrer" className="w-[100vw] object-cover cursor-zoom-in" ></img>
 
       }
     }

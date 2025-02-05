@@ -8,8 +8,7 @@ import H3 from '@/assets/icons/H3.png'
 import Bold from '@/assets/icons/Bold.png'
 import Italic from '@/assets/icons/Italic.png'
 import Quote from '@/assets/icons/Quote.png'
-import AddPhoto from '@/assets/icons/AddPhoto.png'
-import AddSlider from '@/assets/icons/AddSlider.png'
+// import AddSlider from '@/assets/icons/AddSlider.png'
 import AddVideo from '@/assets/icons/AddVideo.png'
 import Clear from '@/assets/icons/Clear.png'
 import AlignCenter from '@/assets/icons/AlignCenter.png'
@@ -22,16 +21,18 @@ import Redo from '@/assets/icons/Redo.png'
 import Horizontal from '@/assets/icons/Horizontal.png'
 import Gif from '@/assets/icons/gif.png'
 import { tiptapMainText } from '@/atoms/TiptapAtom'
-import Resizer from "react-image-file-resizer";
+// import Resizer from "react-image-file-resizer";
+import AddPostModal from '@/mantine/AddPostModal'
+import AddSliderModal from '@/mantine/AddSliderModal'
 
 import { useEffect } from 'react'
 import { useRecoilState } from 'recoil'
-import { GitFileBlock } from '@/atoms/ModalAtom';
+// import { GitFileBlock } from '@/atoms/ModalAtom';
 
 const MenuBar = (props: any) => {
     const { editor } = useCurrentEditor()
     const [  , setMainText] = useRecoilState(tiptapMainText);
-    const [, setFileBlock] = useRecoilState(GitFileBlock);
+    // const [, setFileBlock] = useRecoilState(GitFileBlock);
 
   
     if (!editor) {
@@ -44,37 +45,37 @@ const MenuBar = (props: any) => {
       setMainText(editor.getHTML());     
     }, [props.PreviewSwitch]);
   
-    const resizeFile = (file: File): Promise<File>  =>
-        new Promise((res) => {
-          Resizer.imageFileResizer(
-            file, // target file
-            2500, // maxWidth
-            2500, // maxHeight
-            "JPEG", // compressFormat : Can be either JPEG, PNG or WEBP.
-            100, // quality : 0 and 100. Used for the JPEG compression
-            0, // rotation
-            (uri) => res(uri as File), // responseUriFunc
-            "file" // outputType : Can be either base64, blob or file.(Default type is base64)	
-          );
-        }
-      );
+    // const resizeFile = (file: File): Promise<File>  =>
+    //     new Promise((res) => {
+    //       Resizer.imageFileResizer(
+    //         file, // target file
+    //         2500, // maxWidth
+    //         2500, // maxHeight
+    //         "JPEG", // compressFormat : Can be either JPEG, PNG or WEBP.
+    //         100, // quality : 0 and 100. Used for the JPEG compression
+    //         0, // rotation
+    //         (uri) => res(uri as File), // responseUriFunc
+    //         "file" // outputType : Can be either base64, blob or file.(Default type is base64)	
+    //       );
+    //     }
+    //   );
 
-    const handleUploadPhoto = async (files: FileList | null) => {
-      if (!files) {
-        return;
-      }
+    // const handleUploadPhoto = async (files: FileList | null) => {
+    //   if (!files) {
+    //     return;
+    //   }
 
-      const file = await resizeFile(files[0]);
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = () => {
-          const imageData = reader.result as string; // Cast the result to string
-          editor.commands.setImage({ src: imageData }); // 이미지 삽입
-          editor.commands.insertContent(`<div>${file.name}</div>`); // file이름
-        };
-        reader.readAsDataURL(file); // 파일을 base64로 변환
-      }
-    };
+    //   const file = await resizeFile(files[0]);
+    //   if (file) {
+    //     const reader = new FileReader();
+    //     reader.onload = () => {
+    //       const imageData = reader.result as string; // Cast the result to string
+    //       editor.commands.setImage({ src: imageData }); // 이미지 삽입
+    //       editor.commands.insertContent(`<div>${file.name}</div>`); // file이름
+    //     };
+    //     reader.readAsDataURL(file); // 파일을 base64로 변환
+    //   }
+    // };
 
     const handleUploadGif = async (files: FileList | null) => {
       if (!files) {
@@ -92,43 +93,43 @@ const MenuBar = (props: any) => {
       }
     };
   
-    const handleUploadSlick = async (files: FileList | null) => {
-      if (!files) {
-        return;
-      }
+  //   const handleUploadSlick = async (files: FileList | null) => {
+  //     if (!files) {
+  //       return;
+  //     }
       
-      const resizedFiles: File [] = [];
-      setFileBlock(true);
-      for (let i = 0; i < files.length; i++) {
-        const file = await resizeFile(files[i]);
-        if (file) {
-          resizedFiles.push(file);
-        }
-        // await new Promise(resolve => setTimeout(resolve, 1000));
-      }
-      setFileBlock(false);
-      const NameArray = Array.from(resizedFiles).map(file => file.name);
-      const BlobImageArray = Array.from(resizedFiles).map(file => URL.createObjectURL(file));
+  //     const resizedFiles: File [] = [];
+  //     setFileBlock(true);
+  //     for (let i = 0; i < files.length; i++) {
+  //       const file = await resizeFile(files[i]);
+  //       if (file) {
+  //         resizedFiles.push(file);
+  //       }
+  //       // await new Promise(resolve => setTimeout(resolve, 1000));
+  //     }
+  //     setFileBlock(false);
+  //     const NameArray = Array.from(resizedFiles).map(file => file.name);
+  //     const BlobImageArray = Array.from(resizedFiles).map(file => URL.createObjectURL(file));
 
-    const base64ImageArray = resizedFiles.map(file => {
-        return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
-          const reader = new FileReader();
-          reader.readAsDataURL(file);
-          reader.onload = () => resolve(reader.result);
-          reader.onerror = error => reject(error);
-        });
-      });
-      const Resultbase64ImageArray = await Promise.all(base64ImageArray);
-      props.settiptapPostSliderStack([...props.tiptapPostSliderStack, {
-        blobUrl: BlobImageArray,
-        base64: Resultbase64ImageArray,
-        ImageName: NameArray
-      }]);
-      const NameStr = NameArray.join('#$%^');
-      const ImageStr = BlobImageArray.join('#$%^');
+  //   const base64ImageArray = resizedFiles.map(file => {
+  //       return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+  //         const reader = new FileReader();
+  //         reader.readAsDataURL(file);
+  //         reader.onload = () => resolve(reader.result);
+  //         reader.onerror = error => reject(error);
+  //       });
+  //     });
+  //     const Resultbase64ImageArray = await Promise.all(base64ImageArray);
+  //     props.settiptapPostSliderStack([...props.tiptapPostSliderStack, {
+  //       blobUrl: BlobImageArray,
+  //       base64: Resultbase64ImageArray,
+  //       ImageName: NameArray
+  //     }]);
+  //     const NameStr = NameArray.join('#$%^');
+  //     const ImageStr = BlobImageArray.join('#$%^');
       
-      editor.commands.insertContent(`------\n[슬라이더입니다!]\nimages=<<<${ImageStr}>>> images_cap=<<<${NameStr}>>>\n[!슬라이더입니다]\n------`);
-  };
+  //     editor.commands.insertContent(`------\n[슬라이더입니다!]\nimages=<<<${ImageStr}>>> images_cap=<<<${NameStr}>>>\n[!슬라이더입니다]\n------`);
+  // };
   
   const handleButtonClick = () => {
     const url = prompt('Please enter URL:');
@@ -276,7 +277,7 @@ const MenuBar = (props: any) => {
           <img src={Redo} className="w-5 h-5"/>
         </button>
   
-        <button
+        {/* <button
         type="button"
         className="relative cursor-pointer border border-black p-[10px] hover:bg-gray-200  "
       >
@@ -290,9 +291,15 @@ const MenuBar = (props: any) => {
         />
         <img src={AddPhoto} className="w-5 h-5"/>
   
-      </button>
-  
-      <button
+      </button> */}
+      <AddPostModal editor={editor}> 
+        
+      </AddPostModal>
+      
+          {/* upload photo */}
+
+
+      {/* <button
         type="button"
         className={props.GenreType !== "post" ? " hidden relative cursor-pointer border border-black p-[10px] hover:bg-gray-200" : "relative cursor-pointer border border-black p-[10px] hover:bg-gray-200"}
       >
@@ -306,7 +313,10 @@ const MenuBar = (props: any) => {
           multiple
         />
         <img src={AddSlider} className={"w-5 h-5"}/>
-      </button>
+      </button> */}
+    
+      <AddSliderModal editor={editor}>
+      </AddSliderModal>
   
       <button
         type="button"

@@ -6,7 +6,9 @@ import PostPage from './pages/PostPage'
 import ErrPage from './pages/ErrPage'
 import Editor from './pages/Editor'
 import HomePage from './pages/HomePage'
+import '@mantine/core/styles.css';
 
+import { MantineProvider } from '@mantine/core';
 
 import {
   createBrowserRouter,
@@ -91,7 +93,10 @@ function App() {
     <>
       <RecoilRoot>
         <ModalProvider>
+          <MantineProvider>
           <RouterProvider router={router}/>
+
+          </MantineProvider>
         </ModalProvider>    
       </RecoilRoot>
         </>
