@@ -8,7 +8,6 @@ import { tiptapMainText } from '@/atoms/TiptapAtom';
 import { createFunc, updateFunc } from '@/components/Git/GitFunc';
 import { FileRequire, GitFileBlock } from '@/atoms/ModalAtom';
 import SetTitleImage from '@/components/TipTap/SetTitleImage';
-import axios from 'axios';
 
 export const UploadButton = (props:any) => {
   const [ MainText ] = useRecoilState(tiptapMainText);
@@ -24,86 +23,86 @@ export const UploadButton = (props:any) => {
       //main.html 업로드
       await createFunc(octokit, `Posts/Works/${hashdate}/main.html`, props.tiptapeditor.getHTML(), "main html generated");
       //console.log("create main.html put request:" + result.status);
-      await createFunc(octokit, `Posts/Works/${hashdate}/titlename.txt`, `${props.tiptapPostTitle}\n${props.tiptapPostDate}`, "titlename.txt generated");
+      await createFunc(octokit, `Posts/Works/${hashdate}/titlename.txt`, `${props.tiptapPostTitle}\n${props.tiptapPostDate}\n${props.tiptapPostTitleImage.blobUrl}`, "titlename.txt generated");
       //console.log("create title.txt put request:" + titlename.status);
 
       //title 이미지 업로드
-      if (props.tiptapPostTitleImage) {
-        let base64encoded = props.tiptapPostTitleImage.base64;
-        const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/title.JPEG`;
-        //console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
-        //console.log('Uploading image:', 'title.jpg');
-        if (base64encoded.startsWith('data:image/jpeg;base64,')) {
-          base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
-        }
-        try {
-          const response = await axios.put(
-            apiURL,
-            {
-              message: "Add image",
-              content: base64encoded,
-              branch: "main",
-            },
-            {
-              headers: {
-                Authorization: `token ${import.meta.env.VITE_APP_TOKEN}`,
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          console.log("Image uploaded successfully:", response.data.content.name);
-        } catch (e) {
-          console.error("Error uploading image:", e);
-        }
-        // 각 업로드 요청 사이에 5초 지연
-        await new Promise(resolve => setTimeout(resolve, 5000));
-      }
+      // if (props.tiptapPostTitleImage) {
+      //   let base64encoded = props.tiptapPostTitleImage.base64;
+      //   const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/title.JPEG`;
+      //   //console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
+      //   //console.log('Uploading image:', 'title.jpg');
+      //   if (base64encoded.startsWith('data:image/jpeg;base64,')) {
+      //     base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
+      //   }
+      //   try {
+      //     const response = await axios.put(
+      //       apiURL,
+      //       {
+      //         message: "Add image",
+      //         content: base64encoded,
+      //         branch: "main",
+      //       },
+      //       {
+      //         headers: {
+      //           Authorization: `token ${import.meta.env.VITE_APP_TOKEN}`,
+      //           "Content-Type": "application/json",
+      //         },
+      //       }
+      //     );
+      //     console.log("Image uploaded successfully:", response.data.content.name);
+      //   } catch (e) {
+      //     console.error("Error uploading image:", e);
+      //   }
+      //   // 각 업로드 요청 사이에 5초 지연
+      //   await new Promise(resolve => setTimeout(resolve, 5000));
+      // }
 
       //이미지 업로드
-      if (props.tiptapPostSliderStack) {
-        for (let i = 0; i < props.tiptapPostSliderStack.length; i++) {
-          for (let j = 0; j < props.tiptapPostSliderStack[i].blobUrl.length; j++) {
-            let base64encoded = props.tiptapPostSliderStack[i].base64[j];
-            const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/${props.tiptapPostSliderStack[i].ImageName[j]}`;
-            //console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
-            //console.log('Uploading image:', props.tiptapPostSliderStack[i].ImageName[j]);
-            //console.log(props.tiptapPostSliderStack);
-            if (base64encoded.startsWith('data:image/jpeg;base64,')) {
-              base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
-            }
-            try {
-              const response = await axios.put(
-                apiURL,
-                {
-                  message: "Add image",
-                  content: base64encoded,
-                  branch: "main",
-                },
-                {
-                  headers: {
-                    Authorization: `token ${import.meta.env.VITE_APP_TOKEN}`,
-                    "Content-Type": "application/json",
-                  },
-                }
-              );
-              console.log("Image uploaded successfully:", response.data.content.name);
-            } catch (e) {
-              console.error("Error uploading image:", e);
-            }
-            // 각 업로드 요청 사이에 5초 지연
-            await new Promise(resolve => setTimeout(resolve, 5000));
-          }
-        }
-      }
+      // if (props.tiptapPostSliderStack) {
+      //   for (let i = 0; i < props.tiptapPostSliderStack.length; i++) {
+      //     for (let j = 0; j < props.tiptapPostSliderStack[i].blobUrl.length; j++) {
+      //       let base64encoded = props.tiptapPostSliderStack[i].base64[j];
+      //       const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/${props.tiptapPostSliderStack[i].ImageName[j]}`;
+      //       //console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
+      //       //console.log('Uploading image:', props.tiptapPostSliderStack[i].ImageName[j]);
+      //       //console.log(props.tiptapPostSliderStack);
+      //       if (base64encoded.startsWith('data:image/jpeg;base64,')) {
+      //         base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
+      //       }
+      //       try {
+      //         const response = await axios.put(
+      //           apiURL,
+      //           {
+      //             message: "Add image",
+      //             content: base64encoded,
+      //             branch: "main",
+      //           },
+      //           {
+      //             headers: {
+      //               Authorization: `token ${import.meta.env.VITE_APP_TOKEN}`,
+      //               "Content-Type": "application/json",
+      //             },
+      //           }
+      //         );
+      //         console.log("Image uploaded successfully:", response.data.content.name);
+      //       } catch (e) {
+      //         console.error("Error uploading image:", e);
+      //       }
+      //       // 각 업로드 요청 사이에 5초 지연
+      //       await new Promise(resolve => setTimeout(resolve, 5000));
+      //     }
+      //   }
+      // }
       //state에서 base64 이미지들 전부 업로드 
 
         const tmpPosts = await fetch('/Posts.json')
         .then(response => response.json()) 
         .then(data => {
           // posts 배열 추출.split('-')[0]
-          const posts: { title: string, year: string, hashdate: number }[] = data.posts;
+          const posts: { title: string, year: string, hashdate: number, titleimg:string }[] = data.posts;
             //console.log(posts);
-            const newPost = { title: props.tiptapPostTitle, year: props.tiptapPostDate, hashdate: hashdate };
+            const newPost = { title: props.tiptapPostTitle, year: props.tiptapPostDate, hashdate: hashdate, titleimg: props.tiptapPostTitleImage.blobUrl };
 
             let insertIndex = posts.length;
 
@@ -143,7 +142,7 @@ export const UploadButton = (props:any) => {
       if ( GenreType === "post" )
       {
         //console.log(props.tiptapPostTitleImage)
-        if ( props.tiptapPostTitle === '' || props.tiptapPostDate === '' || (props.tiptapPostTitleImage.base64 === '' && props.tiptapPostTitleImage.blobUrl === ''))
+        if ( props.tiptapPostTitle === '' || props.tiptapPostDate === '' || (props.tiptapPostTitleImage.blobUrl === ''))
         {
           setFileRequire(true);
           return;
@@ -227,7 +226,7 @@ export const UploadButton = (props:any) => {
                 if ( GenreType !== "post" )
                 {
                   props.settiptapPostDate('');
-                  props.settiptapPostTitleImage({ blobUrl: '', base64: '' });
+                  props.settiptapPostTitleImage({ blobUrl: ''});
                   props.settiptapPostTitle('');
                 }
               }

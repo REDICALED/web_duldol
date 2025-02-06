@@ -1,7 +1,7 @@
 import { useDisclosure } from '@mantine/hooks';
 import { Modal } from '@mantine/core';
-import AddPhoto from '@/assets/icons/AddPhoto.png'
 import { useState } from 'react';
+import Gif from '@/assets/icons/gif.png'
 
 export default function AddPostModal({ editor }: { editor: any }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -18,9 +18,8 @@ export default function AddPostModal({ editor }: { editor: any }) {
 
   return (
     <>
-      <Modal size={'xl'} opened={opened} onClose={close} title="Add Image!">
-         <div className='italic opacity-75'>구글 드라이브 내의 이미지를 공유, 링크가 있는 사용자들 모두 볼 수 있게 설정해주세용 (gif도 됩니다) </div>
-         <div className='italic opacity-75'> 뭔가 이상하고 꼬인거 같다면 초기화 누르고 해주세용 </div>
+      <Modal size={'xl'} opened={opened} onClose={close} title="Add GIF!">
+         <div className='italic opacity-75'>구글 드라이브 내의 이미지를 공유, 링크가 있는 사용자들 모두 볼 수 있게 설정해주세용 </div>
 
         <div className="p-10">
           <input
@@ -33,12 +32,6 @@ export default function AddPostModal({ editor }: { editor: any }) {
             parse_image_id(inputimageurl);
           }}>
             불러오기
-          </button>
-          <button type="button" className='mt-2 ml-6 border-2 border-black p-2' onClick={() => {
-            setPreviewUrl("");
-            setInputImageUrl("");
-          }}>
-            초기화
           </button>
         </div>
         {
@@ -68,7 +61,7 @@ export default function AddPostModal({ editor }: { editor: any }) {
         className="relative cursor-pointer border border-black p-[10px] hover:bg-gray-200  "
         onClick={open}>
 
-        <img src={AddPhoto} className="w-5 h-5"/>
+        <img src={Gif} className="w-5 h-5"/>
   
       </button>
     </>

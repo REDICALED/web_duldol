@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const WorksPage = () => {
 
-    const [titlelistState, settitlelistState] = useState<{title: string, year: string, hashdate: number}[]>([]);
+    const [titlelistState, settitlelistState] = useState<{title: string, year: string, hashdate: number, titleimg: string}[]>([]);
     useEffect(() => {
         GetImages();
     }
@@ -42,7 +42,7 @@ const WorksPage = () => {
                             />
                                 : <img
                                 loading='lazy'
-                                src={ `/Posts/Works/${item.hashdate}/title.JPEG`}
+                                src={item.titleimg}
                                 alt={`Work Image ${item.title}`}
                                 className=" peer px-[0.1vw] transition-all duration-500 hover:scale-105 object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px] "
                             />

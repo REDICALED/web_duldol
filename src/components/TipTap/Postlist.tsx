@@ -24,7 +24,6 @@ const Postlist = (props: any) => {
       ...post,
       selected: false
     }));
-    console.log(postsWithCheckbox)
     setPostList(postsWithCheckbox);
     
   }
@@ -140,7 +139,7 @@ const Postlist = (props: any) => {
           <label className='w-1/2' key={index} htmlFor={item.title}>
         <div  className=' bg-white hover:bg-gray-200 transition-all duration-300' key={index}>
           <div className=' place-items-center text-xxs flex border-black'>
-          { item.hashdate === 0 ?  <img className=' h-10 w-10' src={`/images/Works/${item.title}/title.jpg`} /> : <img className=' h-10 w-10' src={`/Posts/Works/${item.hashdate}/title.JPEG`} />}
+          { item.hashdate === 0 ?  <img className=' h-10 w-10' src={`/images/Works/${item.title}/title.jpg`} /> : <img className=' h-10 w-10' src={item.titleimg} />}
             {item.title } /  
              {item.year}
              <input onChange={()=>{PostList[index].selected = !PostList[index].selected;}} className=" ml-1 peer w-3 h-3" type="checkbox" id={item.title} />

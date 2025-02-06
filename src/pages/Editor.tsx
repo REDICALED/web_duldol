@@ -16,9 +16,8 @@ import Postlist from '@/components/TipTap/Postlist'
 const Editor = () => {
   const [tiptapeditor, settiptapeditor] = useState(null);
   const [tiptapPostDate, settiptapPostDate] = useState('');
-  const [tiptapPostTitleImage, settiptapPostTitleImage] = useState<{ blobUrl: string; base64: string; }>({
-    blobUrl: '',
-    base64: '',
+  const [tiptapPostTitleImage, settiptapPostTitleImage] = useState<{ blobUrl: string; }>({
+    blobUrl: ''
   });
   const [tiptapPostSliderStack, settiptapPostSliderStack] = useState<{ blobUrl: string[]; base64: string[]; ImageName: string[]; }[]>([]);
   const [tiptapPostTitle, settiptapPostTitle] = useState('');

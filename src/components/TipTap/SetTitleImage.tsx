@@ -10,7 +10,7 @@ import Datepicker from "tailwind-datepicker-react"
  const SetTitleImage
   = (props:any) => {
     const [  , ] = useRecoilState(PostGenreType);
-    const [ titlefile , setTitleFile] = useState<File | null>(null);
+    const [ titlefile , setTitleFile] = useState<string>("");
     const [show, setShow] = useState < boolean > (false);
 	const [, setSelectedDate] = useState < Date | null > (null);
     // const GetContents = async () => {
@@ -36,16 +36,17 @@ import Datepicker from "tailwind-datepicker-react"
 	const handleClose = (state: boolean) => {
 		setShow(state)
 	}
-
+    const parse_image_id = (url: string) => {
+        const match = url.match(/\/d\/(.*?)\//);
+        const fileId = match ? match[1] : '';
+        return `https://lh3.googleusercontent.com/d/${fileId}`;
+      }
+    
     return (
         <>
-      <div className=" border h-[10vh] border-dul-gray" >
-        {titlefile !== null && <div className=" relative flex h-full flex-col items-center  justify-center overflow-hidden rounded-2xl bg-beige">
-        <label 
-            className="flex h-full w-full cursor-pointer flex-col items-center justify-center">
-        <img className=" h-full" src={URL.createObjectURL(titlefile)} alt="title"/>
-            <input onChange={async (event)=>{
-            if (event.target.files !== null){
+      <div className=" mb-2" >
+        <div className="relative h-full overflow-hidden">
+            {/* <input onChange={async (event)=>{if (event.target.files !== null){
                 const file = await event.target.files[0];
 
                 // Blob URL 가져오기
@@ -54,35 +55,37 @@ import Datepicker from "tailwind-datepicker-react"
                 const reader = new FileReader();
                 reader.readAsDataURL(file)
                 reader.onload = () => {
-                    props.settiptapPostTitleImage({ blobUrl:fileBlob, base64:reader.result});
+                    props.settiptapPostTitleImage({ blobUrl:fileBlob});
                 }
                 // setState 또는 다른 함수를 사용하여 상태 업데이트
                 await setTitleFile(file);
                 }
-            }} className='hidden'  type="file" accept="image/*" />
-        </label>
-        </div> }  
-        {titlefile === null && <div className="relative flex h-full flex-col items-center  justify-center overflow-hidden rounded-2xl bg-beige">
-        <label 
-            className="flex h-full w-full cursor-pointer flex-col items-center justify-center">
-            <span>타이틀 사진 업로드</span>
-            <input onChange={async (event)=>{if (event.target.files !== null){
-                const file = await event.target.files[0];
+            }} className='hidden'  type="text" accept="image/*" /> */}
+            <div>
+                타이틀 이미지
+            </div>
+            <div className='flex'>
+            <input 
+            onChange={(event)=>{ setTitleFile(event.target.value); }}
+            placeholder='타이틀 이미지 링크' className=' pl-2 border-[1px] border-dul-gray w-1/2 '>
+            </input>
+            <button
+            onClick={()=>{
+                console.log(props.tiptapPostTitleImage)
+                props.settiptapPostTitleImage({ blobUrl:parse_image_id(titlefile)});
+            }
+            }
+            className='ml-2 border-2 border-dul-gray p-1'>
+                등록
+            </button>
 
-                // Blob URL 가져오기
-                const fileBlob = URL.createObjectURL(file);
-                // Base64 데이터 가져오기
-                const reader = new FileReader();
-                reader.readAsDataURL(file)
-                reader.onload = () => {
-                    props.settiptapPostTitleImage({ blobUrl:fileBlob, base64:reader.result});
-                }
-                // setState 또는 다른 함수를 사용하여 상태 업데이트
-                await setTitleFile(file);
-                }
-            }} className='hidden'  type="file" accept="image/*" />
-        </label>
-        </div> }
+            
+            </div>
+
+            {props.tiptapPostTitleImage.blobUrl && <div className=' my-2'>
+                <img src={props.tiptapPostTitleImage.blobUrl}></img>
+            </div>}
+        </div>
     </div>
     <input onChange={(event)=>{ props.settiptapPostTitle(event.target.value)}} className='mt-2' type='text' placeholder='제목' />
     <Datepicker classNames=' pt-2' onChange={handleChange} show={show} setShow={handleClose} />

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 const HomePage = () => {
-    const [titlelistState, settitlelistState] = useState<{title: string, year: string, hashdate: number}[]>([]);
+    const [titlelistState, settitlelistState] = useState<{title: string, year: string, hashdate: number, titleimg:string}[]>([]);
     const getmainlist =  async () => {
         const titleresult = await fetch('/Posts.json')
         .then(response => response.json()) 
@@ -41,7 +41,7 @@ const HomePage = () => {
         />
             : <img
             loading='lazy'
-            src={ `/Posts/Works/${item.hashdate}/title.JPEG`}
+            src={`${item.titleimg}`}
             alt={`Work Image ${item.title}`}
             className=" peer transition-all duration-500 hover:scale-105 object-cover md:w-[240px] md:h-[144px] w-[100px] h-[70px] "
         />

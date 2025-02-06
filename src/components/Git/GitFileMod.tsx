@@ -139,7 +139,7 @@ export const resizeFile = (file: File): Promise<File>  =>
               jpegFileNames.push(fileName.trim());  // 각 파일 이름을 배열에 추가 (trim()으로 앞뒤 공백 제거)
             });
           }
-          const array: string[] = ["title.JPEG", "main.html", "titlename.txt"].concat(jpegFileNames);    
+          const array: string[] = ["main.html", "titlename.txt"].concat(jpegFileNames);    
           const cnt = array.length;
 
           for (let j = 0; j < cnt; j++){
