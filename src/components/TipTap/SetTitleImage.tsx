@@ -83,7 +83,7 @@ import Datepicker from "tailwind-datepicker-react"
             </div>
 
             {props.tiptapPostTitleImage.blobUrl && <div className=' my-2'>
-                <img src={props.tiptapPostTitleImage.blobUrl}></img>
+                <img className='w-[200px]' src={props.tiptapPostTitleImage.blobUrl}></img>
             </div>}
         </div>
     </div>
