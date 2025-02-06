@@ -14,117 +14,54 @@ export const UploadButton = (props:any) => {
   const [ GenreType , ] = useRecoilState(PostGenreType);
     const [ ,SetGitFileBlock ] = useRecoilState(GitFileBlock);
     const [ , setFileRequire] = useRecoilState(FileRequire);
-
+  
+    const parseDate = (dateStr:string) =>{
+      const [year, month, day] = dateStr.split('-').map(Number);
+      return year * 10000 + month * 100 + day; // YYYYMMDD 형태로 변환
+  }
+  
     const getBlob = async () => {
       const octokit = new Octokit({
         auth: import.meta.env.VITE_APP_TOKEN,
       });
       const hashdate = Date.now();
+      console.log(hashdate);
       //main.html 업로드
       await createFunc(octokit, `Posts/Works/${hashdate}/main.html`, props.tiptapeditor.getHTML(), "main html generated");
       //console.log("create main.html put request:" + result.status);
       await createFunc(octokit, `Posts/Works/${hashdate}/titlename.txt`, `${props.tiptapPostTitle}\n${props.tiptapPostDate}\n${props.tiptapPostTitleImage.blobUrl}`, "titlename.txt generated");
-      //console.log("create title.txt put request:" + titlename.status);
-
-      //title 이미지 업로드
-      // if (props.tiptapPostTitleImage) {
-      //   let base64encoded = props.tiptapPostTitleImage.base64;
-      //   const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/title.JPEG`;
-      //   //console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
-      //   //console.log('Uploading image:', 'title.jpg');
-      //   if (base64encoded.startsWith('data:image/jpeg;base64,')) {
-      //     base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
-      //   }
-      //   try {
-      //     const response = await axios.put(
-      //       apiURL,
-      //       {
-      //         message: "Add image",
-      //         content: base64encoded,
-      //         branch: "main",
-      //       },
-      //       {
-      //         headers: {
-      //           Authorization: `token ${import.meta.env.VITE_APP_TOKEN}`,
-      //           "Content-Type": "application/json",
-      //         },
-      //       }
-      //     );
-      //     console.log("Image uploaded successfully:", response.data.content.name);
-      //   } catch (e) {
-      //     console.error("Error uploading image:", e);
-      //   }
-      //   // 각 업로드 요청 사이에 5초 지연
-      //   await new Promise(resolve => setTimeout(resolve, 5000));
-      // }
-
-      //이미지 업로드
-      // if (props.tiptapPostSliderStack) {
-      //   for (let i = 0; i < props.tiptapPostSliderStack.length; i++) {
-      //     for (let j = 0; j < props.tiptapPostSliderStack[i].blobUrl.length; j++) {
-      //       let base64encoded = props.tiptapPostSliderStack[i].base64[j];
-      //       const apiURL = `https://api.github.com/repos/${import.meta.env.VITE_APP_OWNER}/${import.meta.env.VITE_APP_REPO}/contents/public/Posts/Works/${hashdate}/${props.tiptapPostSliderStack[i].ImageName[j]}`;
-      //       //console.log('%c ', `font-size:1px; padding:100px; background:url(${base64encoded}) no-repeat; background-size:contain;`);
-      //       //console.log('Uploading image:', props.tiptapPostSliderStack[i].ImageName[j]);
-      //       //console.log(props.tiptapPostSliderStack);
-      //       if (base64encoded.startsWith('data:image/jpeg;base64,')) {
-      //         base64encoded = base64encoded.replace('data:image/jpeg;base64,', '');
-      //       }
-      //       try {
-      //         const response = await axios.put(
-      //           apiURL,
-      //           {
-      //             message: "Add image",
-      //             content: base64encoded,
-      //             branch: "main",
-      //           },
-      //           {
-      //             headers: {
-      //               Authorization: `token ${import.meta.env.VITE_APP_TOKEN}`,
-      //               "Content-Type": "application/json",
-      //             },
-      //           }
-      //         );
-      //         console.log("Image uploaded successfully:", response.data.content.name);
-      //       } catch (e) {
-      //         console.error("Error uploading image:", e);
-      //       }
-      //       // 각 업로드 요청 사이에 5초 지연
-      //       await new Promise(resolve => setTimeout(resolve, 5000));
-      //     }
-      //   }
-      // }
-      //state에서 base64 이미지들 전부 업로드 
-
+      
         const tmpPosts = await fetch('/Posts.json')
         .then(response => response.json()) 
         .then(data => {
           // posts 배열 추출.split('-')[0]
-          const posts: { title: string, year: string, hashdate: number, titleimg:string }[] = data.posts;
+          let posts: { title: string, year: string, hashdate: number, titleimg:string }[] = data.posts;
             //console.log(posts);
             const newPost = { title: props.tiptapPostTitle, year: props.tiptapPostDate, hashdate: hashdate, titleimg: props.tiptapPostTitleImage.blobUrl };
 
             let insertIndex = posts.length;
+            const newPostDate = parseDate(newPost.year);
 
-            // 삽입할 위치를 찾기
             for (let i = 0; i < posts.length; i++) {
-                if ((newPost.year.split('-')[0] >= posts[i].year.split('-')[0])) {
-                  if ((newPost.year.split('-')[0] > posts[i].year.split('-')[0])) {
-                    insertIndex = i;
-                    break;
+              const postDate = parseDate(posts[i].year);
+          
+              if (newPostDate >= postDate) { // 더 최신 날짜일 경우
+                  insertIndex = i;
+                  break;
               }
-                  else if ((newPost.year.split('-')[1] < posts[i].year.split('-')[1]) || ((newPost.year.split('-')[1] === posts[i].year.split('-')[1]) 
-                  && (newPost.year.split('-')[2] <= posts[i].year.split('-')[2])) ) {
-                      insertIndex = i;
-                      break;
-                }
-                }
-            }
+          }
     
             // 찾은 위치에 새로운 포스트 삽입
-            posts.splice(insertIndex, 0, newPost);
-            const tmpPosts = `{ "posts": ` + JSON.stringify(posts) + ` }`;
-            console.log(tmpPosts);
+            console.log(posts)
+            posts = [
+              ...posts.slice(0, insertIndex),  // 삽입할 위치 이전 요소들
+              newPost,                         // 새로운 요소 삽입
+              ...posts.slice(insertIndex)      // 삽입할 위치 이후 요소들
+            ];
+            const tmpPosts = JSON.stringify({ posts })
+
+            console.log(tmpPosts);      
+            console.log(newPost);
             return tmpPosts;
           })
         .catch(error => console.error('Error fetching JSON:', error));
