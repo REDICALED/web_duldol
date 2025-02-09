@@ -119,7 +119,7 @@ export const resizeFile = (file: File): Promise<File>  =>
       if (modtitle[i].hashdate === 0) {
         const titleresult = await getJsonFunc(octokit, `Posts.json`);
 
-        titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
+        titleresult.posts = titleresult.posts.filter((post: { title: string, hashdate: number  }) => post.title !== modtitle[i].title && post.hashdate !== modtitle[i].hashdate);
         updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
         return ;
       }
@@ -170,7 +170,7 @@ export const resizeFile = (file: File): Promise<File>  =>
         setFileBlock(false);
         }
         const titleresult = await getJsonFunc(octokit, `Posts.json`);
-        titleresult.posts = titleresult.posts.filter((post: { title: string; }) => post.title !== modtitle[i].title);
+        titleresult.posts = titleresult.posts.filter((post: { hashdate: number; }) => post.hashdate !== modtitle[i].hashdate);
         updateFunc(octokit, `Posts.json`, JSON.stringify(titleresult), `Posts.json ${modtitle[i].title} deleted`);
         setFileBlock(false);
       }

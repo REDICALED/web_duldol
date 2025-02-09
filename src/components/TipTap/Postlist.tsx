@@ -75,8 +75,7 @@ const Postlist = (props: any) => {
           
           const sliderPattern = /------ \[슬라이더입니다!\].*?\[!슬라이더입니다\] ------/gs;
           returnString = returnString.replace(sliderPattern, '');
-          const imgTagPattern = /<img[^>]*>/g;
-          returnString = returnString.replace(imgTagPattern, '');
+
           // Set the content in the editor
           await props.tiptapeditor.commands.setContent(returnString);
 
