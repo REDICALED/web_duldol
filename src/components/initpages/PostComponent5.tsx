@@ -37,15 +37,7 @@ const PostComponent5 = () => {
             </div>
 
             <br />
-            <span className=" justify-start flex text-left w-full ">
-            예술분야의 신진-미숙련-여성노동자로서 작가 본인이 경험한 사회적 정동을 시적 언어와 이미지로 표현한다.
-            <br />
-            불안과 무력 그리고 투쟁 속 열렬한 의지의 춤을 ‘비둘기 천사’, ’애벌레 나비’ 등의 자의적 표상을 통해 나타낸다.
-            <br />
-            익숙한 기승전결의 보편적 서사 법칙에서 벗어나는 시적 내러티브 형식은 자신의 집을 다시 찾아 나서는 여성 청년, 벗어나는 개인의 모습을 은유한다.
-            <br />
-            <br />
-            </span>
+            
 
             <span className=" justify-end flex text-right w-full ">
             걸어 찾아 물어 걸어 걸어
