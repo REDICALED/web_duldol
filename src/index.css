@@ -1,14 +1,37 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Nanum+Gothic&display=swap');
-
-body {
-    font-family: "Nanum Gothic", sans-serif;
-  }
-
-  .text-xxs {
-    font-size: 0.6rem/* 12px */;
-    line-height: 1rem/* 16px */;
-  }
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: "DXtaja";
+  src: url("/fonts/DXtajaLight.ttf") format("truetype");
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DXtaja";
+  src: url("/fonts/DXtajaMedium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DXtaja";
+  src: url("/fonts/DXtajaBold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+body {
+  font-family: "DXtaja", sans-serif;
+  font-weight: 500;
+}
+
+.text-xxs {
+  font-size: 0.6rem/* 12px */;
+  line-height: 1rem/* 16px */;
+}

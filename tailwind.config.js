@@ -11,6 +11,7 @@ module.exports = {
         'dul-white': '#afb2b4',
       },
       fontFamily: {
+        dxtaja: ['DXtaja', 'sans-serif'],
         dongle: ['Dongle', 'sans-serif'], // Dongle 폰트
       },
     },
