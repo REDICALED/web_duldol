@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR&family=Nanum+Gothic&display=swap');
+
 @font-face {
   font-family: "DXtaja";
   src: url("/fonts/DXtajaLight.ttf") format("truetype");
@@ -27,7 +29,7 @@
 }
 
 body {
-  font-family: "DXtaja", sans-serif;
+  font-family: "DXtaja", "Nanum Gothic", sans-serif;
   font-weight: 500;
 }
 
