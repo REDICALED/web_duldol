@@ -1,4 +1,18 @@
-import { createHash } from 'node:crypto';
+import { createHash, randomUUID } from 'node:crypto';
+
+export const UUID_PATTERN = /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/i;
+export const MEDIA_KEY_PATTERN = /^images\/[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}\.[a-z]+$/i;
+
+export function mediaIdentityKey(sourceIdentity, visibility) {
+  return JSON.stringify([visibility, sourceIdentity]);
+}
+
+export function getMediaIdentity(identities, sourceIdentity, visibility, createId = randomUUID) {
+  const key = mediaIdentityKey(sourceIdentity, visibility);
+  if (!UUID_PATTERN.test(identities[key] || '')) identities[key] = createId();
+  if (!UUID_PATTERN.test(identities[key])) throw new Error('Media identity must be a UUID');
+  return identities[key];
+}
 
 export const LEGACY_POSTS = [
   '감정의 정반합', '단단한 여자애의 소망', '돌계란(stonegg)', '모양들(shapes)',
@@ -88,6 +102,20 @@ export function insertSql(table, row, conflictKey, preserveEdits = false) {
   return `INSERT INTO ${table} (${columns.join(',')}) VALUES (${columns.map(column => sqlLiteral(row[column])).join(',')})`
     + ` ON CONFLICT(${conflictKey}) DO UPDATE SET ${assignments}`
     + (preserveEdits ? ` WHERE ${table}.version=1` : '') + ';';
+}
+
+export function mediaLinksSql(ownerType, ownerId, mediaIds) {
+  const post = ownerType === 'post';
+  if (!post && ownerType !== 'page') throw new Error('Unknown media owner type');
+  const table = post ? 'post_media' : 'page_media';
+  const column = post ? 'post_id' : 'page_slug';
+  const ownerTable = post ? 'posts' : 'pages';
+  const ownerKey = post ? 'id' : 'slug';
+  const eligible = `EXISTS (SELECT 1 FROM ${ownerTable} WHERE ${ownerKey}=${sqlLiteral(ownerId)} AND version=1)`;
+  return [
+    `DELETE FROM ${table} WHERE ${column}=${sqlLiteral(ownerId)} AND ${eligible};`,
+    ...[...new Set(mediaIds)].map(id => `INSERT INTO ${table} (${column},media_id) SELECT ${sqlLiteral(ownerId)},${sqlLiteral(id)} WHERE ${eligible} ON CONFLICT(${column},media_id) DO NOTHING;`),
+  ];
 }
 
 export function inspectHtml(html) {

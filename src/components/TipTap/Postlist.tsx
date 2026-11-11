@@ -24,7 +24,7 @@ export default function Postlist(props: any) {
           props.setEditingId(current.id); props.setVersion(current.version);
           props.settiptapPostTitle(current.title); props.settiptapPostDate(current.work_date);
           props.settiptapPostTitleImage({ blobUrl: current.cover_url || current.titleimg });
-          props.setCoverAssetKey(current.cover_asset_key ?? null); props.setStatus(current.status);
+          props.setCoverMediaId(current.cover_media_id ?? null); props.setStatus(current.status);
           props.setIsListed(Boolean(current.is_listed)); props.setSortOrder(current.sort_order);
           props.setFeaturedOrder(current.featured_order ?? null); props.loadHtml(current.content_html);
         })}>편집</button>

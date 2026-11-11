@@ -147,7 +147,7 @@ export async function removeAsset(env: Env, id: string) {
   const asset = await findAsset(env, id);
   // Check imported HTML as well as normalized references, so migration can be
   // resumed safely before its reference backfill is complete.
-  const result = await env.DB.prepare(`DELETE FROM media WHERE id=? AND NOT EXISTS (SELECT 1 FROM media_references WHERE media_id=?) AND NOT EXISTS (SELECT 1 FROM posts WHERE cover_asset_key=? OR instr(content_html,?)>0 OR instr(coalesce(cover_url,''),?)>0) AND NOT EXISTS (SELECT 1 FROM pages WHERE instr(content_html,?)>0)`).bind(id, id, asset.object_key, asset.object_key, asset.object_key, asset.object_key).run();
+  const result = await env.DB.prepare(`DELETE FROM media WHERE id=? AND NOT EXISTS (SELECT 1 FROM post_media WHERE media_id=?) AND NOT EXISTS (SELECT 1 FROM page_media WHERE media_id=?) AND NOT EXISTS (SELECT 1 FROM posts WHERE cover_media_id=? OR instr(content_html,?)>0 OR instr(coalesce(cover_url,''),?)>0) AND NOT EXISTS (SELECT 1 FROM pages WHERE instr(content_html,?)>0)`).bind(id, id, id, id, asset.object_key, asset.object_key, asset.object_key).run();
   if (!result.meta.changes) throw new ApiError(409, 'asset_in_use', '문서에서 사용 중인 미디어는 삭제할 수 없습니다.');
   await env.MEDIA.delete([asset.object_key, ...(asset.upload_key ? [asset.upload_key] : [])]);
 }

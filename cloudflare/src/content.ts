@@ -20,8 +20,8 @@ export function mediaUrl(media: Pick<MediaRow, 'object_key' | 'visibility'>): st
 }
 
 export function presentPost(row: PostRow) {
-  const cover = row.cover_asset_key ? `/api/media/${row.cover_asset_key}` : row.cover_url || '';
-  const { revision_id: _revision, ...post } = row;
+  const cover = row.cover_object_key ? `/api/media/${row.cover_object_key}` : row.cover_url || '';
+  const { revision_id: _revision, cover_object_key: _coverKey, ...post } = row;
   return { ...post, year: row.work_date, hashdate: /^\d+$/.test(row.id) ? Number(row.id) : 0, titleimg: cover, cover_url: cover };
 }
 
@@ -31,7 +31,7 @@ export function presentPage(row: PageRow) {
 }
 
 export async function findPost(env: Env, key: string, publicOnly = false): Promise<PostRow> {
-  const row = await env.DB.prepare(`SELECT * FROM posts WHERE (id = ? OR slug = ?) ${publicOnly ? "AND status = 'published'" : ''} ORDER BY CASE WHEN id = ? THEN 0 ELSE 1 END LIMIT 1`).bind(key, key, key).first<PostRow>();
+  const row = await env.DB.prepare(`SELECT p.*, m.object_key AS cover_object_key FROM posts p LEFT JOIN media m ON m.id = p.cover_media_id WHERE (p.id = ? OR p.slug = ?) ${publicOnly ? "AND p.status = 'published'" : ''} ORDER BY CASE WHEN p.id = ? THEN 0 ELSE 1 END LIMIT 1`).bind(key, key, key).first<PostRow>();
   if (!row) throw new ApiError(404, 'not_found', '게시물을 찾을 수 없습니다.');
   return row;
 }
@@ -65,57 +65,64 @@ function postValues(body: Record<string, unknown>, previous?: PostRow) {
   const slug = textField(body.slug ?? previous?.slug ?? id, 'slug', 300);
   if (/[\/?#\u0000-\u001f]/.test(slug) || slug === '.' || slug === '..') throw new ApiError(400, 'invalid_slug', 'slug에 경로 구분자를 사용할 수 없습니다.');
   const html = body.content_html === undefined ? previous?.content_html || '' : cleanHtml(body.content_html);
-  const assetKey = body.cover_asset_key === undefined ? previous?.cover_asset_key || null : body.cover_asset_key === null || body.cover_asset_key === '' ? null : textField(body.cover_asset_key, 'cover_asset_key', 500);
+  const coverMediaId = body.cover_media_id === undefined ? previous?.cover_media_id || null : body.cover_media_id === null || body.cover_media_id === '' ? null : textField(body.cover_media_id, 'cover_media_id', 36);
   const url = body.cover_url === undefined && body.titleimg === undefined ? previous?.cover_url || null : coverUrl(body.cover_url ?? body.titleimg);
   const status = body.status ?? previous?.status ?? 'draft';
   if (!['draft', 'published', 'archived'].includes(String(status))) throw new ApiError(400, 'invalid_status', '게시 상태가 올바르지 않습니다.');
   const listed = body.is_listed ?? previous?.is_listed ?? 1;
   if (![true, false, 0, 1].includes(listed as boolean | number)) throw new ApiError(400, 'invalid_field', 'is_listed 값이 올바르지 않습니다.');
-  return { id, slug, title, work_date: workDate, content_html: html, cover_asset_key: assetKey, cover_url: url, status: String(status), is_listed: listed ? 1 : 0, sort_order: optionalInteger(body.sort_order, previous?.sort_order ?? 0) ?? 0, featured_order: optionalInteger(body.featured_order, previous?.featured_order ?? null) };
+  return { id, slug, title, work_date: workDate, content_html: html, cover_media_id: coverMediaId, cover_url: coverMediaId ? null : url, status: String(status), is_listed: listed ? 1 : 0, sort_order: optionalInteger(body.sort_order, previous?.sort_order ?? 0) ?? 0, featured_order: optionalInteger(body.featured_order, previous?.featured_order ?? null) };
 }
 
-export async function referencedMedia(env: Env, html: string, cover: string | null, coverLink: string | null, ownerVisibility: 'public' | 'private'): Promise<MediaRow[]> {
+export async function referencedMedia(env: Env, html: string, coverMediaId: string | null, coverLink: string | null, ownerVisibility: 'public' | 'private'): Promise<MediaRow[]> {
   const keys = new Set<string>();
-  if (cover) keys.add(cover);
   const text = `${html} ${coverLink || ''}`;
   const pattern = /\/(?:api\/(?:admin\/)?)?media\/([a-zA-Z0-9/_%.-]+)/g;
   for (const match of text.matchAll(pattern)) {
     try { keys.add(decodeURIComponent(match[1])); } catch { throw new ApiError(400, 'invalid_asset', '미디어 경로가 올바르지 않습니다.'); }
   }
   if (keys.size > 200) throw new ApiError(400, 'too_many_assets', '문서당 최대 200개의 미디어를 사용할 수 있습니다.');
-  const assets: MediaRow[] = [];
+  const assets = new Map<string, MediaRow>();
+  if (coverMediaId) {
+    const cover = await env.DB.prepare("SELECT * FROM media WHERE id = ? AND status = 'ready'").bind(coverMediaId).first<MediaRow>();
+    if (!cover) throw new ApiError(400, 'asset_not_ready', '업로드 완료되지 않은 커버 미디어입니다.');
+    if (ownerVisibility === 'public' && cover.visibility === 'private') throw new ApiError(400, 'private_asset', '비공개 미디어를 공개 문서에 사용할 수 없습니다.');
+    assets.set(cover.id, cover);
+  }
   for (const key of keys) {
     const media = await env.DB.prepare("SELECT * FROM media WHERE object_key = ? AND status = 'ready'").bind(key).first<MediaRow>();
     if (!media) throw new ApiError(400, 'asset_not_ready', '업로드 완료되지 않은 미디어가 포함되어 있습니다.');
     if (ownerVisibility === 'public' && media.visibility === 'private') throw new ApiError(400, 'private_asset', '비공개 미디어를 공개 문서에 사용할 수 없습니다.');
-    assets.push(media);
+    assets.set(media.id, media);
   }
-  return assets;
+  return [...assets.values()];
 }
 
 function referenceStatements(env: Env, ownerType: 'post' | 'page', ownerId: string, revision: string, media: MediaRow[]) {
   const table = ownerType === 'post' ? 'posts' : 'pages';
   const key = ownerType === 'post' ? 'id' : 'slug';
+  const relationship = ownerType === 'post' ? 'post_media' : 'page_media';
+  const ownerKey = ownerType === 'post' ? 'post_id' : 'page_slug';
   // The unique revision guard keeps stale edits from changing references, even
   // when their optimistic UPDATE affected no rows. D1 batch is one transaction.
   return [
-    env.DB.prepare(`DELETE FROM media_references WHERE owner_type = ? AND owner_id = ? AND EXISTS (SELECT 1 FROM ${table} WHERE ${key} = ? AND revision_id = ?)`).bind(ownerType, ownerId, ownerId, revision),
-    ...media.map(asset => env.DB.prepare(`INSERT INTO media_references (media_id, owner_type, owner_id) SELECT ?, ?, ? WHERE EXISTS (SELECT 1 FROM ${table} WHERE ${key} = ? AND revision_id = ?)`).bind(asset.id, ownerType, ownerId, ownerId, revision)),
+    env.DB.prepare(`DELETE FROM ${relationship} WHERE ${ownerKey} = ? AND EXISTS (SELECT 1 FROM ${table} WHERE ${key} = ? AND revision_id = ?)`).bind(ownerId, ownerId, revision),
+    ...media.map(asset => env.DB.prepare(`INSERT INTO ${relationship} (${ownerKey}, media_id) SELECT ?, ? WHERE EXISTS (SELECT 1 FROM ${table} WHERE ${key} = ? AND revision_id = ?)`).bind(ownerId, asset.id, ownerId, revision)),
   ];
 }
 
 export async function savePost(env: Env, body: Record<string, unknown>, previous?: PostRow) {
   const values = postValues(body, previous);
-  const media = await referencedMedia(env, values.content_html, values.cover_asset_key, values.cover_url, 'public');
+  const media = await referencedMedia(env, values.content_html, values.cover_media_id, values.cover_url, 'public');
   const revision = crypto.randomUUID();
   const now = new Date().toISOString();
-  const params = [values.slug, values.title, values.work_date, values.content_html, values.cover_asset_key, values.cover_url, values.status, values.is_listed, values.sort_order, values.featured_order, revision, now];
+  const params = [values.slug, values.title, values.work_date, values.content_html, values.cover_media_id, values.cover_url, values.status, values.is_listed, values.sort_order, values.featured_order, revision, now];
   let statement: D1PreparedStatement;
   if (previous) {
     const version = requireVersion(body.version);
-    statement = env.DB.prepare('UPDATE posts SET slug=?,title=?,work_date=?,content_html=?,cover_asset_key=?,cover_url=?,status=?,is_listed=?,sort_order=?,featured_order=?,revision_id=?,updated_at=?,version=version+1 WHERE id=? AND version=?').bind(...params, previous.id, version);
+    statement = env.DB.prepare('UPDATE posts SET slug=?,title=?,work_date=?,content_html=?,cover_media_id=?,cover_url=?,status=?,is_listed=?,sort_order=?,featured_order=?,revision_id=?,updated_at=?,version=version+1 WHERE id=? AND version=?').bind(...params, previous.id, version);
   } else {
-    statement = env.DB.prepare('INSERT INTO posts (slug,title,work_date,content_html,cover_asset_key,cover_url,status,is_listed,sort_order,featured_order,revision_id,updated_at,id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind(...params, values.id, now);
+    statement = env.DB.prepare('INSERT INTO posts (slug,title,work_date,content_html,cover_media_id,cover_url,status,is_listed,sort_order,featured_order,revision_id,updated_at,id,created_at) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)').bind(...params, values.id, now);
   }
   try {
     const result = await env.DB.batch([statement, ...referenceStatements(env, 'post', values.id, revision, media)]);
@@ -146,10 +153,7 @@ export async function savePage(env: Env, slug: string, body: Record<string, unkn
 }
 
 export async function removePost(env: Env, post: PostRow, version: number) {
-  const result = await env.DB.batch([
-    env.DB.prepare("DELETE FROM media_references WHERE owner_type = 'post' AND owner_id = ? AND EXISTS (SELECT 1 FROM posts WHERE id = ? AND version = ?)").bind(post.id, post.id, version),
-    env.DB.prepare('DELETE FROM posts WHERE id = ? AND version = ?').bind(post.id, version),
-  ]);
-  if (!result[1].meta.changes) throw new ApiError(409, 'version_conflict', '다른 곳에서 수정된 글입니다. 새로 불러온 뒤 다시 삭제해주세요.');
+  const result = await env.DB.prepare('DELETE FROM posts WHERE id = ? AND version = ?').bind(post.id, version).run();
+  if (!result.meta.changes) throw new ApiError(409, 'version_conflict', '다른 곳에서 수정된 글입니다. 새로 불러온 뒤 다시 삭제해주세요.');
   // Media is retained until explicitly deleted when no document references it.
 }

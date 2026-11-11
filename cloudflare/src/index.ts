@@ -17,7 +17,7 @@ async function handle(request: Request, env: Env): Promise<Response> {
   if (path === '/api/health' && method === 'GET') return json({ ok: true, service: 'duldol-content-api' });
   if (path === '/api/posts' && method === 'GET') {
     const featured = url.searchParams.get('featured') === '1';
-    const result = await env.DB.prepare(`SELECT * FROM posts WHERE status='published' ${featured ? 'AND featured_order IS NOT NULL' : 'AND is_listed=1'} ORDER BY ${featured ? 'featured_order ASC,' : ''} sort_order ASC,work_date DESC,id ASC`).all<PostRow>();
+    const result = await env.DB.prepare(`SELECT p.*,m.object_key AS cover_object_key FROM posts p LEFT JOIN media m ON m.id=p.cover_media_id WHERE p.status='published' ${featured ? 'AND p.featured_order IS NOT NULL' : 'AND p.is_listed=1'} ORDER BY ${featured ? 'p.featured_order ASC,' : ''} p.sort_order ASC,p.work_date DESC,p.id ASC`).all<PostRow>();
     return json({ posts: result.results.map(presentPost) });
   }
   const postRoute = path.match(/^\/api\/posts\/([^/]+)$/);
@@ -39,7 +39,7 @@ async function handle(request: Request, env: Env): Promise<Response> {
   if (path === '/api/admin/session' && method === 'GET') return json({ authenticated: true, ...identity, development: localBypass(request, env) });
   if (path === '/api/admin/posts') {
     if (method === 'GET') {
-      const result = await env.DB.prepare('SELECT * FROM posts ORDER BY sort_order ASC,work_date DESC,id ASC').all<PostRow>();
+      const result = await env.DB.prepare('SELECT p.*,m.object_key AS cover_object_key FROM posts p LEFT JOIN media m ON m.id=p.cover_media_id ORDER BY p.sort_order ASC,p.work_date DESC,p.id ASC').all<PostRow>();
       return json({ posts: result.results.map(presentPost) });
     }
     if (method === 'POST') return json({ post: await savePost(env, await jsonBody(request)) }, 201);

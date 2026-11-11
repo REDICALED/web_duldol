@@ -20,7 +20,7 @@ export default function Editor() {
   const [tiptapPostDate, settiptapPostDate] = useState('');
   const [tiptapPostTitleImage, settiptapPostTitleImage] = useState({ blobUrl: '' });
   const [tiptapPostTitle, settiptapPostTitle] = useState('');
-  const [coverAssetKey, setCoverAssetKey] = useState<string | null>(null);
+  const [coverMediaId, setCoverMediaId] = useState<string | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [version, setVersion] = useState<number | null>(null);
   const [status, setStatus] = useState('published');
@@ -39,7 +39,7 @@ export default function Editor() {
   const resetDocument = (genre = GenreType) => {
     setGenreType(genre); setEditingId(null); setVersion(null);
     settiptapPostTitle(''); settiptapPostDate(''); settiptapPostTitleImage({ blobUrl: '' });
-    setCoverAssetKey(null); setSourceHtml(''); setRawMode(false); setMainText('');
+    setCoverMediaId(null); setSourceHtml(''); setRawMode(false); setMainText('');
     setStatus('published'); setIsListed(true); setSortOrder(0); setFeaturedOrder(null);
     setMessage(''); setError(''); tiptapeditor?.commands.clearContent();
   };
@@ -47,7 +47,7 @@ export default function Editor() {
   const props = {
     tiptapeditor, settiptapeditor, tiptapPostDate, settiptapPostDate, tiptapPostTitleImage,
     settiptapPostTitleImage, tiptapPostTitle, settiptapPostTitle, PreviewSwitch, setPreviewSwitch,
-    GenreType, coverAssetKey, setCoverAssetKey, editingId, setEditingId, version, setVersion,
+    GenreType, coverMediaId, setCoverMediaId, editingId, setEditingId, version, setVersion,
     status, setStatus, isListed, setIsListed, sortOrder, setSortOrder, featuredOrder, setFeaturedOrder,
     sourceHtml, setSourceHtml, rawMode, setRawMode, setMessage, setError, resetDocument,
     documentBusy, setDocumentBusy,

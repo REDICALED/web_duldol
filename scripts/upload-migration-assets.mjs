@@ -2,7 +2,7 @@ import { readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
-import { hashBytes } from './migration-lib.mjs';
+import { UUID_PATTERN, MEDIA_KEY_PATTERN, hashBytes } from './migration-lib.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
 const args = process.argv.slice(2);
@@ -35,7 +35,8 @@ const verified = [];
 
 // Verify the entire set before any write. Paths and keys cannot escape the migration directory.
 for (const asset of manifest.assets) {
-  if (!/^migration\/(?:private\/)?[a-f0-9]{64}\.[a-z]+$/.test(asset.object_key)) throw new Error(`Unexpected object key: ${asset.object_key}`);
+  if (!UUID_PATTERN.test(asset.id) || !MEDIA_KEY_PATTERN.test(asset.object_key)
+    || !asset.object_key.startsWith(`images/${asset.id}.`)) throw new Error(`Unexpected image identity: ${asset.object_key}`);
   const filename = path.resolve(manifestDirectory, asset.local_file);
   if (!filename.startsWith(manifestDirectory + path.sep)) throw new Error('Asset file escapes migration directory');
   if ((await stat(filename)).size !== asset.size || hashBytes(await readFile(filename)) !== asset.sha256) {
@@ -66,6 +67,6 @@ for (const asset of verified) {
   }
   const result = spawnSync(process.execPath, command, { cwd: root, stdio: 'inherit', shell: false });
   if (result.error) throw result.error;
-  if (result.status !== 0) throw new Error(`Upload failed for ${asset.object_key}; rerunning safely retries content-addressed objects.`);
+  if (result.status !== 0) throw new Error(`Upload failed for ${asset.object_key}; keep media-identities.json and rerun to retry the same objects.`);
 }
 console.log(`${execute ? 'Uploaded' : 'Verified plan for'} ${verified.length} objects (${verified.reduce((sum, asset) => sum + asset.size, 0)} bytes). Target: ${execute ? remote ? 'REMOTE R2' : 'local Wrangler R2' : 'none; dry-run'}.`);

@@ -1,5 +1,9 @@
 ﻿# R2 + D1 콘텐츠 전환
 
+다른 컴퓨터에서 이어가는 경우에는 [새 PC 인계 매뉴얼](new-computer.md)을 먼저 읽는다.
+Git의 `migration/media-identities.json`으로 UUID를 복원하므로 현재 `.migration/`을
+따로 전달하지 않아도 원본에서 같은 경로의 자료를 생성할 수 있다.
+
 프런트는 기존 Vercel의 React/Vite 사이트를 사용하고, 게시물·페이지는 D1, 이미지는 R2에 저장한다. 코드 배포는 Git push → Vercel이고, 관리자 화면에서 콘텐츠를 저장하는 작업은 Worker API를 통해 배포 없이 반영한다.
 
 ```text
@@ -18,17 +22,18 @@
 
 - 기존 `initpages/PostComponent1~12.tsx`를 React 서버 렌더링해 12개 글로 추출한다. 제목 기반 기존 `/Works/{title}` 주소를 그대로 보존한다. 현재 목록에서 빠져 있던 글도 `is_listed=0`으로 남긴다.
 - `Posts.json`에 있는 timestamp 글2개도 기존 숫자 URL로 보존한다. 현재 목록10개, 작품 날짜, 정렬 정보, 홈의 최근3개를 이관한다.
-- 기존12개 글의 페이지 레이아웃과 첫 제목/썸네일 헤더는 공통 상세 화면에 맞게 제거한다. 본문, 이미지 순서, 캡션, GIF 및 스타일은 유지한다. 제거 전 렌더 결과는 `legacy-rendered.json`에 별도 보관한다.
+- 기존12개 글의 페이지 레이아웃과 첫 제목/썸네일 헤더는 공통 상세 화면에 맞게 제거한다. 본문과 이미지 순서·캡션·GIF·스타일을 추출하고, 제거 전 렌더 결과는 `legacy-rendered.json`에 별도 보관한다. 기존 화면과 같은 표현인지는 이관 후 화면에서 확인해야 한다.
 - Note/CV/Memo의 현재 HTML과 실제 `Contact.tsx` 화면을 이관한다. Contact 내용은 API 컴포넌트로 바꾸기 전 화면을 `scripts/legacy-content/contact.html`에 보존했다. 사용하지 않는 `Posts/contact.html`을 Contact 본문으로 사용하지 않는다.
 - 슬라이더의 기존 문자열 형식을 유지해 현재 파서와 호환한다. 이후 Tiptap JSON으로 전환할 수 있지만 이번 이관에서 본문 형식을 일괄 변환하지 않는다.
-- Memo는 `visibility=private`이다. Memo의 인라인 이미지3개는 `migration/private/` key와 `media.visibility=private`으로 R2에 추출한다. URL은 인증을 요구하는 `/api/admin/media/{key}`이며 공개 `/api/media/{key}`에서 제공하지 않는다. 기존 `public/Posts/memo.html`이 새 Vercel 배포에 포함되지 않는지도 확인한다.
+- 이미지 ID는 UUID이며 R2 경로는 공개 여부와 관계없이 `images/{uuid}.{확장자}`다. 공개 여부는 `media.visibility`로 관리한다. 게시물 표지는 `cover_media_id`, 본문 이미지 연결은 `post_media`와 `page_media`의 외래 키로 관리한다.
+- Memo는 `visibility=private`이다. Memo의 인라인 이미지3개도 같은 이미지 경로 형식으로 추출하고 `media.visibility=private`으로 설정한다. URL은 인증을 요구하는 `/api/admin/media/{key}`이며 공개 `/api/media/{key}`에서 제공하지 않는다. 기존 `public/Posts/memo.html`이 새 Vercel 배포에 포함되지 않는지도 확인한다.
 - 목록 미참조24개 timestamp 폴더는 `report.json`에 기록한다. 이관 도구는 해당 폴더를 삭제하거나 활성 글로 자동 등록하지 않는다. 과거 백업·실패한 업로드를 구분한 뒤 별도로 보관 여부를 결정한다.
 
 현재 신규2개 글의 외부 Google 이미지 고유 URL은78개이며 Note에2개가 추가로 있다. 전체 저장소326MiB와 실제 게시 콘텐츠의 크기는 다르다. 외부 이미지 다운로드 전에는 R2의 최종 이관 용량을 알 수 없다.
 
 ## 1. 로컬에서 이관 자료 만들기
 
-Node.js20 이상을 사용한다. 저장소 루트에서 실행한다.
+Node.js22.12 이상을 사용한다. 저장소 루트에서 실행한다.
 
 ```powershell
 npm install
@@ -41,10 +46,11 @@ node scripts/prepare-cloudflare-migration.mjs
 
 | 파일 | 내용 |
 | --- | --- |
-| `manifest.json` | posts/pages/assets/media_references 및 진단 전체 |
-| `content.sql` | 초기 스키마에 적용할 D1 데이터 |
+| `manifest.json` | posts/pages/assets/post_media/page_media 및 진단 전체 |
+| `content.sql` | 0001과 0002 마이그레이션 적용 후 가져올 D1 데이터 |
 | `assets.json` | R2 object key, MIME, 크기, SHA-256, 로컬 파일 경로 |
-| `assets/` | 콘텐츠 해시로 이름을 정한 이미지 복사본 |
+| `media-identities.json` | 원본 경로·공개 여부에 대응하는 UUID 기록 |
+| `assets/` | UUID로 이름을 정한 이미지 복사본 |
 | `external-assets.json` | 외부 이미지 원본 주소와 사용 문서 |
 | `legacy-rendered.json` | 원래 레거시 글12개의 렌더 HTML |
 | `report.json` | 오류, 경고, 내장/blob 이미지, 목록 미참조 폴더 |
@@ -61,7 +67,9 @@ node scripts/prepare-cloudflare-migration.mjs --import-external
 
 base64 이미지는 공개/비공개 범위를 유지해 R2 자산으로 추출한다. 활성 콘텐츠에 복구 불가능한 `blob:` URL이나 누락된 로컬 이미지가 있으면 도구는 실패하고 `content.sql`에 실행문을 만들지 않는다. 먼저 `report.json`의 오류를 해결한다. 목록 미참조 보관 폴더 안의 blob URL은 별도 진단으로 남는다.
 
-결과 기준은 posts14개, listedPosts10개, pages4개다. 원본 데이터가 변경되었다면 숫자 차이를 검토한다. `content.sql`은 게시물/페이지 `version>1`인 편집본을 덮어쓰지 않으며, R2 key는 콘텐츠 해시라 동일 자산 재실행 시 같은 key를 사용한다. 운영 편집 후 이관 SQL을 다시 실행하면 옛 미디어 참조가 보수적으로 남을 수 있으므로 초기 전환 이후에는 관리자 API로 변경한다.
+결과 기준은 posts14개, listedPosts10개, pages4개다. 원본 데이터가 변경되었다면 숫자 차이를 검토한다. 변환기는 Git의 `migration/media-identities.json`을 먼저 읽고 `.migration/media-identities.json`의 추가 매핑을 읽는다. 같은 원본에 서로 다른 UUID가 있으면 충돌을 보고하고 중단한다. 새 이미지를 변환한 뒤에는 로컬 매핑을 `migration/media-identities.json`으로 복사해 Git에도 저장한다. base64 이미지는 페이지와 출현 순서로 대응한다. 이전 이미지 복사본은 삭제하지 않는다. SHA-256은 로컬 업로드 파일의 무결성을 확인하는 manifest 값으로만 사용한다.
+
+`content.sql`은 게시물/페이지 `version>1`인 편집본을 덮어쓰지 않는다. 버전1인 초기 이관 데이터의 연결만 `post_media`/`page_media`에서 지우고 현재 연결로 교체하므로 재실행 후 옛 이미지 연결이 남지 않는다. 운영 편집 후에는 이관 SQL 대신 관리자 API로 변경한다.
 
 ## 2. Cloudflare 리소스와 인증 준비
 
@@ -107,7 +115,9 @@ node cloudflare/node_modules/wrangler/bin/wrangler.js d1 execute duldol-content 
 node cloudflare/node_modules/wrangler/bin/wrangler.js dev --env local --config cloudflare/wrangler.jsonc
 ```
 
-업로더는 기본적으로 전체 파일의 크기·SHA-256·경로를 검증하고 계획만 출력한다. `--execute`만 주면 로컬 Wrangler R2에 복사하며, `--execute --remote`를 함께 주어야 실제 R2에 쓴다. 업로드가 중단되어도 해시 key를 사용하므로 같은 명령으로 재시도할 수 있다.
+스키마 마이그레이션은 `0001_initial.sql`과 `0002` 파일을 모두 적용해야 한다. `d1 migrations apply`가 미적용 파일을 순서대로 적용한다. 0002는 표지의 이미지 ID 외래 키와 `post_media`/`page_media` 연결 테이블을 준비한다. 기존 버전의 데이터를 가져온 DB에도 0002를 먼저 적용한다.
+
+업로더는 기본적으로 전체 파일의 크기·SHA-256·UUID 경로를 검증하고 계획만 출력한다. `--execute`만 주면 로컬 Wrangler R2에 복사하며, `--execute --remote`를 함께 주어야 실제 R2에 쓴다. 업로드가 중단되어도 `media-identities.json`을 유지하고 같은 명령으로 재시도할 수 있다.
 
 Vite의 로컬 `/api` 프록시를 Worker 개발 서버에 연결해 목록/상세의 한글 URL, 숫자 URL, 썸네일, 슬라이더, GIF, Note/CV/Contact를 확인한다. `--env local`은 로컬 검증용 인증 우회를 사용한다. 실제 Access 인증 검증은 설정된 대표 도메인의 Worker에서 별도로 확인한다. 이 로컬 환경을 운영 배포하지 않는다.
 

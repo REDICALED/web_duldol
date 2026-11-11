@@ -9,6 +9,8 @@
 API 연결 후에는 글·이미지 변경에 Git 커밋이나 Vercel 재배포가 필요하지 않습니다.
 관리자 비밀번호·GitHub 토큰을 프론트 환경변수로 넣지 않습니다.
 
+**다른 컴퓨터에서 이어서 작업할 때는 [새 PC 인계 매뉴얼](docs/new-computer.md)부터 읽으세요.**
+현재 원본과 UUID 매핑은 Git에 포함되므로 `.migration/`을 다시 생성할 수 있습니다.
 설정, 로컬 실행, 데이터 이관과 운영 전환 순서는 [Cloudflare 이관 문서](docs/cloudflare-migration.md)를 참고하세요.
 아래 설명은 전환 전 구조의 기록입니다.
 

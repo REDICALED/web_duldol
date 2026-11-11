@@ -8,7 +8,7 @@ export interface ContentPost {
   year: string;
   hashdate: number;
   cover_url: string;
-  cover_asset_key?: string | null;
+  cover_media_id?: string | null;
   titleimg: string;
   content_html: string;
   status: 'draft' | 'published';
@@ -95,7 +95,7 @@ export async function adminSession(): Promise<AdminSession> {
 function normalizePost(post: Partial<ContentPost> & { title: string }): ContentPost {
   const id = String(post.id ?? (post.hashdate ? post.hashdate : post.slug ?? post.title));
   const workDate = post.work_date ?? post.year ?? '';
-  const cover = post.titleimg ?? (post.cover_asset_key ? `/api/media/${post.cover_asset_key}` : post.cover_url) ?? '';
+  const cover = post.cover_url || post.titleimg || '';
   return {
     ...post,
     id,

@@ -54,11 +54,12 @@ test('session handles unauthenticated API, Access HTML and browser CORS/redirect
 });
 
 test('public posts normalize metadata and route slugs and timestamps without losing Korean text', async () => {
-  globalThis.fetch = async () => json({ posts: [{ id: '1772618949198', slug: '웅얼벽화합창', title: '웅얼벽화합창', work_date: '2026-03-04', cover_asset_key: 'migration/a.jpg' }] });
+  globalThis.fetch = async () => json({ posts: [{ id: '1772618949198', slug: '웅얼벽화합창', title: '웅얼벽화합창', work_date: '2026-03-04', cover_media_id: 'd02792fc-08a4-4fab-9b8e-34ea91b923dd', cover_url: '/api/media/images/d02792fc-08a4-4fab-9b8e-34ea91b923dd.jpg' }] });
   const [post] = await api.getPosts();
   assert.equal(post.hashdate, 1772618949198);
   assert.equal(post.year, '2026-03-04');
-  assert.equal(api.postCover(post), '/api/media/migration/a.jpg');
+  assert.equal(post.cover_media_id, 'd02792fc-08a4-4fab-9b8e-34ea91b923dd');
+  assert.equal(api.postCover(post), '/api/media/images/d02792fc-08a4-4fab-9b8e-34ea91b923dd.jpg');
   assert.equal(decodeURIComponent(api.postPath(post)), '/Works/웅얼벽화합창');
 
   let requested;

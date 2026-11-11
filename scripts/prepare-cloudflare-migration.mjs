@@ -6,8 +6,8 @@ import { build } from 'esbuild';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import {
-  LEGACY_POSTS, MIME_EXTENSIONS, hashBytes, inspectHtml, insertSql,
-  parseDataImage, rewriteMediaHtml, sqlLiteral,
+  LEGACY_POSTS, MIME_EXTENSIONS, UUID_PATTERN, MEDIA_KEY_PATTERN, hashBytes, inspectHtml, insertSql,
+  getMediaIdentity, mediaIdentityKey, mediaLinksSql, parseDataImage, rewriteMediaHtml,
 } from './migration-lib.mjs';
 
 const root = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
@@ -42,9 +42,51 @@ const report = {
 const assets = new Map();
 const externalAssets = new Map();
 const urlCache = new Map();
+const inlineIndexes = new Map();
+const sharedIdentitiesPath = path.join(root, 'migration', 'media-identities.json');
+const identitiesPath = path.join(outputRoot, 'media-identities.json');
+const identities = Object.create(null);
 const require = createRequire(import.meta.url);
 
 await mkdir(path.join(outputRoot, 'assets'), { recursive: true });
+for (const filename of [sharedIdentitiesPath, identitiesPath]) {
+  try {
+    const stored = JSON.parse(await readFile(filename, 'utf8'));
+    if (stored.schema_version !== 1 || !stored.identities || typeof stored.identities !== 'object' || Array.isArray(stored.identities)) {
+      throw new Error('Invalid media-identities.json; restore the mapping backup before preparing again.');
+    }
+    for (const [key, id] of Object.entries(stored.identities)) {
+      if (!UUID_PATTERN.test(id)) {
+        if (filename === sharedIdentitiesPath) throw new Error('The shared media identity map contains an invalid UUID.');
+        continue;
+      }
+      if (identities[key] && identities[key] !== id) {
+        throw new Error('Shared and local media UUIDs conflict. Restore a matching identity map and asset manifest before importing.');
+      }
+      identities[key] = id;
+    }
+  } catch (error) {
+    if (filename === sharedIdentitiesPath && error.code === 'ENOENT') {
+      throw new Error('Missing migration/media-identities.json. Restore it from Git before preparing content on a new computer.');
+    }
+    if (error.code !== 'ENOENT') throw error;
+  }
+}
+// UUID entries from an earlier manifest can restore a missing mapping. Old hash IDs are deliberately ignored.
+try {
+  const previous = JSON.parse(await readFile(path.join(outputRoot, 'assets.json'), 'utf8'));
+  for (const asset of previous.assets || []) {
+    const sourceIdentity = asset.source_identity || asset.source_url;
+    if (!sourceIdentity || !UUID_PATTERN.test(asset.id)) continue;
+    const key = mediaIdentityKey(sourceIdentity, asset.visibility || 'public');
+    if (identities[key] && identities[key] !== asset.id) {
+      throw new Error('The existing asset manifest uses different UUIDs from the shared mapping. Keep each transfer set together.');
+    }
+    if (!UUID_PATTERN.test(identities[key] || '')) identities[key] = asset.id;
+  }
+} catch (error) {
+  if (error.code !== 'ENOENT') throw error;
+}
 const postsJson = JSON.parse(await readFile(path.join(publicRoot, 'Posts.json'), 'utf8'));
 if (!Array.isArray(postsJson.posts)) throw new Error('Posts.json has no posts array');
 const listedPosts = postsJson.posts;
@@ -57,19 +99,20 @@ const extensionMimes = {
   '.webp': 'image/webp', '.avif': 'image/avif', '.svg': 'image/svg+xml', '.bmp': 'image/bmp',
 };
 
-async function registerAsset(bytes, mimeType, originalFilename, sourceUrl, visibility = 'public') {
+async function registerAsset(bytes, mimeType, originalFilename, sourceUrl, visibility = 'public', sourceIdentity = sourceUrl) {
   const digest = hashBytes(bytes);
   const extension = MIME_EXTENSIONS[mimeType];
   if (!extension) throw new Error(`Unsupported image MIME type ${mimeType}: ${sourceUrl}`);
-  const key = `migration/${visibility === 'private' ? 'private/' : ''}${digest}.${extension}`;
+  const id = getMediaIdentity(identities, sourceIdentity, visibility);
+  const key = `images/${id}.${extension}`;
   if (!assets.has(key)) {
-    const localName = `assets/${visibility === 'private' ? 'private-' : ''}${digest}.${extension}`;
+    const localName = `assets/${id}.${extension}`;
     await writeFile(path.join(outputRoot, localName), bytes);
     assets.set(key, {
-      id: `${visibility === 'private' ? 'private-' : ''}${digest}`, object_key: key, mime_type: mimeType, size: bytes.length, visibility,
+      id, object_key: key, mime_type: mimeType, size: bytes.length, visibility,
       original_filename: originalFilename, source_url: sourceUrl,
       status: 'ready', created_at: generatedAt, updated_at: generatedAt,
-      local_file: localName, sha256: digest,
+      local_file: localName, sha256: digest, source_identity: sourceIdentity,
     });
   }
   return `${visibility === 'private' ? '/api/admin/media/' : '/api/media/'}${key}`;
@@ -129,12 +172,11 @@ async function resolveMediaUrl(rawUrl, document, privatePage = false) {
   }
   if (sourceUrl.startsWith('data:image/')) {
     if (privatePage) report.extractedPrivateInlineImages++;
-    const inlineKey = `${visibility}:${hashBytes(Buffer.from(sourceUrl))}`;
-    if (!urlCache.has(inlineKey)) {
-      const { bytes, mimeType } = parseDataImage(sourceUrl);
-      urlCache.set(inlineKey, await registerAsset(bytes, mimeType, `inline.${MIME_EXTENSIONS[mimeType]}`, `inline:${inlineKey}`, visibility));
-    }
-    return urlCache.get(inlineKey);
+    const inlineIndex = (inlineIndexes.get(document) || 0) + 1;
+    inlineIndexes.set(document, inlineIndex);
+    const sourceIdentity = `${document}:inline:${inlineIndex}`;
+    const { bytes, mimeType } = parseDataImage(sourceUrl);
+    return registerAsset(bytes, mimeType, `inline-${inlineIndex}.${MIME_EXTENSIONS[mimeType]}`, null, visibility, sourceIdentity);
   }
   if (/^https:\/\/lh3\.googleusercontent\.com\//i.test(sourceUrl)) {
     if (!externalAssets.has(sourceUrl)) externalAssets.set(sourceUrl, { source_url: sourceUrl, documents: [], status: 'external' });
@@ -229,10 +271,12 @@ async function makePost({ id, slug, title, year, content, cover, listedIndex, le
   const contentHtml = await rewriteMediaHtml(content, url => resolveMediaUrl(url, `post:${slug}`));
   const coverUrl = await resolveMediaUrl(cover || '', `cover:${slug}`);
   const key = coverUrl.startsWith('/api/media/') ? coverUrl.slice('/api/media/'.length) : null;
+  const coverMediaId = key ? assets.get(key)?.id : null;
+  if (key && !coverMediaId) report.errors.push({ reason: 'Cover has no upload asset', object_key: key });
   const featuredIndex = featured.findIndex(post => String(post.hashdate === 0 ? post.title : post.hashdate) === slug);
   const row = {
     id, slug, title, work_date: year || '', content_html: contentHtml,
-    cover_asset_key: key, cover_url: key ? null : coverUrl || null,
+    cover_media_id: coverMediaId || null, cover_url: key ? null : coverUrl || null,
     is_listed: listedIndex >= 0 ? 1 : 0, status: 'published',
     sort_order: listedIndex >= 0 ? listedIndex : 1000 + rows.length,
     featured_order: featuredIndex >= 0 ? featuredIndex : null,
@@ -298,15 +342,20 @@ for (const directory of await readdir(path.join(publicRoot, 'Posts', 'Works'), {
 const slugs = rows.map(row => row.slug);
 if (new Set(slugs).size !== slugs.length) report.errors.push({ reason: 'Duplicate post slug' });
 if (rows.filter(row => row.is_listed).length !== listedPosts.length) report.errors.push({ reason: 'Listed post count changed' });
-const mediaReferences = [];
+const postMedia = [];
+const pageMedia = [];
 for (const [ownerType, owners] of [['post', rows], ['page', pages]]) {
   for (const owner of owners) {
-    const keys = new Set([...owner.content_html.matchAll(/\/api\/(?:admin\/)?media\/(migration\/(?:private\/)?[a-f0-9]{64}\.[a-z]+)/g)].map(match => match[1]));
-    if (owner.cover_asset_key) keys.add(owner.cover_asset_key);
+    const keys = new Set([...owner.content_html.matchAll(/\/api\/(?:admin\/)?media\/(images\/[a-f0-9-]{36}\.[a-z]+)/g)].map(match => match[1]));
+    const mediaIds = new Set(owner.cover_media_id ? [owner.cover_media_id] : []);
     for (const key of keys) {
       const asset = assets.get(key);
-      if (!asset) report.errors.push({ reason: 'Media reference has no upload asset', object_key: key });
-      else mediaReferences.push({ media_id: asset.id, owner_type: ownerType, owner_id: owner.id || owner.slug });
+      if (!MEDIA_KEY_PATTERN.test(key) || !asset) report.errors.push({ reason: 'Media reference has no upload asset', object_key: key });
+      else mediaIds.add(asset.id);
+    }
+    for (const mediaId of mediaIds) {
+      if (ownerType === 'post') postMedia.push({ post_id: owner.id, media_id: mediaId });
+      else pageMedia.push({ page_slug: owner.slug, media_id: mediaId });
     }
   }
 }
@@ -317,9 +366,10 @@ const summary = {
   remainingExternalAssets: [...externalAssets.values()].filter(asset => asset.status !== 'downloaded').length,
   unlistedDirectories: report.unlistedDirectories.length, errors: report.errors.length, warnings: report.warnings.length,
 };
-const manifest = { schema_version: 1, generated_at: generatedAt, mode: importExternal ? 'local-with-external-downloads' : 'local-only',
-  media_base: '/api/media/', summary, posts: rows, pages, assets: [...assets.values()], media_references: mediaReferences,
+const manifest = { schema_version: 2, generated_at: generatedAt, mode: importExternal ? 'local-with-external-downloads' : 'local-only',
+  media_base: '/api/media/', summary, posts: rows, pages, assets: [...assets.values()], post_media: postMedia, page_media: pageMedia,
   external_assets: [...externalAssets.values()], report };
+await writeFile(identitiesPath, JSON.stringify({ schema_version: 1, identities }, null, 2) + '\n');
 await writeFile(path.join(outputRoot, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 await writeFile(path.join(outputRoot, 'assets.json'), JSON.stringify({ generated_at: generatedAt, assets: [...assets.values()] }, null, 2) + '\n');
 await writeFile(path.join(outputRoot, 'external-assets.json'), JSON.stringify([...externalAssets.values()], null, 2) + '\n');
@@ -333,11 +383,12 @@ if (report.errors.length) {
 } else {
   const sql = [
     '-- Generated locally. Upload R2 objects before importing this file. Never commit this output: it includes private memo content.',
-    '-- Existing rows with version > 1 are preserved. Run initial schema migrations first.',
-    ...[...assets.values()].map(({ local_file, sha256, ...row }) => insertSql('media', row, 'object_key')),
+    '-- Apply both 0001_initial.sql and 0002 media relation migration before importing. Rows with version > 1 are preserved.',
+    ...[...assets.values()].map(({ local_file, sha256, source_identity, ...row }) => insertSql('media', row, 'object_key')),
     ...rows.map(row => insertSql('posts', row, 'id', true)),
     ...pages.map(row => insertSql('pages', row, 'slug', true)),
-    ...mediaReferences.map(row => `INSERT OR IGNORE INTO media_references (media_id,owner_type,owner_id) VALUES (${sqlLiteral(row.media_id)},${sqlLiteral(row.owner_type)},${sqlLiteral(row.owner_id)});`),
+    ...rows.flatMap(row => mediaLinksSql('post', row.id, postMedia.filter(link => link.post_id === row.id).map(link => link.media_id))),
+    ...pages.flatMap(row => mediaLinksSql('page', row.slug, pageMedia.filter(link => link.page_slug === row.slug).map(link => link.media_id))),
   ].join('\n') + '\n';
   await writeFile(path.join(outputRoot, 'content.sql'), sql);
   console.log(JSON.stringify(summary, null, 2));

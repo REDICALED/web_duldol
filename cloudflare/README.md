@@ -99,7 +99,7 @@ the Vercel origin remain available independently of administrator login.
 | DELETE | `/api/admin/assets/:id` | Delete only when unreferenced |
 | GET | `/api/admin/media/:objectKey` | Authenticated private file |
 
-Posts accept `title`, `slug`, `work_date`, `content_html`, `cover_asset_key`,
+Posts accept `title`, `slug`, `work_date`, `content_html`, `cover_media_id`,
 `cover_url`, `status` (`draft`, `published`, `archived`), `is_listed`, `sort_order`,
 and nullable `featured_order`. Responses also expose legacy `year`, `hashdate`,
 and `titleimg` aliases. `id` is immutable; `slug` preserves old work URLs.
@@ -126,7 +126,16 @@ attributes, unsafe URL protocols, and unapproved iframe hosts.
    signature, then copies to a separate immutable final key and marks it ready.
    Reusing the old signed URL cannot overwrite published files.
 4. Insert the returned `asset.url` into the document. For a cover also store
-   `asset.object_key` as `cover_asset_key`.
+   `asset.id` as `cover_media_id`.
+
+Media IDs are UUIDs. Public/private access is stored only in `media.visibility`;
+it is not encoded in the ID. Covers reference `media.id`, and `post_media` and
+`page_media` use foreign keys to connect files to their owning documents.
+Migration `0002_media_relationships.sql` upgrades databases created with `0001`:
+it preserves all rows, versions, file keys, and HTML URLs, maps older non-UUID
+media IDs to UUIDs, and backfills cover and document relationships. Existing
+UUID IDs remain unchanged. Broken legacy references stop the migration instead
+of silently dropping data. Apply both migrations when creating a new database.
 
 Accepted types: JPEG, PNG, GIF, WebP, AVIF, PDF; maximum 20 MiB. Pending or private
 files are never returned through the public media route. Referenced files cannot

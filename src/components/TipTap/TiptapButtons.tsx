@@ -18,7 +18,7 @@ export function UploadButton(props: any) {
           method: props.editingId ? 'PUT' : 'POST',
           json: {
             title: props.tiptapPostTitle.trim(), work_date: props.tiptapPostDate, content_html,
-            cover_url: props.tiptapPostTitleImage.blobUrl, cover_asset_key: props.coverAssetKey,
+            cover_url: props.tiptapPostTitleImage.blobUrl, cover_media_id: props.coverMediaId,
             status: props.status, is_listed: props.isListed, sort_order: props.sortOrder,
             featured_order: props.featuredOrder,
             ...(props.editingId ? { version: props.version } : {}),

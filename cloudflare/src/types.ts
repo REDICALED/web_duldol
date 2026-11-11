@@ -15,7 +15,8 @@ export interface Env {
 
 export interface PostRow {
   id: string; slug: string; title: string; work_date: string;
-  content_html: string; cover_asset_key: string | null; cover_url: string | null;
+  content_html: string; cover_media_id: string | null; cover_url: string | null;
+  cover_object_key?: string | null;
   status: 'draft' | 'published' | 'archived'; is_listed: number;
   sort_order: number; featured_order: number | null; version: number;
   revision_id: string; created_at: string; updated_at: string;

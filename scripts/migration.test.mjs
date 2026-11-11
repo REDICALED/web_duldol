@@ -1,7 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {
-  LEGACY_POSTS, decodeEntities, hashBytes, insertSql, inspectHtml,
+  LEGACY_POSTS, UUID_PATTERN, MEDIA_KEY_PATTERN, decodeEntities, hashBytes, getMediaIdentity,
+  mediaIdentityKey, mediaLinksSql, insertSql, inspectHtml,
   parseDataImage, rewriteMediaHtml,
 } from './migration-lib.mjs';
 
@@ -45,9 +46,37 @@ test('inline images decode exactly and invalid base64 cannot silently truncate',
   assert.throws(() => parseDataImage('data:image/png;base64,'));
 });
 
-test('same image bytes have stable object identity independent of filename', () => {
+test('checksums detect changed image bytes without defining image identity', () => {
   assert.equal(hashBytes(Buffer.from('same artwork')), hashBytes(Buffer.from('same artwork')));
   assert.notEqual(hashBytes(Buffer.from('same artwork')), hashBytes(Buffer.from('changed artwork')));
+});
+
+test('media UUIDs survive saved mapping reuse and old hash identities are replaced', () => {
+  const identities = {};
+  const original = getMediaIdentity(identities, '/images/artwork.jpg', 'public');
+  const reloaded = JSON.parse(JSON.stringify(identities));
+  assert.match(original, UUID_PATTERN);
+  assert.equal(getMediaIdentity(reloaded, '/images/artwork.jpg', 'public'), original);
+  const privateId = getMediaIdentity(reloaded, '/images/artwork.jpg', 'private');
+  assert.notEqual(privateId, original);
+  assert.ok(MEDIA_KEY_PATTERN.test(`images/${privateId}.jpg`));
+  assert.ok(!MEDIA_KEY_PATTERN.test(`images/private-${hashBytes(Buffer.from('image'))}.jpg`));
+  const legacyKey = mediaIdentityKey('/images/old.jpg', 'private');
+  reloaded[legacyKey] = `private-${hashBytes(Buffer.from('image'))}`;
+  assert.match(getMediaIdentity(reloaded, '/images/old.jpg', 'private'), UUID_PATTERN);
+});
+
+test('typed media links replace only unedited initial imports and deduplicate links', () => {
+  const postSql = mediaLinksSql('post', "artist's-post", ['media-one', 'media-one']).join('\n');
+  assert.equal((postSql.match(/INSERT INTO post_media/g) || []).length, 1);
+  assert.ok(postSql.includes("DELETE FROM post_media WHERE post_id='artist''s-post'"));
+  assert.ok(postSql.includes('FROM posts'));
+  assert.equal((postSql.match(/AND version=1/g) || []).length, 2);
+  assert.ok(postSql.includes('ON CONFLICT(post_id,media_id) DO NOTHING'));
+  const pageSql = mediaLinksSql('page', 'memo', []).join('\n');
+  assert.ok(pageSql.includes("DELETE FROM page_media WHERE page_slug='memo'"));
+  assert.ok(pageSql.includes("FROM pages WHERE slug='memo' AND version=1"));
+  assert.throws(() => mediaLinksSql('other', 'x', []));
 });
 
 test('SQL preserves Korean, quotes, line breaks and refuses nonfinite values', () => {

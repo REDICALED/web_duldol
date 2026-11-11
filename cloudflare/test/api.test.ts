@@ -23,6 +23,12 @@ function request(path: string, method = 'GET', body?: unknown, options: { origin
 
 async function responseJson(response: Response): Promise<any> { return response.json(); }
 
+async function applyMigration(db: D1Database, filename: string) {
+  const schema = readFileSync(new URL(`../migrations/${filename}`, import.meta.url), 'utf8');
+  const statements = schema.split(';').map(sql => sql.trim()).filter(Boolean);
+  await db.batch(statements.map(sql => db.prepare(sql)));
+}
+
 async function upload(visibility = 'public') {
   const response = await request('/api/admin/assets', 'POST', { filename: 'image.png', content_type: 'image/png', size: png.length, visibility });
   expect(response.status).toBe(201);
@@ -35,20 +41,67 @@ async function upload(visibility = 'public') {
 }
 
 beforeAll(async () => {
-  mf = new Miniflare({ modules: true, script: 'export default { fetch() { return new Response("test") } }', compatibilityDate: '2026-08-01', d1Databases: ['DB'], r2Buckets: ['MEDIA'] });
+  mf = new Miniflare({ modules: true, script: 'export default { fetch() { return new Response("test") } }', compatibilityDate: '2026-08-01', d1Databases: ['DB', 'LEGACY'], r2Buckets: ['MEDIA'] });
   env = { DB: await mf.getD1Database('DB') as unknown as D1Database, MEDIA: await mf.getR2Bucket('MEDIA') as unknown as R2Bucket, ENVIRONMENT: 'development', DEV_AUTH_BYPASS: 'true', APP_ORIGIN: origin };
-  const schema = readFileSync(new URL('../migrations/0001_initial.sql', import.meta.url), 'utf8');
-  for (const sql of schema.split(';').map(value => value.trim()).filter(Boolean)) await env.DB.prepare(sql).run();
+  await applyMigration(env.DB, '0001_initial.sql');
+  await applyMigration(env.DB, '0002_media_relationships.sql');
 });
 
 beforeEach(async () => {
   await env.DB.batch([
-    env.DB.prepare('DELETE FROM media_references'), env.DB.prepare('DELETE FROM posts'), env.DB.prepare('DELETE FROM media'),
+    env.DB.prepare('DELETE FROM post_media'), env.DB.prepare('DELETE FROM page_media'),
+    env.DB.prepare('DELETE FROM posts'), env.DB.prepare('DELETE FROM media'),
     env.DB.prepare("UPDATE pages SET title=slug,content_html='',visibility=CASE WHEN slug='memo' THEN 'private' ELSE 'public' END,version=1,revision_id=''")
   ]);
 });
 
 afterAll(async () => { await mf?.dispose(); });
+
+describe('media schema upgrade', () => {
+  it('preserves documents, URLs and existing UUIDs while migrating legacy media IDs and foreign keys', async () => {
+    const db = await mf.getD1Database('LEGACY') as unknown as D1Database;
+    await applyMigration(db, '0001_initial.sql');
+    const oldPublicId = 'a'.repeat(64);
+    const oldPrivateId = `private-${'b'.repeat(64)}`;
+    const uuid = 'd02792fc-08a4-4fab-9b8e-34ea91b923dd';
+    const publicKey = `migration/${oldPublicId}.png`;
+    const privateKey = `migration/private/${'b'.repeat(64)}.png`;
+    const body = `<p>기존 작품</p><img src="/api/media/${publicKey}">`;
+    const memoBody = `<p>메모</p><img src="/api/admin/media/${privateKey}">`;
+    await db.batch([
+      ...[[oldPublicId, publicKey, 'public'], [oldPrivateId, privateKey, 'private'], [uuid, `images/${uuid}.png`, 'public']].map(([id, key, visibility]) =>
+        db.prepare("INSERT INTO media (id,object_key,mime_type,size,original_filename,status,visibility) VALUES (?,?,'image/png',1,'image.png','ready',?)").bind(id, key, visibility)),
+      db.prepare("INSERT INTO posts (id,slug,title,work_date,content_html,cover_asset_key,status,is_listed,version,revision_id) VALUES ('legacy-post','기존 주소','기존 작품','2025',?,?,'published',0,3,'original-revision')").bind(body, publicKey),
+      db.prepare("UPDATE pages SET content_html=?,version=2 WHERE slug='memo'").bind(memoBody),
+      db.prepare("INSERT INTO media_references VALUES (?,'post','legacy-post')").bind(oldPublicId),
+      db.prepare("INSERT INTO media_references VALUES (?,'page','memo')").bind(oldPrivateId),
+    ]);
+    await applyMigration(db, '0002_media_relationships.sql');
+    const publicMedia = await db.prepare('SELECT * FROM media WHERE object_key=?').bind(publicKey).first<{ id: string; visibility: string }>();
+    const privateMedia = await db.prepare('SELECT * FROM media WHERE object_key=?').bind(privateKey).first<{ id: string; visibility: string }>();
+    const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/;
+    expect(publicMedia!.id).toMatch(uuidPattern);
+    expect(privateMedia!.id).toMatch(uuidPattern);
+    expect(privateMedia!.visibility).toBe('private');
+    expect(await db.prepare('SELECT id FROM media WHERE id=?').bind(uuid).first()).toEqual({ id: uuid });
+    const post = await db.prepare("SELECT * FROM posts WHERE id='legacy-post'").first();
+    expect(post).toMatchObject({ cover_media_id: publicMedia!.id, slug: '기존 주소', content_html: body, version: 3, revision_id: 'original-revision', is_listed: 0 });
+    expect(post).not.toHaveProperty('cover_asset_key');
+    expect(await db.prepare("SELECT content_html,version,visibility FROM pages WHERE slug='memo'").first()).toEqual({ content_html: memoBody, version: 2, visibility: 'private' });
+    expect(await db.prepare("SELECT media_id FROM post_media WHERE post_id='legacy-post'").first()).toEqual({ media_id: publicMedia!.id });
+    expect(await db.prepare("SELECT media_id FROM page_media WHERE page_slug='memo'").first()).toEqual({ media_id: privateMedia!.id });
+    expect(await db.prepare("SELECT name FROM sqlite_master WHERE type='table' AND name='media_references'").first()).toBeNull();
+    expect((await db.prepare('PRAGMA foreign_key_check').all()).results).toEqual([]);
+    await expect(db.prepare('DELETE FROM media WHERE id=?').bind(privateMedia!.id).run()).rejects.toThrow();
+    const changedId = 'b310c6f8-c704-4ed6-839f-6c2d6215808e';
+    await db.prepare('UPDATE media SET id=? WHERE id=?').bind(changedId, publicMedia!.id).run();
+    expect(await db.prepare("SELECT cover_media_id FROM posts WHERE id='legacy-post'").first()).toEqual({ cover_media_id: changedId });
+    expect(await db.prepare("SELECT media_id FROM post_media WHERE post_id='legacy-post'").first()).toEqual({ media_id: changedId });
+    await db.prepare("DELETE FROM posts WHERE id='legacy-post'").run();
+    expect((await db.prepare('SELECT * FROM post_media').all()).results).toEqual([]);
+    expect(await db.prepare('SELECT id FROM media WHERE id=?').bind(changedId).first()).toEqual({ id: changedId });
+  });
+});
 
 describe('administrator boundary', () => {
   it('never enables the development bypass in production or on a public hostname', async () => {
@@ -169,6 +222,8 @@ describe('R2 media lifecycle', () => {
 
   it('protects private memo files from public URLs and public post references', async () => {
     const asset = await upload('private');
+    expect(asset.id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
+    expect(asset.object_key).toBe(`images/${asset.id}.png`);
     expect(asset.url).toMatch(/^\/api\/admin\/media\//);
     expect((await request(asset.url)).status).toBe(200);
     expect((await request(`/api/media/${asset.object_key}`)).status).toBe(404);
@@ -182,8 +237,14 @@ describe('R2 media lifecycle', () => {
   it('keeps references consistent after a stale edit and permits safe cleanup', async () => {
     const a = await upload();
     const b = await upload();
-    const { post } = await responseJson(await request('/api/admin/posts', 'POST', { title: 'Images', work_date: '2026', content_html: `<img src="${a.url}">` }));
-    expect((await request(`/api/admin/posts/${post.id}`, 'PUT', { version: 1, content_html: `<img src="${b.url}">` })).status).toBe(200);
+    const { post } = await responseJson(await request('/api/admin/posts', 'POST', { title: 'Images', work_date: '2026', status: 'published', cover_media_id: a.id, cover_url: a.url, content_html: `<img src="${a.url}">` }));
+    expect(post).toMatchObject({ cover_media_id: a.id, titleimg: a.url });
+    expect((await responseJson(await request('/api/posts'))).posts[0].titleimg).toBe(a.url);
+    const saved = await request(`/api/admin/posts/${post.id}`, 'PUT', { version: 1, cover_media_id: b.id, cover_url: b.url, content_html: `<img src="${b.url}">` });
+    expect(saved.status).toBe(200);
+    expect((await responseJson(saved)).post).toMatchObject({ cover_media_id: b.id, titleimg: b.url });
+    expect(await env.DB.prepare('SELECT cover_url FROM posts WHERE id=?').bind(post.id).first()).toEqual({ cover_url: null });
+    expect((await responseJson(await request('/api/posts'))).posts[0].titleimg).toBe(b.url);
     expect((await request(`/api/admin/posts/${post.id}`, 'PUT', { version: 1, content_html: `<img src="${a.url}">` })).status).toBe(409);
     expect((await request(`/api/admin/assets/${b.id}`, 'DELETE')).status).toBe(409);
     expect((await request(`/api/admin/assets/${a.id}`, 'DELETE')).status).toBe(200);

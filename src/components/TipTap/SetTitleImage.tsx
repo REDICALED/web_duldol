@@ -10,7 +10,7 @@ export default function SetTitleImage(props: any) {
     </label>
     <ImageUpload label="대표 이미지" onUpload={assets => {
       props.settiptapPostTitleImage({ blobUrl: assets[0].url });
-      props.setCoverAssetKey(assets[0].object_key);
+      props.setCoverMediaId(assets[0].id);
     }} />
     {props.tiptapPostTitleImage.blobUrl && <img className="w-[160px] h-[100px] object-cover" src={props.tiptapPostTitleImage.blobUrl} alt="대표 이미지" />}
     <label className="block"><input type="checkbox" checked={props.isListed} onChange={event => props.setIsListed(event.target.checked)} /> 작품 목록에 표시</label>

@@ -31,5 +31,6 @@ dist-ssr
 .dev.vars.*
 !.dev.vars.example
 .migration/
+.handoff/
 .env.*
 !.env.example
