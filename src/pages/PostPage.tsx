@@ -12,39 +12,15 @@ import PostComponent10 from "@/components/initpages/PostComponent10";
 import PostComponent11 from "@/components/initpages/PostComponent11";
 import PostComponent12 from "@/components/initpages/PostComponent12";
 import PostNewPage from "@/pages/PostNewPage";
-import { useEffect, useState } from "react";
+import { CONTENT_API_ENABLED } from '@/lib/content-api';
 
 
 
 const PostPage = () => {
     const tags = useParams();
-    const [titlearray, settitlearray] = useState<string []>([]);
-    const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
-    const [, setIsError] = useState(false); // 에러 상태 추가
+    if (CONTENT_API_ENABLED) return <PostNewPage />;
 
-    const getlist =  async () => {
-        await fetch('/Posts.json')
-        .then(response => response.json()) 
-        .then(data => {
-          // posts 배열 추출
-          const posts: { title: string, year: string, hashdate: number }[] = data.posts;
-          settitlearray(posts.map((post) => post.title));
-        if (tags.id && titlearray.includes(tags.id) === true) {
-            setIsError(true);
-        }
-        })
-        .catch(error => console.error('Error fetching JSON:', error));
-        setIsLoading(false); // 로딩 완료
-    }
-
-    useEffect(() => {
-        getlist();
-    }, []);
-
-    if (isLoading) {
-        return <div>Loading...</div>; // 로딩 중이라면 로딩 표시
-    } 
-     else {
+    {
         if (tags.id === "감정의 정반합") 
             return <PostComponent1 />;
         else if (tags.id === "단단한 여자애의 소망") 

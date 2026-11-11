@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { CONTENT_API_ENABLED, ContentPost, getPosts, postCover, postPath } from '@/lib/content-api';
 
 const WorksPage = () => {
 
-    const [titlelistState, settitlelistState] = useState<{title: string, year: string, hashdate: number, titleimg: string}[]>([]);
+    const [titlelistState, settitlelistState] = useState<ContentPost[]>([]);
+    const [error, setError] = useState('');
     useEffect(() => {
         GetImages();
     }
     ,[]);
     const GetImages = async () => {
-        await fetch('/Posts.json')
-        .then(response => response.json()) 
-        .then(data => {
-          // posts 배열 추출
-          const posts = data.posts.sort((a: { year: string | number | Date; }, b: { year: string | number | Date; }) => {
+        try {
+          const items = await getPosts();
+          const posts = CONTENT_API_ENABLED ? items : [...items].sort((a, b) => {
             const dateA = new Date(a.year).getTime();
             const dateB = new Date(b.year).getTime();
             return dateB - dateA; // 최신순 정렬
           });;
           settitlelistState(posts);
-        })
-        .catch(error => console.error('Error fetching JSON:', error));
+        } catch {
+          setError('작품 목록을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+        }
         
     }
 
@@ -29,20 +30,15 @@ const WorksPage = () => {
         <>
             {/* 연도별 이미지 출력 */}
         <div className=" md:w-[680px] lg:grid lg:grid-cols-5 lg:gap-0 flex flex-wrap text-dul-gray leading-6 md:leading-6 pt-[10vh] md:pt-[15vh] ml-[35vw] md:mx-[30vw] mr-[5vw] text-xxs md:text-xs ">
+            {error && <p role="alert">{error}</p>}
             {titlelistState.map((item) => (
-                <div key={item.title} className=" md:m-2 m-1">
+                <div key={item.id} className=" md:m-2 m-1">
                     <div className="flex ">
                         { 
-                            <Link key={item.title} to={'/Works/' + (item.hashdate === 0 ? item.title : item.hashdate)} className=''>
-                            { item.hashdate === 0 ? <img
+                            <Link to={postPath(item)} className=''>
+                            { postCover(item) && <img
                                 loading='lazy'
-                                src={ `/images/Works/${item.title}/title.jpg`}
-                                alt={`Work Image ${item.title}`}
-                                className=" peer px-[0.1vw] transition-all duration-500 hover:scale-105 object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px] "
-                            />
-                                : <img
-                                loading='lazy'
-                                src={item.titleimg}
+                                src={postCover(item)}
                                 alt={`Work Image ${item.title}`}
                                 className=" peer px-[0.1vw] transition-all duration-500 hover:scale-105 object-cover md:w-[120px] md:h-[72px] w-[70px] h-[42px] "
                             />

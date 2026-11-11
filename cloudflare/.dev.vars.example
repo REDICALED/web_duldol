@@ -1,0 +1,8 @@
+# Local development only. Never place production credentials in VITE_* variables.
+ENVIRONMENT=development
+APP_ORIGIN=http://localhost:5173
+DEV_AUTH_BYPASS=true
+
+# Production: set these through `wrangler secret put`, not committed files.
+# R2_ACCESS_KEY_ID=
+# R2_SECRET_ACCESS_KEY=

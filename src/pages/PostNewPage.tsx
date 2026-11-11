@@ -1,76 +1,45 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import ParseHtml from "@/components/TipTap/ParseHtml";
+import { useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import parse from 'html-react-parser';
-import { useRecoilState } from "recoil";
-import { ImageZoom } from "@/atoms/ModalAtom";
+import { useSetRecoilState } from 'recoil';
+import ParseHtml from '@/components/TipTap/ParseHtml';
+import { ImageZoom } from '@/atoms/ModalAtom';
+import { ContentApiError, ContentPost, getPost, postCover } from '@/lib/content-api';
 
 const PostNewPage = () => {
-    const tags = useParams();
-    const [htmlcontents, sethtmlcontents] = useState("");
-    const [, setImageZoom] = useRecoilState(ImageZoom);
-    const [titlename, settitlename] = useState("");
-    const [titleimg, settitleimg] = useState("");
+  const { id } = useParams();
+  const [post, setPost] = useState<ContentPost | null>(null);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const setImageZoom = useSetRecoilState(ImageZoom);
 
-    useEffect(() => {
-        getlist();
-    }, []);
+  useEffect(() => {
+    let active = true;
+    setPost(null);
+    setError('');
+    setLoading(true);
+    getPost(id || '').then(item => {
+      if (active) setPost(item);
+    }).catch(reason => {
+      if (active) setError(reason instanceof ContentApiError && reason.status === 404 ? '작품을 찾을 수 없습니다.' : '작품을 불러오지 못했습니다. 잠시 후 다시 시도해주세요.');
+    }).finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, [id]);
 
-    const getlist =  async () => {
-
-      const tmpPosts = await fetch('/Posts.json')
-      .then(response => response.json()) 
-      .then(data => {
-        // posts 배열 추출
-        const posts: { title: string, year: string, hashdate: number,titleimg:string }[] = data.posts;
-          //console.log(posts);
-          return posts;
-        })
-      .catch(error => console.error('Error fetching JSON:', error));
-      let tmp = false;
-      if (tmpPosts)
-        {
-          for(let i = 0; i < tmpPosts.length; i++) {
-            if (tags.id === tmpPosts[i].hashdate.toString() ) {
-              tmp = true;
-              settitleimg(tmpPosts[i].titleimg);
-              break;
-            }
-          }
-        }
-      if (tmp === false) {
-        window.location.href = '/';
-      }
-        await fetch(`/Posts/Works/${tags.id}/main.html`)
-        .then(response => response.text())
-        .then(html => {
-          sethtmlcontents(html);
-        })
-        .catch(error => {
-          console.error('Fetch error:', error);
-          window.location.href = '/';
-        });
-        await fetch(`/Posts/Works/${tags.id}/titlename.txt`)
-        .then(response => response.text())
-        .then(html => {
-          settitlename(html.split('\n')[0]);
-        })
-        .catch(error => {
-          console.error('Fetch error:', error);
-        });
-        
-    }
-    
-    return (
-        <div className=" leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] mb-10 md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
-            <div className='flex mb-[1vh] md:mb-[0.5vh]'>
-                    <img onClick={()=>{setImageZoom(titleimg)}} src={titleimg} className=' cursor-zoom-in md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0  object-cover'></img>
-                <span className='w-full text-xxs md:text-xs m-1'>{titlename}</span>
-            </div>
-            {parse(htmlcontents, {replace: (node) => ParseHtml.replace(node, setImageZoom)})}
+  const cover = post ? postCover(post) : '';
+  return (
+    <div className="leading-6 md:leading-6 text-dul-gray pt-[5vh] ml-[35vw] mb-10 md:mx-[30vw] mr-[5vw] text-xxs md:text-xs">
+      {loading && <p role="status">콘텐츠를 불러오는 중입니다.</p>}
+      {error && <div role="alert"><p>{error}</p><Link to="/Works">작품 목록으로 돌아가기</Link></div>}
+      {post && <>
+        <div className="flex mb-[1vh] md:mb-[0.5vh]">
+          {cover && <img onClick={() => setImageZoom(cover)} src={cover} alt={post.title} className="cursor-zoom-in md:w-[100px] w-[60px] h-[60px] md:h-[100px] shrink-0 object-cover" />}
+          <span className="w-full text-xxs md:text-xs m-1">{post.title}</span>
         </div>
-    );
+        {parse(post.content_html, { replace: node => ParseHtml.replace(node, setImageZoom) })}
+      </>}
+    </div>
+  );
 };
-
 
 export default PostNewPage;

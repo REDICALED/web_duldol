@@ -33,19 +33,25 @@ const MenuBar = (props: any) => {
     const [  , setMainText] = useRecoilState(tiptapMainText);
     // const [, setFileBlock] = useRecoilState(GitFileBlock);
 
-    if (!editor) {
-      return null
-    }
-  
     useEffect(() => {
+      if (!editor) return;
       props.settiptapeditor(editor);
-      setMainText(editor.getHTML());     
-    }, [props.PreviewSwitch]);
+      const sync = () => setMainText(editor.getHTML());
+      sync();
+      editor.on('update', sync);
+      return () => { editor.off('update', sync); };
+    }, [editor, props.settiptapeditor, setMainText]);
+
+    if (!editor) return null;
   
   const handleButtonClick = () => {
     const url = prompt('Please enter URL:');
     if (url) {
-      editor.commands.insertContent(`------\n[비디오입니다!]\nVideourl=<<<${url}>>>\n[!비디오입니다]\n------`);
+      try {
+        const video = new URL(url);
+        if (video.protocol !== 'https:' || !['player.vimeo.com', 'www.youtube.com', 'www.youtube-nocookie.com'].includes(video.hostname)) return;
+        editor.commands.insertContent({ type: 'paragraph', content: [{ type: 'text', text: `------ [비디오입니다!] Videourl=<<<${video.href}>>> [!비디오입니다] ------` }] });
+      } catch { return; }
     }
   };
   
@@ -189,13 +195,10 @@ const MenuBar = (props: any) => {
         </button>
   
 
-      <AddPostModal editor={editor}> 
-        
-      </AddPostModal>
+      <AddPostModal editor={editor} />
 
     
-      <AddSliderModal editor={editor}>
-      </AddSliderModal>
+      <AddSliderModal editor={editor} />
   
       <button
         type="button"

@@ -1,0 +1,45 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "duldol-content-api",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "preview_urls": false,
+  "vars": {
+    "ENVIRONMENT": "production",
+    "APP_ORIGIN": "https://www.duldoljimi.com",
+    "ACCESS_TEAM_DOMAIN": "",
+    "ACCESS_AUD": "",
+    "ADMIN_EMAILS": "",
+    "R2_ACCOUNT_ID": "",
+    "R2_BUCKET_NAME": "duldol-media"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "duldol-content",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "duldol-media" }],
+  "dev": { "ip": "127.0.0.1", "port": 8787 },
+  "observability": { "enabled": true },
+  // Set the real zone's /api/* route before deployment.
+  // Keep the site's existing Vercel origin; these routes serve only content APIs.
+  // "routes": [
+  //   { "pattern": "www.duldoljimi.com/api/*", "zone_name": "duldoljimi.com" }
+  // ],
+  "env": {
+    "local": {
+      "vars": {
+        "ENVIRONMENT": "development",
+        "APP_ORIGIN": "http://localhost:5173",
+        "DEV_AUTH_BYPASS": "true"
+      },
+      "d1_databases": [{ "binding": "DB", "database_name": "duldol-content", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "migrations" }],
+      "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "duldol-media" }]
+    }
+  }
+}

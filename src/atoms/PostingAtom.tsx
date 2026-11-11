@@ -2,7 +2,7 @@ import { atom } from "recoil";
 
 export const PostGenreType = atom({
     key: 'PostGenreType', // unique ID (with respect to other atoms/selectors)
-    default: "memo", // default value (aka initial value)
+    default: "post", // default value (aka initial value)
   });
 
   export const GitTag = atom({

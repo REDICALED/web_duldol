@@ -3,12 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 
 import { LoginValid } from "@/atoms/LoginValidAtom";
 import { useRecoilState } from "recoil";
+import useAdminSession from '@/hooks/useAdminSession';
 
 
 
 
 
 const NavBar = () => {
+    useAdminSession();
     const location = useLocation();
 
     const [currentPath, setCurrentPath] = useState(location.pathname);

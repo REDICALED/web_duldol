@@ -25,7 +25,7 @@ export const Slick = (props: { images: string[], images_cap: string[] }) => {
   onClick={()=>{setImageSlickZoom({SlickImages: images, index: 0})}}
 />}
                 { currentImage === index && <div className=" text-xxs md:text-xs flex justify-between " >
-                  <p>{props.images_cap[index].replace(".JPEG", "")}</p>
+                  <p>{(props.images_cap[index] ?? '').replace(".JPEG", "")}</p>
                 </div>}
             </div>
       ))}

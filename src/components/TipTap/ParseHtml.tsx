@@ -29,7 +29,11 @@ import '@/styles.scss'
         const videoMatch = string.match(videoRegex);
         const videoStr = videoMatch ? videoMatch[1] : '';
 
-        return <iframe src={videoStr+"?autoplay=0"} className="w-full md:h-[550px]" ></iframe>;
+        try {
+          const video = new URL(videoStr);
+          video.searchParams.set('autoplay', '0');
+          return <iframe src={video.href} title="동영상" loading="lazy" allowFullScreen className="w-full md:h-[550px]" />;
+        } catch { return <></>; }
       }
 
       else if (node.type === 'tag' && node.name === 'img') {

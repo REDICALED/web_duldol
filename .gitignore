@@ -24,3 +24,12 @@ dist-ssr
 *.sw?
 
 *.env
+
+# Cloudflare local state and generated content exports
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.migration/
+.env.*
+!.env.example
